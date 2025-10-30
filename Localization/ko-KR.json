@@ -59,6 +59,9 @@
     { "key": "net.clientNotStarted", "value": "클라이언트가 시작되지 않음" },
     { "key": "net.connectingTo", "value": "연결 중: {0}:{1}" },
     { "key": "net.connectionFailedLog", "value": "호스트 연결 실패: {0}" },
-    { "key": "net.connectionFailed", "value": "연결 실패" }
+    { "key": "net.connectionFailed", "value": "연결 실패" },
+    { "key": "death.itemPreserve.enabled", "value": "클라이언트 사망 시 아이템 보존 활성화 (임시 수정)" },
+    { "key": "death.itemPreserve.notice", "value": "참고: 이것은 무덤 시스템 문제의 임시 해결책입니다" },
+    { "key": "death.itemPreserve.inventoryBlocked", "value": "사망 시 인벤토리 정리 차단됨" }
   ]
 }

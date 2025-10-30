@@ -123,6 +123,11 @@ A: The script supports paths with spaces and parentheses, such as `Program Files
 - ⚡ Optimized network performance
 - 🔄 Automatic reconnection
 
+### Temporary Fixes
+- 🛠️ **Client Death Item Preservation** - Temporary solution for grave system "no_inv" issue
+  - Client player items are not lost upon death
+  - Death state and spectator mode work normally
+  - See [DEATH_ITEM_PRESERVE_FIX_EN.md](DEATH_ITEM_PRESERVE_FIX_EN.md) for details
 ---
 
 ## 💡 Credits

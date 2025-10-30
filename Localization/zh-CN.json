@@ -59,6 +59,9 @@
     { "key": "net.clientNotStarted", "value": "客户端未启动" },
     { "key": "net.connectingTo", "value": "连接中: {0}:{1}" },
     { "key": "net.connectionFailedLog", "value": "连接到主机失败: {0}" },
-    { "key": "net.connectionFailed", "value": "连接失败" }
+    { "key": "net.connectionFailed", "value": "连接失败" },
+    { "key": "death.itemPreserve.enabled", "value": "客户端死亡物品保留已启用（临时修复）" },
+    { "key": "death.itemPreserve.notice", "value": "注意：这是坟墓系统问题的临时解决方案" },
+    { "key": "death.itemPreserve.inventoryBlocked", "value": "已阻止死亡时清空库存" }
   ]
 }

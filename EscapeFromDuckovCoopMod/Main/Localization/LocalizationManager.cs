@@ -23,32 +23,32 @@ using SodaCraft.Localizations;
 namespace EscapeFromDuckovCoopMod
 {
     /// <summary>
-    /// 중앙 집중식 로컬라이제이션 관리자
-    /// JSON 파일에서 번역을 로드하고 관리합니다
+    /// 集中式本地化管理器
+    /// 从JSON文件加载和管理翻译
     /// </summary>
     public static class CoopLocalization
     {
-        private static Dictionary<string, string> currentTranslations = new Dictionary<string, string>();
-        private static string currentLanguageCode = "en-US";
-        private static bool isInitialized = false;
-        private static SystemLanguage lastSystemLanguage = SystemLanguage.Unknown;
+        private static Dictionary<string, string> currentTranslations = new Dictionary<string, string>(); // 当前翻译字典
+        private static string currentLanguageCode = "en-US"; // 当前语言代码
+        private static bool isInitialized = false; // 是否已初始化
+        private static SystemLanguage lastSystemLanguage = SystemLanguage.Unknown; // 上次系统语言
 
         /// <summary>
-        /// 로컬라이제이션 시스템 초기화
+        /// 初始化本地化系统
         /// </summary>
         public static void Initialize()
         {
             if (isInitialized) return;
 
-            // 게임의 현재 언어 감지
+            // 检测并加载游戏当前语言
             DetectAndLoadLanguage();
             isInitialized = true;
 
-            Debug.Log($"[CoopLocalization] Initialized with language: {currentLanguageCode}");
+            Debug.Log($"[CoopLocalization] 已初始化，语言: {currentLanguageCode}");
         }
 
         /// <summary>
-        /// 시스템 언어 변경 확인 및 리로드
+        /// 检查系统语言变更并重新加载
         /// </summary>
         public static void CheckLanguageChange()
         {
@@ -57,13 +57,13 @@ namespace EscapeFromDuckovCoopMod
             var currentSystemLang = LocalizationManager.CurrentLanguage;
             if (currentSystemLang != lastSystemLanguage)
             {
-                Debug.Log($"[CoopLocalization] Language changed from {lastSystemLanguage} to {currentSystemLang}, reloading translations...");
+                Debug.Log($"[CoopLocalization] 语言已从 {lastSystemLanguage} 更改为 {currentSystemLang}，重新加载翻译...");
                 DetectAndLoadLanguage();
             }
         }
 
         /// <summary>
-        /// 시스템 언어 감지 및 번역 로드
+        /// 检测系统语言并加载翻译
         /// </summary>
         private static void DetectAndLoadLanguage()
         {
@@ -93,7 +93,7 @@ namespace EscapeFromDuckovCoopMod
         }
 
         /// <summary>
-        /// JSON 파일에서 번역 로드
+        /// 从JSON文件加载翻译
         /// </summary>
         private static void LoadTranslations(string languageCode)
         {
@@ -101,63 +101,63 @@ namespace EscapeFromDuckovCoopMod
 
             try
             {
-                // Mod 폴더 경로 찾기
+                // 查找模组文件夹路径
                 string modPath = Path.GetDirectoryName(typeof(CoopLocalization).Assembly.Location);
                 string localizationPath = Path.Combine(modPath, "Localization", $"{languageCode}.json");
 
-                // JSON 파일이 없으면 폴백으로 영어 사용
+                // 如果JSON文件不存在，使用英语作为后备
                 if (!File.Exists(localizationPath))
                 {
-                    Debug.LogWarning($"[CoopLocalization] Translation file not found: {localizationPath}, using fallback translations");
+                    Debug.LogWarning($"[CoopLocalization] 未找到翻译文件: {localizationPath}，使用后备翻译");
                     LoadFallbackTranslations();
                     return;
                 }
 
                 string json = File.ReadAllText(localizationPath);
 
-                // 수동 JSON 파싱 (Unity JsonUtility의 배열 파싱 문제 회피)
+                // 手动JSON解析（避免Unity JsonUtility的数组解析问题）
                 ParseJsonTranslations(json);
 
                 if (currentTranslations.Count > 0)
                 {
-                    Debug.Log($"[CoopLocalization] Loaded {currentTranslations.Count} translations from {localizationPath}");
+                    Debug.Log($"[CoopLocalization] 从 {localizationPath} 加载了 {currentTranslations.Count} 条翻译");
                 }
                 else
                 {
-                    Debug.LogWarning($"[CoopLocalization] Failed to parse translation file, using fallback");
+                    Debug.LogWarning($"[CoopLocalization] 解析翻译文件失败，使用后备翻译");
                     LoadFallbackTranslations();
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError($"[CoopLocalization] Error loading translations: {e.Message}");
+                Debug.LogError($"[CoopLocalization] 加载翻译时出错: {e.Message}");
                 LoadFallbackTranslations();
             }
         }
 
         /// <summary>
-        /// 수동 JSON 파싱 (Unity JsonUtility 배열 파싱 문제 회피)
+        /// 手动JSON解析（避免Unity JsonUtility的数组解析问题）
         /// </summary>
         private static void ParseJsonTranslations(string json)
         {
             try
             {
-                // "translations": [ 부분 찾기
+                // 查找 "translations": [ 部分
                 int startIndex = json.IndexOf("\"translations\"");
                 if (startIndex == -1) return;
 
-                // [ 찾기
+                // 查找 [
                 int arrayStart = json.IndexOf('[', startIndex);
                 if (arrayStart == -1) return;
 
-                // ] 찾기 (마지막)
+                // 查找 ] (最后一个)
                 int arrayEnd = json.LastIndexOf(']');
                 if (arrayEnd == -1) return;
 
-                // 각 엔트리 파싱
+                // 解析每个条目
                 string arrayContent = json.Substring(arrayStart + 1, arrayEnd - arrayStart - 1);
 
-                // { } 블록 단위로 분리
+                // 按 { } 块分割
                 int braceCount = 0;
                 int entryStart = -1;
 
@@ -175,7 +175,7 @@ namespace EscapeFromDuckovCoopMod
                         braceCount--;
                         if (braceCount == 0 && entryStart != -1)
                         {
-                            // 하나의 엔트리 추출
+                            // 提取一个条目
                             string entry = arrayContent.Substring(entryStart, i - entryStart + 1);
                             ParseSingleEntry(entry);
                             entryStart = -1;
@@ -185,12 +185,12 @@ namespace EscapeFromDuckovCoopMod
             }
             catch (Exception e)
             {
-                Debug.LogError($"[CoopLocalization] JSON parsing error: {e.Message}");
+                Debug.LogError($"[CoopLocalization] JSON解析错误: {e.Message}");
             }
         }
 
         /// <summary>
-        /// 단일 JSON 엔트리 파싱
+        /// 解析单个JSON条目
         /// </summary>
         private static void ParseSingleEntry(string entry)
         {
@@ -199,7 +199,7 @@ namespace EscapeFromDuckovCoopMod
                 string key = null;
                 string value = null;
 
-                // "key": "..." 파싱
+                // 解析 "key": "..."
                 int keyIndex = entry.IndexOf("\"key\"");
                 if (keyIndex != -1)
                 {
@@ -215,7 +215,7 @@ namespace EscapeFromDuckovCoopMod
                     }
                 }
 
-                // "value": "..." 파싱
+                // 解析 "value": "..."
                 int valueIndex = entry.IndexOf("\"value\"");
                 if (valueIndex != -1)
                 {
@@ -238,89 +238,94 @@ namespace EscapeFromDuckovCoopMod
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"[CoopLocalization] Entry parsing error: {e.Message}");
+                Debug.LogWarning($"[CoopLocalization] 条目解析错误: {e.Message}");
             }
         }
 
         /// <summary>
-        /// 폴백 번역 로드 (JSON 파일이 없을 때)
+        /// 加载后备翻译（当JSON文件不存在时）
         /// </summary>
         private static void LoadFallbackTranslations()
         {
-            // 기본 영어 번역을 하드코딩으로 제공
+            // 提供硬编码的默认中文翻译
             currentTranslations.Clear();
-            currentTranslations["ui.window.title"] = "Co-op Mod Control Panel";
-            currentTranslations["ui.window.playerStatus"] = "Player Status";
-            currentTranslations["ui.mode.current"] = "Current Mode";
-            currentTranslations["ui.mode.server"] = "Server";
-            currentTranslations["ui.mode.client"] = "Client";
-            currentTranslations["ui.mode.switchTo"] = "Switch to {0} Mode";
-            currentTranslations["ui.hostList.title"] = "🔍 LAN Host List";
-            currentTranslations["ui.hostList.empty"] = "(Waiting for broadcast, no hosts found)";
-            currentTranslations["ui.hostList.connect"] = "Connect";
-            currentTranslations["ui.manualConnect.title"] = "Manual IP and Port Connection:";
+            currentTranslations["ui.window.title"] = "联机模组控制面板";
+            currentTranslations["ui.window.playerStatus"] = "玩家状态";
+            currentTranslations["ui.mode.current"] = "当前模式";
+            currentTranslations["ui.mode.server"] = "服务器";
+            currentTranslations["ui.mode.client"] = "客户端";
+            currentTranslations["ui.mode.switchTo"] = "切换到{0}模式";
+            currentTranslations["ui.hostList.title"] = "🔍 局域网主机列表";
+            currentTranslations["ui.hostList.empty"] = "（等待广播回应，暂无主机）";
+            currentTranslations["ui.hostList.connect"] = "连接";
+            currentTranslations["ui.manualConnect.title"] = "手动输入IP和端口连接:";
             currentTranslations["ui.manualConnect.ip"] = "IP:";
-            currentTranslations["ui.manualConnect.port"] = "Port:";
-            currentTranslations["ui.manualConnect.button"] = "Manual Connect";
-            currentTranslations["ui.manualConnect.portError"] = "Invalid port format";
-            currentTranslations["ui.status.label"] = "Status:";
-            currentTranslations["ui.status.notConnected"] = "Not Connected";
-            currentTranslations["ui.status.connecting"] = "Connecting...";
-            currentTranslations["ui.status.connected"] = "Connected";
-            currentTranslations["ui.server.listenPort"] = "Server Listening Port:";
-            currentTranslations["ui.server.connections"] = "Current Connections:";
-            currentTranslations["ui.playerStatus.toggle"] = "Show Player Status Window (Toggle key: {0})";
+            currentTranslations["ui.manualConnect.port"] = "端口:";
+            currentTranslations["ui.manualConnect.button"] = "手动连接";
+            currentTranslations["ui.manualConnect.portError"] = "端口格式错误";
+            currentTranslations["ui.status.label"] = "状态:";
+            currentTranslations["ui.status.notConnected"] = "未连接";
+            currentTranslations["ui.status.connecting"] = "连接中...";
+            currentTranslations["ui.status.connected"] = "已连接";
+            currentTranslations["ui.server.listenPort"] = "服务器监听端口:";
+            currentTranslations["ui.server.connections"] = "当前连接数:";
+            currentTranslations["ui.playerStatus.toggle"] = "显示玩家状态窗口（切换键: {0}）";
             currentTranslations["ui.playerStatus.id"] = "ID:";
-            currentTranslations["ui.playerStatus.name"] = "Name:";
-            currentTranslations["ui.playerStatus.latency"] = "Latency:";
-            currentTranslations["ui.playerStatus.inGame"] = "In Game:";
-            currentTranslations["ui.playerStatus.yes"] = "Yes";
-            currentTranslations["ui.playerStatus.no"] = "No";
-            currentTranslations["ui.debug.printLootBoxes"] = "[Debug] Print all lootboxes in this map";
-            currentTranslations["ui.vote.mapVote"] = "Map Vote / Ready  [{0}]";
-            currentTranslations["ui.vote.pressKey"] = "Press {0} to toggle ready (Current: {1})";
-            currentTranslations["ui.vote.ready"] = "Ready";
-            currentTranslations["ui.vote.notReady"] = "Not Ready";
-            currentTranslations["ui.vote.playerReadyStatus"] = "Player Ready Status:";
-            currentTranslations["ui.vote.readyIcon"] = "✅ Ready";
-            currentTranslations["ui.vote.notReadyIcon"] = "⌛ Not Ready";
-            currentTranslations["ui.spectator.mode"] = "Spectator Mode: LMB ▶ Next | RMB ◀ Previous | Spectating";
+            currentTranslations["ui.playerStatus.name"] = "名称:";
+            currentTranslations["ui.playerStatus.latency"] = "延迟:";
+            currentTranslations["ui.playerStatus.inGame"] = "游戏中:";
+            currentTranslations["ui.playerStatus.yes"] = "是";
+            currentTranslations["ui.playerStatus.no"] = "否";
+            currentTranslations["ui.debug.printLootBoxes"] = "[调试] 打印此地图中的所有战利品箱";
+            currentTranslations["ui.vote.mapVote"] = "地图投票 / 准备  [{0}]";
+            currentTranslations["ui.vote.pressKey"] = "按 {0} 切换准备状态（当前: {1}）";
+            currentTranslations["ui.vote.ready"] = "准备";
+            currentTranslations["ui.vote.notReady"] = "未准备";
+            currentTranslations["ui.vote.playerReadyStatus"] = "玩家准备状态:";
+            currentTranslations["ui.vote.readyIcon"] = "✅ 准备";
+            currentTranslations["ui.vote.notReadyIcon"] = "⌛ 未准备";
+            currentTranslations["ui.spectator.mode"] = "观战模式: 左键 ▶ 下一个 | 右键 ◀ 上一个 | 观战中";
 
-            // Scene 관련
-            currentTranslations["scene.waitingForHost"] = "[Coop] Waiting for host to finish loading… (Auto-enter after 100s if delayed)";
-            currentTranslations["scene.hostReady"] = "Host ready, entering…";
+            // 场景相关
+            currentTranslations["scene.waitingForHost"] = "[联机] 等待主机完成加载…（如延迟将在30秒后自动进入）";
+            currentTranslations["scene.hostReady"] = "主机准备完毕，正在进入…";
 
-            // Network 관련
-            currentTranslations["net.connectionSuccess"] = "Connected successfully: {0}";
-            currentTranslations["net.connectedTo"] = "Connected to {0}";
-            currentTranslations["net.disconnected"] = "Disconnected: {0}, Reason: {1}";
-            currentTranslations["net.connectionLost"] = "Connection Lost";
-            currentTranslations["net.networkError"] = "Network error: {0} from {1}";
-            currentTranslations["net.hostDiscovered"] = "Host discovered: {0}";
-            currentTranslations["net.serverStarted"] = "Server started, listening on port {0}";
-            currentTranslations["net.serverStartFailed"] = "Server start failed, check if port is already in use";
-            currentTranslations["net.clientStarted"] = "Client started";
-            currentTranslations["net.clientStartFailed"] = "Client start failed";
-            currentTranslations["net.networkStarted"] = "Network started";
-            currentTranslations["net.networkStopped"] = "Network stopped";
-            currentTranslations["net.ipEmpty"] = "IP is empty";
-            currentTranslations["net.invalidPort"] = "Invalid port";
-            currentTranslations["net.serverModeCannotConnect"] = "Server mode cannot connect to other hosts";
-            currentTranslations["net.alreadyConnecting"] = "Already connecting.";
-            currentTranslations["net.clientNetworkStartFailed"] = "Failed to start client network: {0}";
-            currentTranslations["net.clientNetworkStartFailedStatus"] = "Client network start failed";
-            currentTranslations["net.clientNotStarted"] = "Client not started";
-            currentTranslations["net.connectingTo"] = "Connecting to: {0}:{1}";
-            currentTranslations["net.connectionFailedLog"] = "Failed to connect to host: {0}";
-            currentTranslations["net.connectionFailed"] = "Connection failed";
+            // 网络相关
+            currentTranslations["net.connectionSuccess"] = "连接成功: {0}";
+            currentTranslations["net.connectedTo"] = "已连接到 {0}";
+            currentTranslations["net.disconnected"] = "已断开连接: {0}，原因: {1}";
+            currentTranslations["net.connectionLost"] = "连接丢失";
+            currentTranslations["net.networkError"] = "网络错误: {0} 来自 {1}";
+            currentTranslations["net.hostDiscovered"] = "发现主机: {0}";
+            currentTranslations["net.serverStarted"] = "服务器已启动，监听端口 {0}";
+            currentTranslations["net.serverStartFailed"] = "服务器启动失败，请检查端口是否已被占用";
+            currentTranslations["net.clientStarted"] = "客户端已启动";
+            currentTranslations["net.clientStartFailed"] = "客户端启动失败";
+            currentTranslations["net.networkStarted"] = "网络已启动";
+            currentTranslations["net.networkStopped"] = "网络已停止";
+            currentTranslations["net.ipEmpty"] = "IP地址为空";
+            currentTranslations["net.invalidPort"] = "无效端口";
+            currentTranslations["net.serverModeCannotConnect"] = "服务器模式无法连接到其他主机";
+            currentTranslations["net.alreadyConnecting"] = "正在连接中。";
+            currentTranslations["net.clientNetworkStartFailed"] = "启动客户端网络失败: {0}";
+            currentTranslations["net.clientNetworkStartFailedStatus"] = "客户端网络启动失败";
+            currentTranslations["net.clientNotStarted"] = "客户端未启动";
+            currentTranslations["net.connectingTo"] = "正在连接到: {0}:{1}";
+            currentTranslations["net.connectionFailedLog"] = "连接主机失败: {0}";
+            currentTranslations["net.connectionFailed"] = "连接失败";
+            
+            // 死亡物品保留相关
+            currentTranslations["death.itemPreserve.enabled"] = "客户端死亡物品保留已启用（临时修复）";
+            currentTranslations["death.itemPreserve.notice"] = "注意：这是坟墓系统问题的临时解决方案";
+            currentTranslations["death.itemPreserve.inventoryBlocked"] = "已阻止死亡时清空库存";
         }
 
         /// <summary>
-        /// 번역된 문자열 가져오기
+        /// 获取翻译后的字符串
         /// </summary>
-        /// <param name="key">번역 키</param>
-        /// <param name="args">포맷 인자</param>
-        /// <returns>번역된 문자열</returns>
+        /// <param name="key">翻译键</param>
+        /// <param name="args">格式化参数</param>
+        /// <returns>翻译后的字符串</returns>
         public static string Get(string key, params object[] args)
         {
             if (!isInitialized)
@@ -338,32 +343,32 @@ namespace EscapeFromDuckovCoopMod
                     }
                     catch (Exception e)
                     {
-                        Debug.LogWarning($"[CoopLocalization] Format error for key '{key}': {e.Message}");
+                        Debug.LogWarning($"[CoopLocalization] 键 '{key}' 的格式化错误: {e.Message}");
                         return value;
                     }
                 }
                 return value;
             }
 
-            Debug.LogWarning($"[CoopLocalization] Missing translation for key: {key}");
+            Debug.LogWarning($"[CoopLocalization] 缺少翻译键: {key}");
             return $"[{key}]";
         }
 
         /// <summary>
-        /// 언어 변경
+        /// 更改语言
         /// </summary>
-        /// <param name="languageCode">언어 코드 (zh-CN, en-US, ko-KR, ja-JP)</param>
+        /// <param name="languageCode">语言代码 (zh-CN, en-US, ko-KR, ja-JP)</param>
         public static void SetLanguage(string languageCode)
         {
             if (currentLanguageCode == languageCode) return;
 
             currentLanguageCode = languageCode;
             LoadTranslations(languageCode);
-            Debug.Log($"[CoopLocalization] Language changed to: {languageCode}");
+            Debug.Log($"[CoopLocalization] 语言已更改为: {languageCode}");
         }
 
         /// <summary>
-        /// 현재 언어 코드 가져오기
+        /// 获取当前语言代码
         /// </summary>
         public static string GetCurrentLanguage()
         {

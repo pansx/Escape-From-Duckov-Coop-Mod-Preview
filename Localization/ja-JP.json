@@ -59,6 +59,9 @@
     { "key": "net.clientNotStarted", "value": "クライアント未起動" },
     { "key": "net.connectingTo", "value": "接続中: {0}:{1}" },
     { "key": "net.connectionFailedLog", "value": "ホスト接続失敗: {0}" },
-    { "key": "net.connectionFailed", "value": "接続失敗" }
+    { "key": "net.connectionFailed", "value": "接続失敗" },
+    { "key": "death.itemPreserve.enabled", "value": "クライアント死亡時アイテム保持が有効（一時的修正）" },
+    { "key": "death.itemPreserve.notice", "value": "注意：これは墓システム問題の一時的解決策です" },
+    { "key": "death.itemPreserve.inventoryBlocked", "value": "死亡時のインベントリクリアをブロックしました" }
   ]
 }

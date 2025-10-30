@@ -59,6 +59,9 @@
     { "key": "net.clientNotStarted", "value": "Client not started" },
     { "key": "net.connectingTo", "value": "Connecting to: {0}:{1}" },
     { "key": "net.connectionFailedLog", "value": "Failed to connect to host: {0}" },
-    { "key": "net.connectionFailed", "value": "Connection failed" }
+    { "key": "net.connectionFailed", "value": "Connection failed" },
+    { "key": "death.itemPreserve.enabled", "value": "Client death item preservation enabled (temporary fix)" },
+    { "key": "death.itemPreserve.notice", "value": "Note: This is a temporary solution for the grave system issue" },
+    { "key": "death.itemPreserve.inventoryBlocked", "value": "Blocked inventory clearing on death" }
   ]
 }
