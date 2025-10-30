@@ -23,13 +23,12 @@ namespace EscapeFromDuckovCoopMod;
 /// 临时修复：客户端玩家死亡后保留物品，避免坟墓系统的"no_inv"问题
 /// 这是一个临时解决方案，直到坟墓系统的底层问题得到修复
 /// </summary>
-[HarmonyPatch]
+[HarmonyPatch(typeof(CharacterMainControl), "OnDead")]
 internal static class PlayerDeathItemPreservePatch
 {
     // 拦截玩家死亡时的物品掉落/清空逻辑
-    [HarmonyPatch(typeof(CharacterMainControl), "OnDead")]
     [HarmonyPrefix]
-    private static bool PreventClientPlayerItemDrop(CharacterMainControl __instance, DamageInfo damageInfo)
+    private static bool PreventClientPlayerItemDrop(CharacterMainControl __instance, DamageInfo dmgInfo)
     {
         var mod = ModBehaviourF.Instance;
         if (mod == null || !mod.networkStarted) return true; // 非联机模式，正常执行
@@ -43,7 +42,7 @@ internal static class PlayerDeathItemPreservePatch
             Debug.Log("[COOP] 客户端玩家死亡 - 启用物品保留模式（临时修复）");
             
             // 执行死亡的视觉效果和状态切换，但跳过物品掉落
-            ExecuteDeathWithoutItemDrop(__instance, damageInfo);
+            ExecuteDeathWithoutItemDrop(__instance, dmgInfo);
             
             // 阻止原始的OnDead执行，避免物品被清空
             return false;
@@ -58,21 +57,21 @@ internal static class PlayerDeathItemPreservePatch
     /// <summary>
     /// 执行死亡逻辑但保留物品
     /// </summary>
-    private static void ExecuteDeathWithoutItemDrop(CharacterMainControl character, DamageInfo damageInfo)
+    private static void ExecuteDeathWithoutItemDrop(CharacterMainControl character, DamageInfo dmgInfo)
     {
         try
         {
             // 1. 触发死亡视觉效果
-            TriggerDeathVisualEffects(character, damageInfo);
+            TriggerDeathVisualEffects(character, dmgInfo);
             
             // 2. 设置死亡状态但不清空物品
             SetDeathStateWithoutItemClear(character);
             
             // 3. 进入观战模式（如果启用）
-            TryEnterSpectatorMode(damageInfo);
+            TryEnterSpectatorMode(dmgInfo);
             
             // 4. 通知其他系统玩家已死亡
-            NotifyPlayerDeath(character, damageInfo);
+            NotifyPlayerDeath(character, dmgInfo);
             
             Debug.Log("[COOP] 客户端玩家死亡处理完成 - 物品已保留（临时修复）");
         }
@@ -85,7 +84,7 @@ internal static class PlayerDeathItemPreservePatch
     /// <summary>
     /// 触发死亡视觉效果
     /// </summary>
-    private static void TriggerDeathVisualEffects(CharacterMainControl character, DamageInfo damageInfo)
+    private static void TriggerDeathVisualEffects(CharacterMainControl character, DamageInfo dmgInfo)
     {
         try
         {
@@ -97,7 +96,7 @@ internal static class PlayerDeathItemPreservePatch
             }
             
             // 触发受伤视觉效果（使用现有的AI方法）
-            LocalHitKillFx.ClientPlayForAI(character, damageInfo, true);
+            LocalHitKillFx.ClientPlayForAI(character, dmgInfo, true);
             
             // 禁用角色控制
             var characterController = character.GetComponent<CharacterController>();
@@ -146,14 +145,14 @@ internal static class PlayerDeathItemPreservePatch
     /// <summary>
     /// 尝试进入观战模式
     /// </summary>
-    private static void TryEnterSpectatorMode(DamageInfo damageInfo)
+    private static void TryEnterSpectatorMode(DamageInfo dmgInfo)
     {
         try
         {
             var spectator = Spectator.Instance;
             if (spectator != null)
             {
-                spectator.TryEnterSpectatorOnDeath(damageInfo);
+                spectator.TryEnterSpectatorOnDeath(dmgInfo);
                 Debug.Log("[COOP] 已尝试进入观战模式");
             }
         }
@@ -166,7 +165,7 @@ internal static class PlayerDeathItemPreservePatch
     /// <summary>
     /// 通知其他系统玩家死亡
     /// </summary>
-    private static void NotifyPlayerDeath(CharacterMainControl character, DamageInfo damageInfo)
+    private static void NotifyPlayerDeath(CharacterMainControl character, DamageInfo dmgInfo)
     {
         try
         {
