@@ -128,7 +128,6 @@ A: The script supports paths with spaces and parentheses, such as `Program Files
   - Client player items are not lost upon death
   - Death state and spectator mode work normally
   - See [DEATH_ITEM_PRESERVE_FIX_EN.md](DEATH_ITEM_PRESERVE_FIX_EN.md) for details
-
 ---
 
 ## 💡 Credits
