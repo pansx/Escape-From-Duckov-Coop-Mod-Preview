@@ -36,6 +36,15 @@ public class NetService : MonoBehaviour, INetEventListener
 
     public readonly HashSet<int> _dedupeShotFrame = new(); // 本帧已发过的标记
 
+    // 连接缓存相关字段
+    public string cachedConnectedIP = "";
+    public int cachedConnectedPort = 9050;
+    public bool hasSuccessfulConnection = false;
+    public bool isManualConnection = false; // 区分手动连接和自动重连
+    private bool isReconnecting = false; // 防止重复重连
+    private float lastReconnectTime = 0f;
+    private const float RECONNECT_COOLDOWN = 2f; // 重连冷却时间
+
     // 客户端：按 endPoint(玩家ID) 管理
     public readonly Dictionary<string, PlayerStatus> clientPlayerStatuses = new();
     public readonly Dictionary<string, GameObject> clientRemoteCharacters = new();
@@ -67,6 +76,16 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             status = CoopLocalization.Get("net.connectedTo", peer.EndPoint.ToString());
             isConnecting = false;
+            
+            // 只有手动连接成功时才更新缓存
+            if (isManualConnection)
+            {
+                cachedConnectedIP = peer.EndPoint.Address.ToString();
+                cachedConnectedPort = peer.EndPoint.Port;
+                hasSuccessfulConnection = true;
+                Debug.Log($"[COOP] 缓存连接信息: {cachedConnectedIP}:{cachedConnectedPort}");
+            }
+            
             Send_ClientStatus.Instance.SendClientStatusUpdate();
         }
 
@@ -160,6 +179,15 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             status = CoopLocalization.Get("net.connectionLost");
             isConnecting = false;
+            
+            // 只有主动断开连接时才清除缓存，网络错误时保留缓存用于重连
+            if (disconnectInfo.Reason == DisconnectReason.DisconnectPeerCalled)
+            {
+                hasSuccessfulConnection = false;
+                cachedConnectedIP = "";
+                cachedConnectedPort = 9050;
+                Debug.Log("[COOP] 主动断开连接，清除连接缓存");
+            }
         }
 
         if (connectedPeer == peer) connectedPeer = null;
@@ -168,7 +196,7 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             var _st = playerStatuses[peer];
             if (_st != null && !string.IsNullOrEmpty(_st.EndPoint))
-                SceneNet.Instance._cliLastSceneIdByPlayer.Remove(_st.EndPoint);
+                SceneNet.Instance?._cliLastSceneIdByPlayer?.Remove(_st.EndPoint);
             playerStatuses.Remove(peer);
         }
 
@@ -371,6 +399,7 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             status = CoopLocalization.Get("net.connectingTo", ip, port);
             isConnecting = true;
+            isManualConnection = true; // 标记为手动连接
 
             // 若已有连接，先断开（以免残留状态）
             try
@@ -395,6 +424,80 @@ public class NetService : MonoBehaviour, INetEventListener
             status = CoopLocalization.Get("net.connectionFailed");
             isConnecting = false;
             connectedPeer = null;
+        }
+    }
+
+    /// <summary>
+    /// 场景切换后自动重连到缓存的主机
+    /// </summary>
+    public void ReconnectAfterSceneLoad()
+    {
+        if (!hasSuccessfulConnection || string.IsNullOrEmpty(cachedConnectedIP))
+        {
+            Debug.Log("[COOP] 没有缓存的连接信息，跳过自动重连");
+            return;
+        }
+
+        if (IsServer)
+        {
+            Debug.Log("[COOP] 主机模式不需要重连");
+            return;
+        }
+
+        if (isReconnecting)
+        {
+            Debug.Log("[COOP] 正在重连中，跳过重复请求");
+            return;
+        }
+
+        // 检查冷却时间
+        if (Time.time - lastReconnectTime < RECONNECT_COOLDOWN)
+        {
+            Debug.Log($"[COOP] 重连冷却中，剩余 {RECONNECT_COOLDOWN - (Time.time - lastReconnectTime):F1} 秒");
+            return;
+        }
+
+        if (connectedPeer != null && connectedPeer.ConnectionState == ConnectionState.Connected)
+        {
+            Debug.Log("[COOP] 已经连接，无需重连");
+            return;
+        }
+
+        Debug.Log($"[COOP] 开始自动重连到 {cachedConnectedIP}:{cachedConnectedPort}");
+        isReconnecting = true;
+        lastReconnectTime = Time.time;
+        isManualConnection = false; // 标记为自动重连
+
+        AutoReconnectToHost();
+    }
+
+    /// <summary>
+    /// 自动重连到缓存的主机
+    /// </summary>
+    private async void AutoReconnectToHost()
+    {
+        try
+        {
+            await UniTask.Delay(500); // 等待场景完全加载
+
+            if (string.IsNullOrEmpty(cachedConnectedIP))
+            {
+                Debug.LogWarning("[COOP] 缓存的IP为空，无法重连");
+                isReconnecting = false;
+                return;
+            }
+
+            Debug.Log($"[COOP] 尝试重连到 {cachedConnectedIP}:{cachedConnectedPort}");
+            ConnectToHost(cachedConnectedIP, cachedConnectedPort);
+
+            // 等待连接结果
+            await UniTask.Delay(3000);
+            isReconnecting = false;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[COOP] 自动重连失败: {ex.Message}");
+            isReconnecting = false;
         }
     }
 

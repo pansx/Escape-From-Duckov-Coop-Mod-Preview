@@ -701,6 +701,16 @@ public class SceneNet : MonoBehaviour
         catch
         {
         }
+
+        // 场景加载完成后，尝试自动重连
+        try
+        {
+            NetService.Instance?.ReconnectAfterSceneLoad();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[COOP] 场景加载后重连失败: {ex.Message}");
+        }
     }
 
     // 主机：自身初始化完成 → 开门；已举手的立即放行；之后若有迟到的 READY，也会单放行
