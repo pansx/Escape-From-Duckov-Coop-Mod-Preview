@@ -36,6 +36,14 @@ public class NetService : MonoBehaviour, INetEventListener
 
     public readonly HashSet<int> _dedupeShotFrame = new(); // 本帧已发过的标记
 
+    // 场景切换重连功能
+    public string cachedConnectedIP = "";
+    public int cachedConnectedPort = 0;
+    public bool hasSuccessfulConnection = false;
+    private float lastReconnectTime = 0f;
+    private const float RECONNECT_COOLDOWN = 10f;
+    private bool isManualConnection = false;
+
     // 客户端：按 endPoint(玩家ID) 管理
     public readonly Dictionary<string, PlayerStatus> clientPlayerStatuses = new();
     public readonly Dictionary<string, GameObject> clientRemoteCharacters = new();
@@ -67,6 +75,21 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             status = CoopLocalization.Get("net.connectedTo", peer.EndPoint.ToString());
             isConnecting = false;
+            
+            // 只有手动连接成功才更新缓存
+            if (isManualConnection)
+            {
+                cachedConnectedIP = peer.EndPoint.Address.ToString();
+                cachedConnectedPort = peer.EndPoint.Port;
+                hasSuccessfulConnection = true;
+                Debug.Log($"[COOP] 手动连接成功，缓存连接信息: {cachedConnectedIP}:{cachedConnectedPort}");
+                isManualConnection = false;
+            }
+            else
+            {
+                Debug.Log($"[COOP] 自动重连成功，不更新缓存: {peer.EndPoint.Address}:{peer.EndPoint.Port}");
+            }
+            
             Send_ClientStatus.Instance.SendClientStatusUpdate();
         }
 
@@ -155,11 +178,28 @@ public class NetService : MonoBehaviour, INetEventListener
 
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
     {
-        Debug.Log(CoopLocalization.Get("net.disconnected", peer.EndPoint.ToString(), disconnectInfo.Reason.ToString()));
+        var peerEndPoint = peer?.EndPoint?.ToString() ?? "Unknown";
+        Debug.Log(CoopLocalization.Get("net.disconnected", peerEndPoint, disconnectInfo.Reason.ToString()));
         if (!IsServer)
         {
             status = CoopLocalization.Get("net.connectionLost");
             isConnecting = false;
+            
+            // 只有在手动断开连接时才清除缓存，自动重连失败时保留缓存
+            if (isManualConnection && (disconnectInfo.Reason == DisconnectReason.DisconnectPeerCalled || 
+                disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose))
+            {
+                hasSuccessfulConnection = false;
+                cachedConnectedIP = "";
+                cachedConnectedPort = 0;
+                Debug.Log("[COOP] 手动断开连接，清除缓存的连接信息");
+            }
+            else
+            {
+                Debug.Log($"[COOP] 连接断开 ({disconnectInfo.Reason})，保留缓存的连接信息用于重连");
+            }
+            
+            isManualConnection = false;
         }
 
         if (connectedPeer == peer) connectedPeer = null;
@@ -167,7 +207,7 @@ public class NetService : MonoBehaviour, INetEventListener
         if (playerStatuses.ContainsKey(peer))
         {
             var _st = playerStatuses[peer];
-            if (_st != null && !string.IsNullOrEmpty(_st.EndPoint))
+            if (_st != null && !string.IsNullOrEmpty(_st.EndPoint) && SceneNet.Instance != null)
                 SceneNet.Instance._cliLastSceneIdByPlayer.Remove(_st.EndPoint);
             playerStatuses.Remove(peer);
         }
@@ -318,11 +358,15 @@ public class NetService : MonoBehaviour, INetEventListener
 
     public void ConnectToHost(string ip, int port)
     {
+        // 标记为手动连接（从UI调用）
+        isManualConnection = true;
+        
         // 基础校验
         if (string.IsNullOrWhiteSpace(ip))
         {
             status = CoopLocalization.Get("net.ipEmpty");
             isConnecting = false;
+            isManualConnection = false;
             return;
         }
 
@@ -330,18 +374,21 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             status = CoopLocalization.Get("net.invalidPort");
             isConnecting = false;
+            isManualConnection = false;
             return;
         }
 
         if (IsServer)
         {
             Debug.LogWarning(CoopLocalization.Get("net.serverModeCannotConnect"));
+            isManualConnection = false;
             return;
         }
 
         if (isConnecting)
         {
             Debug.LogWarning(CoopLocalization.Get("net.alreadyConnecting"));
+            isManualConnection = false;
             return;
         }
 
@@ -356,6 +403,7 @@ public class NetService : MonoBehaviour, INetEventListener
                 Debug.LogError(CoopLocalization.Get("net.clientNetworkStartFailed", e));
                 status = CoopLocalization.Get("net.clientNetworkStartFailedStatus");
                 isConnecting = false;
+                isManualConnection = false;
                 return;
             }
 
@@ -364,6 +412,7 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             status = CoopLocalization.Get("net.clientNotStarted");
             isConnecting = false;
+            isManualConnection = false;
             return;
         }
 
@@ -395,6 +444,7 @@ public class NetService : MonoBehaviour, INetEventListener
             status = CoopLocalization.Get("net.connectionFailed");
             isConnecting = false;
             connectedPeer = null;
+            isManualConnection = false;
         }
     }
 
@@ -417,5 +467,128 @@ public class NetService : MonoBehaviour, INetEventListener
         if (playerStatuses != null && playerStatuses.TryGetValue(peer, out var st) && !string.IsNullOrEmpty(st.EndPoint))
             return st.EndPoint;
         return peer.EndPoint.ToString();
+    }
+
+    /// <summary>
+    /// 自动重连方法，不会更新缓存的连接信息
+    /// </summary>
+    private void AutoReconnectToHost(string ip, int port)
+    {
+        isManualConnection = false;
+        
+        if (string.IsNullOrWhiteSpace(ip) || port <= 0 || port > 65535 || IsServer || isConnecting)
+            return;
+
+        if (netManager == null || !netManager.IsRunning || IsServer || !networkStarted)
+        {
+            try
+            {
+                StartNetwork(false);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[COOP] 自动重连启动客户端网络失败: {e}");
+                return;
+            }
+        }
+
+        if (netManager == null || !netManager.IsRunning)
+            return;
+
+        try
+        {
+            Debug.Log($"[COOP] 开始自动重连到: {ip}:{port}");
+            isConnecting = true;
+
+            try
+            {
+                connectedPeer?.Disconnect();
+            }
+            catch { }
+
+            connectedPeer = null;
+
+            if (writer == null) writer = new NetDataWriter();
+
+            writer.Reset();
+            writer.Put("gameKey");
+            netManager.Connect(ip, port, writer);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[COOP] 自动重连失败: {ex}");
+            isConnecting = false;
+            connectedPeer = null;
+        }
+    }
+
+    /// <summary>
+    /// 场景加载完成后重新连接到缓存的主机
+    /// </summary>
+    public async UniTask ReconnectAfterSceneLoad()
+    {
+        if (IsServer || !hasSuccessfulConnection || string.IsNullOrEmpty(cachedConnectedIP) || cachedConnectedPort <= 0)
+            return;
+
+        // 防抖机制
+        float currentTime = Time.realtimeSinceStartup;
+        if (currentTime - lastReconnectTime < RECONNECT_COOLDOWN)
+            return;
+
+        lastReconnectTime = currentTime;
+
+        // 强制重连，先断开当前连接
+        if (connectedPeer != null && 
+            connectedPeer.EndPoint.Address.ToString() == cachedConnectedIP && 
+            connectedPeer.EndPoint.Port == cachedConnectedPort)
+        {
+            try
+            {
+                connectedPeer.Disconnect();
+                connectedPeer = null;
+                await UniTask.Delay(500);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[COOP] 断开连接异常: {ex}");
+            }
+        }
+
+        await UniTask.Delay(1000);
+
+        try
+        {
+            AutoReconnectToHost(cachedConnectedIP, cachedConnectedPort);
+            
+            var timeout = Time.realtimeSinceStartup + 15f;
+            while (isConnecting && Time.realtimeSinceStartup < timeout)
+            {
+                await UniTask.Delay(100);
+            }
+
+            if (connectedPeer != null)
+            {
+                Debug.Log($"[COOP] 场景切换后重连成功: {cachedConnectedIP}:{cachedConnectedPort}");
+                
+                await UniTask.Delay(1000);
+                
+                try
+                {
+                    if (Send_ClientStatus.Instance != null)
+                        Send_ClientStatus.Instance.SendClientStatusUpdate();
+                    
+                    if (SceneNet.Instance != null)
+                        SceneNet.Instance.TrySendSceneReadyOnce();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[COOP] 重连后发送状态更新异常: {ex}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[COOP] 场景切换后重连异常: {ex}");
+        }
     }
 }

@@ -701,6 +701,12 @@ public class SceneNet : MonoBehaviour
         catch
         {
         }
+
+        // 场景门控完成后，客户端尝试重连以确保完全同步
+        if (!IsServer && Service != null)
+        {
+            Service.ReconnectAfterSceneLoad().Forget();
+        }
     }
 
     // 主机：自身初始化完成 → 开门；已举手的立即放行；之后若有迟到的 READY，也会单放行
