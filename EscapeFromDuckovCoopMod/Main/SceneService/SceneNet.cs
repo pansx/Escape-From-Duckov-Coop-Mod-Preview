@@ -677,6 +677,34 @@ public class SceneNet : MonoBehaviour
             }
         }
 
+        // 6) 如果仍然没有连接，尝试自动重连
+        if (connectedPeer == null)
+        {
+            try
+            {
+                NetService.Instance?.ReconnectAfterSceneLoad();
+                // 重连后再次等待连接建立
+                var reconnectDeadline = Time.realtimeSinceStartup + 10f;
+                while (connectedPeer == null && Time.realtimeSinceStartup < reconnectDeadline)
+                {
+                    await UniTask.Delay(200);
+                    if (connectedPeer != null)
+                    {
+                        writer.Reset();
+                        writer.Put((byte)Op.SCENE_GATE_READY);
+                        writer.Put(localPlayerStatus != null ? localPlayerStatus.EndPoint : "");
+                        writer.Put(sid ?? "");
+                        connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[COOP] 场景门控期间重连失败: {ex.Message}");
+            }
+        }
+
         _cliGateDeadline = Time.realtimeSinceStartup + 100f; // 可调超时（防死锁）吃保底
 
         while (!_cliSceneGateReleased && Time.realtimeSinceStartup < _cliGateDeadline)
@@ -700,16 +728,6 @@ public class SceneNet : MonoBehaviour
         }
         catch
         {
-        }
-
-        // 场景加载完成后，尝试自动重连
-        try
-        {
-            NetService.Instance?.ReconnectAfterSceneLoad();
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[COOP] 场景加载后重连失败: {ex.Message}");
         }
     }
 
