@@ -8,22 +8,16 @@ echo Escape From Duckov Coop Mod Build Script
 echo ========================================
 echo.
 
-REM 检查环境变量
-if "%DUCKOV_GAME_DIRECTORY%"=="" (
-    echo [错误] 环境变量 DUCKOV_GAME_DIRECTORY 未设置
-    echo [Error] Environment variable DUCKOV_GAME_DIRECTORY is not set
-    echo.
-    echo 请先运行 SetEnvVars_Permanent.bat 设置游戏路径
-    echo Please run SetEnvVars_Permanent.bat first to set game path
-    echo.
-    pause
-    exit /b 1
-)
+REM 设置固定的游戏路径
+set "DUCKOV_GAME_DIRECTORY=C:\SteamLibrary\steamapps\common\Escape from Duckov"
 
 REM 验证游戏路径
 if not exist "%DUCKOV_GAME_DIRECTORY%" (
     echo [错误] 游戏目录不存在: %DUCKOV_GAME_DIRECTORY%
     echo [Error] Game directory does not exist: %DUCKOV_GAME_DIRECTORY%
+    echo.
+    echo [提示] 请修改Build.bat中的DUCKOV_GAME_DIRECTORY路径
+    echo [Tip] Please modify DUCKOV_GAME_DIRECTORY path in Build.bat
     echo.
     pause
     exit /b 1
@@ -146,5 +140,4 @@ if !errorLevel! equ 0 (
 )
 
 echo.
-pause
 endlocal
