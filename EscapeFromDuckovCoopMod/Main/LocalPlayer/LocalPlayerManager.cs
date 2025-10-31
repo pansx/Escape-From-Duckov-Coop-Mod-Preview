@@ -371,8 +371,9 @@ public class LocalPlayerManager : MonoBehaviour
         {
             cur = h.CurrentHealth;
         }
-        catch
+        catch (Exception e)
         {
+            Debug.LogError($"[DEATH-DEBUG] Error getting current health: {e}");
         }
 
         // 血量 > 0 ：视为复活/回血，清空所有“本轮死亡”相关标记
@@ -389,6 +390,8 @@ public class LocalPlayerManager : MonoBehaviour
         {
             return;
         }
+
+        Debug.Log($"[DEATH-DEBUG] Triggering death event - health: {cur}");
 
         try
         {
@@ -409,6 +412,11 @@ public class LocalPlayerManager : MonoBehaviour
             h.OnDeadEvent?.Invoke(di);
 
             _cliSelfDeathFired = true;
+            Debug.Log("[DEATH-DEBUG] Death event invoked");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[DEATH-DEBUG] Error in death event handling: {e}");
         }
         finally
         {

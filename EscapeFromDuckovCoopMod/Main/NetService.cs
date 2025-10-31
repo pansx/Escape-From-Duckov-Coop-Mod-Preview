@@ -14,6 +14,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
 
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
@@ -26,7 +27,7 @@ public class NetService : MonoBehaviour, INetEventListener
     public List<string> hostList = new();
     public bool isConnecting;
     public string status = "";
-    public string manualIP = "127.0.0.1";
+    public string manualIP = "r.pansx.net";
     public string manualPort = "9050"; // GTX 5090 我也想要
     public bool networkStarted;
     public float broadcastTimer;
@@ -178,6 +179,9 @@ public class NetService : MonoBehaviour, INetEventListener
 
                     peer.Send(w, DeliveryMethod.ReliableOrdered);
                 }
+            
+            // 同步当前场景的所有墓碑给新连接的客户端
+            SyncTombstonesToNewClient(peer);
         }
     }
 
@@ -688,6 +692,107 @@ public class NetService : MonoBehaviour, INetEventListener
         catch (Exception ex)
         {
             Debug.LogError($"[COOP] 场景切换后重连异常: {ex}");
+        }
+    }
+
+    /// <summary>
+    /// 同步当前场景的所有墓碑给新连接的客户端
+    /// </summary>
+    private void SyncTombstonesToNewClient(NetPeer peer)
+    {
+        if (!IsServer || peer == null || LootManager.Instance == null)
+        {
+            return;
+        }
+
+        try
+        {
+            Debug.Log($"[TOMBSTONE] 开始同步墓碑给新客户端: {peer.EndPoint}");
+            
+            var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            var syncCount = 0;
+            
+            // 遍历所有服务端的墓碑，发送给新客户端
+            foreach (var kv in LootManager.Instance._srvLootByUid)
+            {
+                var lootUid = kv.Key;
+                var inventory = kv.Value;
+                
+                if (inventory == null)
+                {
+                    continue;
+                }
+                
+                // 尝试获取墓碑的位置信息
+                Vector3 position = Vector3.zero;
+                Quaternion rotation = Quaternion.identity;
+                
+                if (LootManager.Instance.TryGetLootboxWorldPos(inventory, out position))
+                {
+                    // 从墓碑持久化系统获取更准确的位置和旋转信息
+                    if (TombstonePersistence.Instance != null)
+                    {
+                        // 尝试从所有用户的墓碑数据中找到匹配的墓碑
+                        var tombstoneFound = false;
+                        var tombstoneDir = Path.Combine(Application.streamingAssetsPath, "TombstoneData");
+                        
+                        if (Directory.Exists(tombstoneDir))
+                        {
+                            var tombstoneFiles = Directory.GetFiles(tombstoneDir, "*_tombstones.json");
+                            foreach (var filePath in tombstoneFiles)
+                            {
+                                try
+                                {
+                                    var fileName = Path.GetFileName(filePath);
+                                    var userId = TombstonePersistence.Instance.DecodeUserIdFromFileName(fileName);
+                                    var tombstone = TombstonePersistence.Instance.GetTombstone(userId, lootUid);
+                                    
+                                    if (tombstone != null)
+                                    {
+                                        position = tombstone.position;
+                                        rotation = tombstone.rotation;
+                                        tombstoneFound = true;
+                                        break;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.LogWarning($"[TOMBSTONE] 获取墓碑数据失败: {e.Message}");
+                                }
+                            }
+                        }
+                        
+                        if (!tombstoneFound)
+                        {
+                            Debug.LogWarning($"[TOMBSTONE] 未找到lootUid={lootUid}的墓碑数据，使用默认旋转");
+                        }
+                    }
+                    
+                    // 发送DEAD_LOOT_SPAWN消息给新客户端
+                    var writer = new NetDataWriter();
+                    writer.Put((byte)Op.DEAD_LOOT_SPAWN);
+                    writer.Put(currentScene);
+                    writer.Put(0); // aiId，对于恢复的墓碑设为0
+                    writer.Put(lootUid);
+                    writer.PutV3cm(position);
+                    writer.PutQuaternion(rotation);
+                    
+                    peer.Send(writer, DeliveryMethod.ReliableOrdered);
+                    syncCount++;
+                    
+                    Debug.Log($"[TOMBSTONE] 已同步墓碑给客户端: lootUid={lootUid}, pos={position}");
+                }
+                else
+                {
+                    Debug.LogWarning($"[TOMBSTONE] 无法获取lootUid={lootUid}的位置信息，跳过同步");
+                }
+            }
+            
+            Debug.Log($"[TOMBSTONE] 完成墓碑同步，共同步 {syncCount} 个墓碑给客户端: {peer.EndPoint}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] 同步墓碑给新客户端失败: {e}");
         }
     }
 }

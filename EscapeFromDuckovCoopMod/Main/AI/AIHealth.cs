@@ -74,7 +74,6 @@ public class AIHealth
         {
             COOPManager.AIHandle._cliPendingAiHealth[aiId] = cur;
             if (max > 0f) COOPManager.AIHandle._cliPendingAiMax[aiId] = max;
-            Debug.Log($"[AI-HP][CLIENT] pending aiId={aiId} max={max} cur={cur}");
             return;
         }
 

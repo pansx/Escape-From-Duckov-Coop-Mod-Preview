@@ -484,6 +484,21 @@ public class ModBehaviourF : MonoBehaviour
     {
         SceneNet.Instance.TrySendSceneReadyOnce();
         if (!IsServer) COOPManager.Weather.Client_RequestEnvSync();
+        
+        // 加载场景墓碑数据
+        if (IsServer && LootManager.Instance != null)
+        {
+            var sceneId = arg0.name;
+            
+            // 标准化场景名称
+            if (sceneId.StartsWith("Level_GroundZero"))
+            {
+                sceneId = "Level_GroundZero";
+            }
+            
+            Debug.Log($"[TOMBSTONE] Scene loaded, restoring tombstones for: {sceneId}");
+            LootManager.Instance.LoadSceneTombstones(sceneId);
+        }
     }
 
 
@@ -1313,9 +1328,9 @@ public class ModBehaviourF : MonoBehaviour
 
                 if (IsServer) break;
 
-                if (LogAiLoadoutDebug)
-                    Debug.Log(
-                        $"[AI-RECV] ver={ver} aiId={aiId} model='{modelName}' icon={iconType} showName={showName} faceLen={(faceJson != null ? faceJson.Length : 0)}");
+                // if (LogAiLoadoutDebug)
+                //     Debug.Log(
+                //         $"[AI-RECV] ver={ver} aiId={aiId} model='{modelName}' icon={iconType} showName={showName} faceLen={(faceJson != null ? faceJson.Length : 0)}");
 
                 if (AITool.aiById.TryGetValue(aiId, out var cmc) && cmc)
                     COOPManager.AIHandle.Client_ApplyAiLoadout(aiId, equips, weapons, faceJson, modelName, iconType,
@@ -1446,34 +1461,95 @@ public class ModBehaviourF : MonoBehaviour
 
                 if (AITool.aiById.TryGetValue(aiId, out var cmc) && cmc)
                     AIName.RefreshNameIconWithRetries(cmc, iconType, showName, displayName).Forget();
-                else
-                    Debug.LogWarning("[AI_icon_Name 10s] cmc is null!");
                 // 若当前还没绑定上 cmc，就先忽略；每 10s 会兜底播一遍
                 break;
             }
 
             case Op.PLAYER_DEAD_TREE:
             {
-                if (!IsServer) break;
+                Debug.Log($"[DEATH-DEBUG] Received PLAYER_DEAD_TREE from peer: {peer?.EndPoint}");
+                
+                if (!IsServer) 
+                {
+                    Debug.Log("[DEATH-DEBUG] Not server, ignoring PLAYER_DEAD_TREE");
+                    break;
+                }
+                
                 var pos = reader.GetV3cm();
                 var rot = reader.GetQuaternion();
+                Debug.Log($"[DEATH-DEBUG] Dead tree position: {pos}, rotation: {rot}");
 
                 var snap = ItemTool.ReadItemSnapshot(reader);
+                Debug.Log($"[DEATH-DEBUG] Item snapshot read from packet");
+                
                 var tmpRoot = ItemTool.BuildItemFromSnapshot(snap);
                 if (!tmpRoot)
                 {
-                    Debug.LogWarning("[LOOT] PLAYER_DEAD_TREE BuildItemFromSnapshot failed.");
+                    Debug.LogWarning("[DEATH-DEBUG] PLAYER_DEAD_TREE BuildItemFromSnapshot failed.");
                     break;
                 }
 
+                Debug.Log($"[DEATH-DEBUG] Built item from snapshot: {tmpRoot.name}, typeId: {tmpRoot.TypeID}");
+                
+                // 检查重建的物品树内容
+                var inventory = tmpRoot.Inventory;
+                if (inventory != null)
+                {
+                    Debug.Log($"[DEATH-DEBUG] Rebuilt item has inventory with {inventory.Content.Count} items");
+                    for (int i = 0; i < inventory.Content.Count; i++)
+                    {
+                        var item = inventory.GetItemAt(i);
+                        if (item != null)
+                        {
+                            Debug.Log($"[DEATH-DEBUG] - Item {i}: {item.name} (TypeID: {item.TypeID})");
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("[DEATH-DEBUG] Rebuilt item has no inventory!");
+                }
+
                 var deadPfb = LootManager.Instance.ResolveDeadLootPrefabOnServer();
+                Debug.Log($"[DEATH-DEBUG] Dead loot prefab resolved: {deadPfb?.name}");
+                
                 var box = InteractableLootbox.CreateFromItem(tmpRoot, pos + Vector3.up * 0.10f, rot, true, deadPfb);
                 if (box)
+                {
+                    Debug.Log($"[DEATH-DEBUG] Created lootbox: {box.name}");
+                    
+                    // 检查创建的墓碑内容
+                    var boxInventory = box.Inventory;
+                    if (boxInventory != null)
+                    {
+                        Debug.Log($"[DEATH-DEBUG] Created lootbox has inventory with {boxInventory.Content.Count} items");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[DEATH-DEBUG] Created lootbox has no inventory!");
+                    }
+                    
+                    // 保存用户ID到墓碑，用于后续持久化
+                    var userId = TombstonePersistence.Instance?.GetUserIdFromPeer(peer) ?? peer?.EndPoint?.ToString() ?? "unknown";
+                    if (box.gameObject != null)
+                    {
+                        var userIdComponent = box.gameObject.AddComponent<TombstoneUserIdTag>();
+                        userIdComponent.userId = userId;
+                        Debug.Log($"[DEATH-DEBUG] Tagged tombstone with userId: {userId}");
+                    }
+                    
                     DeadLootBox.Instance
                         .Server_OnDeadLootboxSpawned(box, null); // 用新版重载：会发 lootUid + aiId + 随后 LOOT_STATE
+                    Debug.Log("[DEATH-DEBUG] Called Server_OnDeadLootboxSpawned with whoDied=null");
+                }
+                else
+                {
+                    Debug.LogWarning("[DEATH-DEBUG] Failed to create lootbox from item");
+                }
 
                 if (remoteCharacters.TryGetValue(peer, out var proxy) && proxy)
                 {
+                    Debug.Log($"[DEATH-DEBUG] Destroying remote character proxy: {proxy.name}");
                     Destroy(proxy);
                     remoteCharacters.Remove(peer);
                 }
@@ -1481,6 +1557,7 @@ public class ModBehaviourF : MonoBehaviour
                 // B) 广播给所有客户端：这个玩家的远程代理需要销毁
                 if (playerStatuses.TryGetValue(peer, out var st) && !string.IsNullOrEmpty(st.EndPoint))
                 {
+                    Debug.Log($"[DEATH-DEBUG] Broadcasting REMOTE_DESPAWN for player: {st.EndPoint}");
                     var w2 = writer;
                     w2.Reset();
                     w2.Put((byte)Op.REMOTE_DESPAWN);
@@ -1488,8 +1565,11 @@ public class ModBehaviourF : MonoBehaviour
                     netManager.SendToAll(w2, DeliveryMethod.ReliableOrdered);
                 }
 
-
-                if (tmpRoot && tmpRoot.gameObject) Destroy(tmpRoot.gameObject);
+                if (tmpRoot && tmpRoot.gameObject) 
+                {
+                    Debug.Log("[DEATH-DEBUG] Destroying temporary root item");
+                    Destroy(tmpRoot.gameObject);
+                }
                 break;
             }
 

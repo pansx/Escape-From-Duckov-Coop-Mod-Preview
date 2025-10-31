@@ -373,6 +373,21 @@ public class LootNet
         peer.Send(ack, DeliveryMethod.ReliableOrdered);
 
         Server_SendLootboxState(null, inv);
+        
+        // 更新墓碑持久化数据（如果这是墓碑容器）
+        if (lootUid >= 0)
+        {
+            try
+            {
+                var userId = TombstonePersistence.Instance?.GetUserIdFromPeer(peer) ?? "unknown";
+                LootManager.Instance.UpdateTombstoneItems(userId, lootUid, inv);
+                Debug.Log($"[TOMBSTONE] Updated tombstone after item put: userId={userId}, lootUid={lootUid}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[TOMBSTONE] Failed to update tombstone after put: {e}");
+            }
+        }
     }
 
 
@@ -443,6 +458,22 @@ public class LootNet
         }
 
         Server_SendLootboxState(null, inv);
+        
+        // 更新墓碑持久化数据（如果这是玩家墓碑容器）
+        if (lootUid >= 0)
+        {
+            try
+            {
+                // 直接通过lootUid更新坟墓，不管是谁操作的
+                // 注意：UpdateTombstoneByLootUid 内部会检查是否为玩家坟墓
+                TombstonePersistence.Instance?.UpdateTombstoneByLootUid(lootUid, inv);
+                Debug.Log($"[TOMBSTONE] Attempted to update tombstone after item taken: lootUid={lootUid}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[TOMBSTONE] Failed to update tombstone after take: {e}");
+            }
+        }
     }
 
     public void Server_SendLootDeny(NetPeer peer, string reason)
@@ -1215,4 +1246,6 @@ public class LootNet
         public Inventory srcLoot;
         public int srcPos;
     }
+
+
 }

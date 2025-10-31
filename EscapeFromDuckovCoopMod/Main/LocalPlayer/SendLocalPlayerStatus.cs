@@ -192,7 +192,32 @@ public class SendLocalPlayerStatus : MonoBehaviour
         if (!networkStarted || IsServer || connectedPeer == null || who == null) return;
 
         var item = who.CharacterItem; // 本机一定能拿到
-        if (item == null) return;
+        if (item == null) 
+        {
+            Debug.LogWarning("[DEATH-DEBUG] Client CharacterItem is null!");
+            return;
+        }
+
+        Debug.Log($"[DEATH-DEBUG] Client item tree - name: {item.name}, typeId: {item.TypeID}");
+        
+        // 检查客户端物品树内容
+        var inventory = item.Inventory;
+        if (inventory != null)
+        {
+            Debug.Log($"[DEATH-DEBUG] Client inventory has {inventory.Content.Count} items");
+            for (int i = 0; i < inventory.Content.Count; i++)
+            {
+                var invItem = inventory.GetItemAt(i);
+                if (invItem != null)
+                {
+                    Debug.Log($"[DEATH-DEBUG] - Client Item {i}: {invItem.name} (TypeID: {invItem.TypeID})");
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[DEATH-DEBUG] Client item has no inventory!");
+        }
 
         // 尸体位置/朝向尽量贴近角色模型
         var pos = who.transform.position;
@@ -207,6 +232,8 @@ public class SendLocalPlayerStatus : MonoBehaviour
         // 把整棵物品“快照”写进包里
         ItemTool.WriteItemSnapshot(writer, item);
 
+
         connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+        Debug.Log("[DEATH-DEBUG] PLAYER_DEAD_TREE packet sent to server");
     }
 }
