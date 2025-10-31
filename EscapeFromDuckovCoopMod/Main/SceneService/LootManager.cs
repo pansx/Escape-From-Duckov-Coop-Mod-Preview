@@ -1296,16 +1296,15 @@ public class LootManager : MonoBehaviour
         {
             Debug.Log($"[TOMBSTONE] Broadcasting tombstone restoration: lootUid={tombstone.lootUid}, position={tombstone.position}");
             
-            // 使用现有的DEAD_LOOT_SPAWN消息格式来通知客户端
+            // 使用专门的TOMBSTONE_RESTORE消息类型来通知客户端
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
             
             writer.Reset();
-            writer.Put((byte)Op.DEAD_LOOT_SPAWN);
+            writer.Put((byte)Op.TOMBSTONE_RESTORE);
             writer.Put(scene);
-            writer.Put(tombstone.aiId); // AI ID，对于恢复的墓碑可能是0
             writer.Put(tombstone.lootUid);
             writer.PutV3cm(tombstone.position);
-            writer.PutQuaternion(tombstone.rotation); // 添加rotation参数
+            writer.PutQuaternion(tombstone.rotation);
             
             // 广播给所有客户端
             netManager.SendToAll(writer, DeliveryMethod.ReliableOrdered);
@@ -1315,6 +1314,162 @@ public class LootManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"[TOMBSTONE] Failed to broadcast tombstone restoration: {e}");
+        }
+    }
+
+    /// <summary>
+    /// 客户端重连后强制重新请求所有可见战利品箱的状态
+    /// </summary>
+    public void Client_ForceResyncAllLootboxes()
+    {
+        if (IsServer || !networkStarted)
+        {
+            return;
+        }
+
+        try
+        {
+            Debug.Log("[LOOT] 开始强制重新同步当前场景的战利品箱");
+            
+            // 首先清理无效的缓存条目
+            CleanupInvalidLootboxCaches();
+            
+            var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            var lootboxes = Object.FindObjectsOfType<InteractableLootbox>(false); // 只查找活跃的对象
+            var syncCount = 0;
+            var skippedCount = 0;
+            
+            foreach (var lootbox in lootboxes)
+            {
+                if (lootbox == null || lootbox.gameObject == null || lootbox.Inventory == null)
+                {
+                    skippedCount++;
+                    continue;
+                }
+
+                // 检查是否在当前场景中
+                if (lootbox.gameObject.scene != currentScene)
+                {
+                    skippedCount++;
+                    continue;
+                }
+
+                // 检查游戏对象是否处于活跃状态
+                if (!lootbox.gameObject.activeInHierarchy)
+                {
+                    skippedCount++;
+                    continue;
+                }
+
+                var inv = lootbox.Inventory;
+                
+                // 跳过私有库存
+                if (LootboxDetectUtil.IsPrivateInventory(inv))
+                {
+                    skippedCount++;
+                    continue;
+                }
+
+                try
+                {
+                    // 设置为加载状态
+                    inv.Loading = true;
+                    
+                    // 请求最新状态
+                    COOPManager.LootNet.Client_RequestLootState(inv);
+                    
+                    // 设置超时保护
+                    KickLootTimeout(inv, 2.0f);
+                    
+                    syncCount++;
+                    
+                    Debug.Log($"[LOOT] 请求同步战利品箱: {lootbox.name} at {lootbox.transform.position}");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[LOOT] 请求同步战利品箱失败: {lootbox.name}, 错误: {e.Message}");
+                    skippedCount++;
+                }
+            }
+            
+            Debug.Log($"[LOOT] 完成强制重新同步，当前场景: {currentScene.name}, 请求同步: {syncCount} 个, 跳过: {skippedCount} 个战利品箱");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[LOOT] 强制重新同步所有战利品箱失败: {e}");
+        }
+    }
+
+    /// <summary>
+    /// 清理无效的战利品箱缓存条目
+    /// </summary>
+    private void CleanupInvalidLootboxCaches()
+    {
+        if (IsServer)
+        {
+            return;
+        }
+
+        try
+        {
+            var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            var cleanedCount = 0;
+
+            // 清理客户端战利品箱映射中的无效条目
+            var invalidUids = new List<int>();
+            foreach (var kv in _cliLootByUid)
+            {
+                var lootUid = kv.Key;
+                var inventory = kv.Value;
+                
+                if (inventory == null)
+                {
+                    invalidUids.Add(lootUid);
+                    continue;
+                }
+                
+                // 检查对应的InteractableLootbox是否还存在且在当前场景中
+                var lootbox = LootboxDetectUtil.TryGetInventoryLootBox(inventory);
+                if (lootbox == null || lootbox.gameObject == null || 
+                    !lootbox.gameObject.activeInHierarchy || 
+                    lootbox.gameObject.scene != currentScene)
+                {
+                    invalidUids.Add(lootUid);
+                }
+            }
+            
+            foreach (var uid in invalidUids)
+            {
+                _cliLootByUid.Remove(uid);
+                cleanedCount++;
+            }
+
+            // 清理待处理的战利品状态
+            var invalidPendingUids = new List<int>();
+            foreach (var kv in _pendingLootStatesByUid)
+            {
+                var lootUid = kv.Key;
+                // 如果对应的战利品箱已经不在当前场景，清理待处理状态
+                if (!_cliLootByUid.ContainsKey(lootUid))
+                {
+                    invalidPendingUids.Add(lootUid);
+                }
+            }
+            
+            foreach (var uid in invalidPendingUids)
+            {
+                _pendingLootStatesByUid.Remove(uid);
+                cleanedCount++;
+            }
+            
+            if (cleanedCount > 0)
+            {
+                Debug.Log($"[LOOT] 清理了 {cleanedCount} 个无效的战利品箱缓存条目");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[LOOT] 清理无效战利品箱缓存失败: {e}");
         }
     }
 }

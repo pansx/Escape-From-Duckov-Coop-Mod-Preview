@@ -456,28 +456,47 @@ namespace EscapeFromDuckovCoopMod
                     createTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
                 };
 
-                // 序列化物品数据
+                // 序列化物品数据（过滤掉不应该掉落的物品）
                 if (inventory != null)
                 {
+                    var filteredCount = 0;
+                    var totalCount = 0;
+                    
                     for (int i = 0; i < inventory.Content.Count; i++)
                     {
                         var item = inventory.GetItemAt(i);
                         if (item != null)
                         {
-                            try
+                            totalCount++;
+                            
+                            // 检查物品是否应该掉落
+                            if (ShouldItemDrop(item))
                             {
-                                var snapshot = ItemTool.MakeSnapshot(item);
-                                tombstone.items.Add(new TombstoneItem
+                                try
                                 {
-                                    position = i,
-                                    snapshot = snapshot
-                                });
+                                    var snapshot = ItemTool.MakeSnapshot(item);
+                                    tombstone.items.Add(new TombstoneItem
+                                    {
+                                        position = i,
+                                        snapshot = snapshot
+                                    });
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.LogError($"[TOMBSTONE] Failed to serialize item at position {i}: {e}");
+                                }
                             }
-                            catch (Exception e)
+                            else
                             {
-                                Debug.LogError($"[TOMBSTONE] Failed to serialize item at position {i}: {e}");
+                                filteredCount++;
+                                Debug.Log($"[TOMBSTONE] Filtered non-droppable item: TypeID={item.TypeID}, Name={item.name}");
                             }
                         }
+                    }
+                    
+                    if (filteredCount > 0)
+                    {
+                        Debug.Log($"[TOMBSTONE] Filtered {filteredCount} non-droppable items out of {totalCount} total items");
                     }
                 }
 
@@ -489,6 +508,160 @@ namespace EscapeFromDuckovCoopMod
             catch (Exception e)
             {
                 Debug.LogError($"[TOMBSTONE] Failed to add tombstone: {e}");
+            }
+        }
+
+        /// <summary>
+        /// 判断物品是否应该掉落（过滤掉近战武器、图腾等不应掉落的物品）
+        /// </summary>
+        private bool ShouldItemDrop(Item item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                // 检查物品是否是近战武器
+                if (IsMeleeWeapon(item))
+                {
+                    Debug.Log($"[TOMBSTONE] Filtering melee weapon: TypeID={item.TypeID}, Name={item.name}");
+                    return false;
+                }
+
+                // 检查物品是否是图腾或其他特殊物品
+                if (IsTotemOrSpecialItem(item))
+                {
+                    Debug.Log($"[TOMBSTONE] Filtering totem/special item: TypeID={item.TypeID}, Name={item.name}");
+                    return false;
+                }
+
+                // 检查物品名称中是否包含不应掉落的关键词
+                if (HasNonDroppableKeywords(item))
+                {
+                    Debug.Log($"[TOMBSTONE] Filtering item with non-droppable keywords: TypeID={item.TypeID}, Name={item.name}");
+                    return false;
+                }
+
+                // 默认允许掉落
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[TOMBSTONE] Error checking if item should drop: {e}");
+                // 出错时保守处理，允许掉落
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 检查是否是近战武器
+        /// </summary>
+        private bool IsMeleeWeapon(Item item)
+        {
+            try
+            {
+                // 检查物品是否有ItemAgent_MeleeWeapon组件
+                var meleeAgent = item.GetComponent<ItemAgent_MeleeWeapon>();
+                if (meleeAgent != null)
+                {
+                    return true;
+                }
+
+                // 检查物品名称是否包含近战武器关键词
+                var itemName = item.name?.ToLower() ?? "";
+                var meleeKeywords = new[] { "knife", "sword", "axe", "hammer", "blade", "melee", "刀", "剑", "斧", "锤" };
+                
+                foreach (var keyword in meleeKeywords)
+                {
+                    if (itemName.Contains(keyword))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[TOMBSTONE] Error checking melee weapon: {e}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 检查是否是图腾或其他特殊物品
+        /// </summary>
+        private bool IsTotemOrSpecialItem(Item item)
+        {
+            try
+            {
+                var itemName = item.name?.ToLower() ?? "";
+                
+                // 图腾相关关键词
+                var totemKeywords = new[] { "totem", "图腾", "charm", "amulet", "talisman" };
+                
+                foreach (var keyword in totemKeywords)
+                {
+                    if (itemName.Contains(keyword))
+                    {
+                        return true;
+                    }
+                }
+
+                // 检查特定的TypeID（如果知道具体的图腾或特殊物品ID）
+                // 这里可以根据实际游戏中的物品ID进行调整
+                var nonDroppableTypeIds = new HashSet<int>
+                {
+                    // 添加已知的不应掉落的物品TypeID
+                    // 例如：1001, 1002, 1003 等
+                };
+
+                if (nonDroppableTypeIds.Contains(item.TypeID))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[TOMBSTONE] Error checking totem/special item: {e}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 检查物品名称是否包含不应掉落的关键词
+        /// </summary>
+        private bool HasNonDroppableKeywords(Item item)
+        {
+            try
+            {
+                var itemName = item.name?.ToLower() ?? "";
+                
+                // 不应掉落的物品关键词
+                var nonDroppableKeywords = new[] 
+                { 
+                    "starter", "default", "basic", "tutorial", "quest", "mission",
+                    "初始", "默认", "基础", "教程", "任务", "剧情"
+                };
+                
+                foreach (var keyword in nonDroppableKeywords)
+                {
+                    if (itemName.Contains(keyword))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[TOMBSTONE] Error checking non-droppable keywords: {e}");
+                return false;
             }
         }
 
@@ -511,27 +684,78 @@ namespace EscapeFromDuckovCoopMod
                 
                 Debug.Log($"[TOMBSTONE] Found {sceneTombstones.Count} tombstones for userId={userId}, sceneId={sceneId}");
                 
-                // 输出匹配的墓碑详细信息
+                // 检查并清理空墓碑
+                var emptyTombstones = new List<TombstoneData>();
+                var validTombstones = new List<TombstoneData>();
+                
+                // 输出匹配的墓碑详细信息并分类
                 for (int i = 0; i < sceneTombstones.Count; i++)
                 {
                     var tombstone = sceneTombstones[i];
-                    var totalItems = tombstone.items.Count;
+                    var totalItems = tombstone.items?.Count ?? 0;
                     Debug.Log($"[TOMBSTONE] Scene tombstone {i}: lootUid={tombstone.lootUid}, items={totalItems}, position={tombstone.position}");
                     
-                    // 统计物品类型
-                    var itemTypes = new Dictionary<int, int>();
-                    foreach (var item in tombstone.items)
+                    if (totalItems == 0)
                     {
-                        if (itemTypes.ContainsKey(item.snapshot.typeId))
-                            itemTypes[item.snapshot.typeId] += item.snapshot.stack;
-                        else
-                            itemTypes[item.snapshot.typeId] = item.snapshot.stack;
+                        Debug.LogWarning($"[TOMBSTONE] Found empty tombstone: userId={userId}, lootUid={tombstone.lootUid}, sceneId={sceneId}");
+                        emptyTombstones.Add(tombstone);
                     }
-                    
-                    Debug.Log($"[TOMBSTONE]   Item summary: {string.Join(", ", itemTypes.Select(kv => $"TypeID:{kv.Key}x{kv.Value}"))}");
+                    else
+                    {
+                        // 统计物品类型
+                        var itemTypes = new Dictionary<int, int>();
+                        foreach (var item in tombstone.items)
+                        {
+                            if (itemTypes.ContainsKey(item.snapshot.typeId))
+                                itemTypes[item.snapshot.typeId] += item.snapshot.stack;
+                            else
+                                itemTypes[item.snapshot.typeId] = item.snapshot.stack;
+                        }
+                        
+                        Debug.Log($"[TOMBSTONE]   Item summary: {string.Join(", ", itemTypes.Select(kv => $"TypeID:{kv.Key}x{kv.Value}"))}");
+                        validTombstones.Add(tombstone);
+                    }
                 }
                 
-                return sceneTombstones;
+                // 如果有空墓碑，从用户数据中移除并保存
+                if (emptyTombstones.Count > 0)
+                {
+                    Debug.Log($"[TOMBSTONE] Removing {emptyTombstones.Count} empty tombstones for userId={userId}");
+                    
+                    // 从用户数据中移除空墓碑
+                    foreach (var emptyTombstone in emptyTombstones)
+                    {
+                        userData.tombstones.RemoveAll(t => t.lootUid == emptyTombstone.lootUid);
+                        Debug.Log($"[TOMBSTONE] Removed empty tombstone: lootUid={emptyTombstone.lootUid}");
+                    }
+                    
+                    // 检查用户是否还有其他墓碑
+                    if (userData.tombstones.Count == 0)
+                    {
+                        // 如果用户没有任何墓碑了，删除整个JSON文件
+                        var filePath = GetUserDataPath(userId);
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                            Debug.Log($"[TOMBSTONE] Deleted empty tombstone file: {filePath}");
+                        }
+                        
+                        // 从缓存中移除
+                        if (_userDataCache.ContainsKey(userId))
+                        {
+                            _userDataCache.Remove(userId);
+                            Debug.Log($"[TOMBSTONE] Removed user data from cache: {userId}");
+                        }
+                    }
+                    else
+                    {
+                        // 还有其他墓碑，保存更新后的数据
+                        SaveUserData(userId, userData);
+                        Debug.Log($"[TOMBSTONE] Updated tombstone file after removing empty tombstones: userId={userId}, remaining tombstones={userData.tombstones.Count}");
+                    }
+                }
+                
+                return validTombstones;
             }
             catch (Exception e)
             {

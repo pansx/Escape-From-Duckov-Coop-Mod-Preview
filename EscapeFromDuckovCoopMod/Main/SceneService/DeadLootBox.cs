@@ -39,24 +39,105 @@ public class DeadLootBox : MonoBehaviour
         Instance = this;
     }
 
+    /// <summary>
+    /// 清理客户端无效的战利品箱条目
+    /// </summary>
+    private void CleanupInvalidLootboxEntries()
+    {
+        if (IsServer || LootManager.Instance == null)
+        {
+            return;
+        }
+
+        try
+        {
+            var invalidUids = new List<int>();
+            
+            foreach (var kv in LootManager.Instance._cliLootByUid)
+            {
+                var lootUid = kv.Key;
+                var inventory = kv.Value;
+                
+                if (inventory == null)
+                {
+                    invalidUids.Add(lootUid);
+                    continue;
+                }
+                
+                // 检查对应的InteractableLootbox是否还存在且有效
+                var lootbox = LootboxDetectUtil.TryGetInventoryLootBox(inventory);
+                if (lootbox == null || lootbox.gameObject == null || !lootbox.gameObject.activeInHierarchy)
+                {
+                    invalidUids.Add(lootUid);
+                }
+            }
+            
+            foreach (var uid in invalidUids)
+            {
+                LootManager.Instance._cliLootByUid.Remove(uid);
+                Debug.Log($"[DEATH-DEBUG] Cleaned up invalid lootbox entry: lootUid={uid}");
+            }
+            
+            if (invalidUids.Count > 0)
+            {
+                Debug.Log($"[DEATH-DEBUG] Cleaned up {invalidUids.Count} invalid lootbox entries");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[DEATH-DEBUG] Failed to cleanup invalid lootbox entries: {e}");
+        }
+    }
+
     public void SpawnDeadLootboxAt(int aiId, int lootUid, Vector3 pos, Quaternion rot)
     {
         Debug.Log($"[DEATH-DEBUG] SpawnDeadLootboxAt called - aiId:{aiId}, lootUid:{lootUid}, pos:{pos}, rot:{rot}");
         
         try
         {
+            // 首先清理所有无效的战利品箱条目
+            CleanupInvalidLootboxEntries();
+            
             // 检查是否已经存在相同lootUid的墓碑，并且游戏对象仍然有效
             if (lootUid >= 0 && LootManager.Instance._cliLootByUid.ContainsKey(lootUid))
             {
                 var existingInv = LootManager.Instance._cliLootByUid[lootUid];
-                if (existingInv != null && existingInv.gameObject != null)
+                if (existingInv != null)
                 {
-                    Debug.Log($"[DEATH-DEBUG] Tombstone with lootUid {lootUid} already exists on client, skipping creation");
-                    return;
+                    // 检查对应的InteractableLootbox是否还存在且有效
+                    var existingLootbox = LootboxDetectUtil.TryGetInventoryLootBox(existingInv);
+                    if (existingLootbox != null && existingLootbox.gameObject != null && existingLootbox.gameObject.activeInHierarchy)
+                    {
+                        // 检查位置是否匹配，如果位置不匹配说明是旧的战利品箱，需要清理
+                        var distance = Vector3.Distance(existingLootbox.transform.position, pos);
+                        if (distance < 1.0f) // 1米内认为是同一个位置
+                        {
+                            Debug.Log($"[DEATH-DEBUG] Tombstone with lootUid {lootUid} already exists on client at same position, skipping creation");
+                            return;
+                        }
+                        else
+                        {
+                            Debug.Log($"[DEATH-DEBUG] Tombstone with lootUid {lootUid} exists but at different position (distance: {distance:F2}m), removing old one");
+                            try
+                            {
+                                Destroy(existingLootbox.gameObject);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogWarning($"[DEATH-DEBUG] Failed to destroy old lootbox: {e.Message}");
+                            }
+                            LootManager.Instance._cliLootByUid.Remove(lootUid);
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"[DEATH-DEBUG] Tombstone with lootUid {lootUid} exists in dictionary but lootbox is invalid, removing and recreating");
+                        LootManager.Instance._cliLootByUid.Remove(lootUid);
+                    }
                 }
                 else
                 {
-                    Debug.Log($"[DEATH-DEBUG] Tombstone with lootUid {lootUid} exists in dictionary but gameObject is null, removing and recreating");
+                    Debug.Log($"[DEATH-DEBUG] Tombstone with lootUid {lootUid} exists in dictionary but inventory is null, removing and recreating");
                     LootManager.Instance._cliLootByUid.Remove(lootUid);
                 }
             }
@@ -573,5 +654,218 @@ public class DeadLootBox : MonoBehaviour
             Debug.LogWarning($"[DEATH-DEBUG] Client error checking if inventory is empty: {e.Message}");
             return true; // 出错时认为是空的，需要清理
         }
+    }
+
+    /// <summary>
+    /// 客户端专用：恢复墓碑（不移除AI尸体，使用墓碑预制体）
+    /// </summary>
+    public void SpawnTombstoneRestoration(int lootUid, Vector3 pos, Quaternion rot)
+    {
+        Debug.Log($"[TOMBSTONE] SpawnTombstoneRestoration called - lootUid:{lootUid}, pos:{pos}, rot:{rot}");
+        
+        try
+        {
+            // 首先清理所有无效的战利品箱条目
+            CleanupInvalidLootboxEntries();
+            
+            // 检查是否已经存在相同lootUid的墓碑
+            if (lootUid >= 0 && LootManager.Instance._cliLootByUid.ContainsKey(lootUid))
+            {
+                var existingInv = LootManager.Instance._cliLootByUid[lootUid];
+                if (existingInv != null)
+                {
+                    var existingLootbox = LootboxDetectUtil.TryGetInventoryLootBox(existingInv);
+                    if (existingLootbox != null && existingLootbox.gameObject != null && existingLootbox.gameObject.activeInHierarchy)
+                    {
+                        var distance = Vector3.Distance(existingLootbox.transform.position, pos);
+                        if (distance < 1.0f)
+                        {
+                            Debug.Log($"[TOMBSTONE] Tombstone with lootUid {lootUid} already exists at same position, skipping restoration");
+                            return;
+                        }
+                        else
+                        {
+                            Debug.Log($"[TOMBSTONE] Tombstone with lootUid {lootUid} exists but at different position (distance: {distance:F2}m), removing old one");
+                            try
+                            {
+                                Destroy(existingLootbox.gameObject);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogWarning($"[TOMBSTONE] Failed to destroy old tombstone: {e.Message}");
+                            }
+                            LootManager.Instance._cliLootByUid.Remove(lootUid);
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"[TOMBSTONE] Tombstone with lootUid {lootUid} exists in dictionary but lootbox is invalid, removing and recreating");
+                        LootManager.Instance._cliLootByUid.Remove(lootUid);
+                    }
+                }
+                else
+                {
+                    Debug.Log($"[TOMBSTONE] Tombstone with lootUid {lootUid} exists in dictionary but inventory is null, removing and recreating");
+                    LootManager.Instance._cliLootByUid.Remove(lootUid);
+                }
+            }
+            
+            // 清理同一位置的空墓碑
+            CleanupEmptyLootboxesAtPositionClient(pos, 1.0f);
+            
+            // 注意：墓碑恢复不移除AI尸体，因为这不是真正的AI死亡
+            
+            // 获取墓碑预制体（优先使用墓碑外观）
+            GameObject prefabGO = null;
+            var tombstonePrefab = GetTombstonePrefabOnClient();
+            if (tombstonePrefab != null)
+            {
+                prefabGO = tombstonePrefab.gameObject;
+            }
+            else
+            {
+                Debug.LogWarning("[TOMBSTONE] Tombstone prefab not found on client, using fallback");
+                prefabGO = GetDeadLootPrefabOnClient(0); // 使用默认预制体作为后备
+                if (prefabGO == null)
+                {
+                    Debug.LogError("[TOMBSTONE] No suitable prefab found for tombstone restoration");
+                    return;
+                }
+            }
+
+            Debug.Log($"[TOMBSTONE] Using tombstone prefab: {prefabGO.name}");
+
+            var go = Instantiate(prefabGO, pos, rot);
+            var box = go ? go.GetComponent<InteractableLootbox>() : null;
+            if (!box) 
+            {
+                Debug.LogWarning("[TOMBSTONE] Failed to get InteractableLootbox component from tombstone");
+                return;
+            }
+
+            Debug.Log($"[TOMBSTONE] Created tombstone: {box.name}");
+
+            var inv = box.Inventory;
+            if (!inv)
+            {
+                Debug.LogWarning("[TOMBSTONE] Tombstone inventory is null!");
+                return;
+            }
+
+            Debug.Log($"[TOMBSTONE] Got tombstone inventory with {inv.Content.Count} items");
+
+            // 标记为需要检视的世界容器
+            WorldLootPrime.PrimeIfClient(box);
+            Debug.Log("[TOMBSTONE] Primed tombstone for client");
+
+            // 注册到字典
+            var dict = InteractableLootbox.Inventories;
+            if (dict != null)
+            {
+                var correctKey = LootManager.ComputeLootKeyFromPos(pos);
+                dict[correctKey] = inv;
+                Debug.Log($"[TOMBSTONE] Registered tombstone inventory with correct key: {correctKey}");
+            }
+
+            // 注册稳定ID
+            if (lootUid >= 0) 
+            {
+                LootManager.Instance._cliLootByUid[lootUid] = inv;
+                Debug.Log($"[TOMBSTONE] Registered tombstone inventory with lootUid: {lootUid}");
+            }
+
+            // 处理缓存的状态（如果有）
+            if (lootUid >= 0 && LootManager.Instance._pendingLootStatesByUid.TryGetValue(lootUid, out var pack))
+            {
+                Debug.Log($"[TOMBSTONE] Found pending loot state for lootUid: {lootUid}, applying cached state");
+                LootManager.Instance._pendingLootStatesByUid.Remove(lootUid);
+
+                COOPManager.LootNet._applyingLootState = true;
+                try
+                {
+                    var cap = Mathf.Clamp(pack.capacity, 1, 128);
+                    Debug.Log($"[TOMBSTONE] Applying cached state - capacity: {cap}, items: {pack.Item2.Count}");
+                    
+                    inv.Loading = true;
+                    inv.SetCapacity(cap);
+
+                    // 清空现有物品
+                    var removedCount = 0;
+                    for (var i = inv.Content.Count - 1; i >= 0; --i)
+                    {
+                        Item removed;
+                        inv.RemoveAt(i, out removed);
+                        try
+                        {
+                            if (removed) 
+                            {
+                                Destroy(removed.gameObject);
+                                removedCount++;
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    Debug.Log($"[TOMBSTONE] Removed {removedCount} existing items");
+
+                    // 添加缓存的物品
+                    var addedCount = 0;
+                    foreach (var (p, snap) in pack.Item2)
+                    {
+                        var item = ItemTool.BuildItemFromSnapshot(snap);
+                        if (item) 
+                        {
+                            inv.AddAt(item, p);
+                            addedCount++;
+                        }
+                    }
+                    Debug.Log($"[TOMBSTONE] Added {addedCount} cached items to tombstone");
+
+                    inv.Loading = false;
+                }
+                finally
+                {
+                    COOPManager.LootNet._applyingLootState = false;
+                }
+            }
+            else
+            {
+                Debug.Log($"[TOMBSTONE] No cached state found, requesting loot state from server");
+                // 请求服务端状态
+                COOPManager.LootNet.Client_RequestLootState(inv);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] SpawnTombstoneRestoration failed: {e}");
+        }
+    }
+
+    /// <summary>
+    /// 获取墓碑预制体（客户端用）
+    /// </summary>
+    private InteractableLootbox GetTombstonePrefabOnClient()
+    {
+        try
+        {
+            // 使用LootManager的方法来获取墓碑预制体
+            var lootManager = LootManager.Instance;
+            if (lootManager != null)
+            {
+                var prefab = lootManager.ResolveDeadLootPrefabOnServer();
+                if (prefab != null)
+                {
+                    Debug.Log($"[TOMBSTONE] Found tombstone prefab via LootManager: {prefab.name}");
+                    return prefab;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[TOMBSTONE] Failed to get tombstone prefab via LootManager: {e.Message}");
+        }
+        
+        return null;
     }
 }

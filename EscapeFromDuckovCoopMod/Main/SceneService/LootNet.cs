@@ -170,6 +170,7 @@ public class LootNet
             inv.SetCapacity(capacity);
             inv.Loading = false;
 
+            // 清除现有物品
             for (var i = inv.Content.Count - 1; i >= 0; --i)
             {
                 Item removed;
@@ -177,6 +178,7 @@ public class LootNet
                 if (removed) Object.Destroy(removed.gameObject);
             }
 
+            // 添加新物品
             for (var k = 0; k < count; ++k)
             {
                 var pos = r.GetInt();
@@ -185,12 +187,18 @@ public class LootNet
                 if (item == null) continue;
                 inv.AddAt(item, pos);
             }
+
+            // 确保稳定ID映射正确更新
+            if (lootUid >= 0)
+            {
+                LootManager.Instance._cliLootByUid[lootUid] = inv;
+                Debug.Log($"[LOOT] 客户端更新战利品箱映射: lootUid={lootUid}, 物品数量={count}");
+            }
         }
         finally
         {
             _applyingLootState = false;
         }
-
 
         try
         {

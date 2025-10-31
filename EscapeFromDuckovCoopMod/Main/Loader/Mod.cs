@@ -1447,6 +1447,19 @@ public class ModBehaviourF : MonoBehaviour
                 break;
             }
 
+            case Op.TOMBSTONE_RESTORE:
+            {
+                var scene = reader.GetInt();
+                var lootUid = reader.GetInt();
+                var pos = reader.GetV3cm();
+                var rot = reader.GetQuaternion();
+                if (SceneManager.GetActiveScene().buildIndex != scene) break;
+
+                Debug.Log($"[TOMBSTONE] Client received TOMBSTONE_RESTORE: lootUid={lootUid}, pos={pos}");
+                DeadLootBox.Instance.SpawnTombstoneRestoration(lootUid, pos, rot);
+                break;
+            }
+
 
             case Op.AI_NAME_ICON:
             {

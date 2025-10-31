@@ -74,68 +74,183 @@ public class COOPManager
 
     public static void ChangeArmorModel(CharacterModel characterModel, Item item)
     {
-        if (item != null)
+        try
         {
-            var slot = characterModel.characterMainControl.CharacterItem.Slots["Armor"];
-            Traverse.Create(slot).Field<Item>("content").Value = item;
-        }
+            if (characterModel == null || characterModel.characterMainControl == null || 
+                characterModel.characterMainControl.CharacterItem == null)
+            {
+                Debug.LogWarning("[COOP] ChangeArmorModel: characterModel or CharacterItem is null");
+                return;
+            }
 
-        if (item == null)
-        {
-            var socket = characterModel.ArmorSocket;
-            for (var i = socket.childCount - 1; i >= 0; i--) Object.Destroy(socket.GetChild(i).gameObject);
-            return;
-        }
+            var slots = characterModel.characterMainControl.CharacterItem.Slots;
+            if (slots == null)
+            {
+                Debug.LogWarning("[COOP] ChangeArmorModel: Slots is null");
+                return;
+            }
 
-        var faceMaskSocket = characterModel.ArmorSocket;
-        var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
-        if (itemAgent == null)
-        {
-            Debug.LogError("生成的装备Item没有装备agent，Item名称：" + item.gameObject.name);
-            return;
-        }
+            var slot = slots.GetSlot("Armor");
+            if (slot == null)
+            {
+                Debug.LogWarning("[COOP] ChangeArmorModel: Armor slot not found");
+                return;
+            }
 
-        if (itemAgent != null)
-        {
+            // 安全地设置槽位内容
+            if (item != null)
+            {
+                try
+                {
+                    Traverse.Create(slot).Field<Item>("content").Value = item;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[COOP] ChangeArmorModel: Failed to set slot content: {e.Message}");
+                }
+            }
+
+            if (item == null)
+            {
+                var socket = characterModel.ArmorSocket;
+                if (socket != null)
+                {
+                    for (var i = socket.childCount - 1; i >= 0; i--) 
+                    {
+                        var child = socket.GetChild(i);
+                        if (child != null) Object.Destroy(child.gameObject);
+                    }
+                }
+                return;
+            }
+
+            var faceMaskSocket = characterModel.ArmorSocket;
+            if (faceMaskSocket == null)
+            {
+                Debug.LogWarning("[COOP] ChangeArmorModel: ArmorSocket is null");
+                return;
+            }
+
+            if (item.AgentUtilities == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeArmorModel: Item {item.name} has no AgentUtilities");
+                return;
+            }
+
+            var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
+            if (itemAgent == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeArmorModel: Failed to create agent for item: {item.name}");
+                return;
+            }
+
             itemAgent.transform.SetParent(faceMaskSocket, false);
             itemAgent.transform.localRotation = Quaternion.identity;
             itemAgent.transform.localPosition = Vector3.zero;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[COOP] ChangeArmorModel exception: {e}");
         }
     }
 
 
     public static void ChangeHelmatModel(CharacterModel characterModel, Item item)
     {
-        if (item != null)
+        try
         {
-            var slot = characterModel.characterMainControl.CharacterItem.Slots["Helmat"];
-            Traverse.Create(slot).Field<Item>("content").Value = item;
-        }
+            if (characterModel == null || characterModel.characterMainControl == null || 
+                characterModel.characterMainControl.CharacterItem == null)
+            {
+                Debug.LogWarning("[COOP] ChangeHelmatModel: characterModel or CharacterItem is null");
+                return;
+            }
 
-        if (item == null)
-        {
-            var socket = characterModel.HelmatSocket;
-            for (var i = socket.childCount - 1; i >= 0; i--) Object.Destroy(socket.GetChild(i).gameObject);
-            characterModel.CustomFace.hairSocket.gameObject.SetActive(true);
-            characterModel.CustomFace.mouthPart.socket.gameObject.SetActive(true);
-            return;
-        }
+            var slots = characterModel.characterMainControl.CharacterItem.Slots;
+            if (slots == null)
+            {
+                Debug.LogWarning("[COOP] ChangeHelmatModel: Slots is null");
+                return;
+            }
 
-        characterModel.CustomFace.hairSocket.gameObject.SetActive(false);
-        characterModel.CustomFace.mouthPart.socket.gameObject.SetActive(false);
-        var faceMaskSocket = characterModel.HelmatSocket;
-        var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
-        if (itemAgent == null)
-        {
-            Debug.LogError("生成的装备Item没有装备agent，Item名称：" + item.gameObject.name);
-            return;
-        }
+            var slot = slots.GetSlot("Helmat");
+            if (slot == null)
+            {
+                Debug.LogWarning("[COOP] ChangeHelmatModel: Helmat slot not found");
+                return;
+            }
 
-        if (itemAgent != null)
-        {
+            // 安全地设置槽位内容，避免状态不一致
+            if (item != null)
+            {
+                try
+                {
+                    // 使用Traverse安全地设置内容，但不触发通知
+                    Traverse.Create(slot).Field<Item>("content").Value = item;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[COOP] ChangeHelmatModel: Failed to set slot content: {e.Message}");
+                }
+            }
+
+            if (item == null)
+            {
+                var socket = characterModel.HelmatSocket;
+                if (socket != null)
+                {
+                    for (var i = socket.childCount - 1; i >= 0; i--) 
+                    {
+                        var child = socket.GetChild(i);
+                        if (child != null) Object.Destroy(child.gameObject);
+                    }
+                }
+                
+                if (characterModel.CustomFace != null)
+                {
+                    if (characterModel.CustomFace.hairSocket != null)
+                        characterModel.CustomFace.hairSocket.gameObject.SetActive(true);
+                    if (characterModel.CustomFace.mouthPart != null && characterModel.CustomFace.mouthPart.socket != null)
+                        characterModel.CustomFace.mouthPart.socket.gameObject.SetActive(true);
+                }
+                return;
+            }
+
+            if (characterModel.CustomFace != null)
+            {
+                if (characterModel.CustomFace.hairSocket != null)
+                    characterModel.CustomFace.hairSocket.gameObject.SetActive(false);
+                if (characterModel.CustomFace.mouthPart != null && characterModel.CustomFace.mouthPart.socket != null)
+                    characterModel.CustomFace.mouthPart.socket.gameObject.SetActive(false);
+            }
+
+            var faceMaskSocket = characterModel.HelmatSocket;
+            if (faceMaskSocket == null)
+            {
+                Debug.LogWarning("[COOP] ChangeHelmatModel: HelmatSocket is null");
+                return;
+            }
+
+            if (item.AgentUtilities == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeHelmatModel: Item {item.name} has no AgentUtilities");
+                return;
+            }
+
+            var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
+            if (itemAgent == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeHelmatModel: Failed to create agent for item: {item.name}");
+                return;
+            }
+
             itemAgent.transform.SetParent(faceMaskSocket, false);
             itemAgent.transform.localRotation = Quaternion.identity;
             itemAgent.transform.localPosition = Vector3.zero;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[COOP] ChangeHelmatModel exception: {e}");
         }
     }
 
@@ -176,64 +291,166 @@ public class COOPManager
 
     public static void ChangeBackpackModel(CharacterModel characterModel, Item item)
     {
-        if (item != null)
+        try
         {
-            var slot = characterModel.characterMainControl.CharacterItem.Slots["Backpack"];
-            Traverse.Create(slot).Field<Item>("content").Value = item;
-        }
+            if (characterModel == null || characterModel.characterMainControl == null || 
+                characterModel.characterMainControl.CharacterItem == null)
+            {
+                Debug.LogWarning("[COOP] ChangeBackpackModel: characterModel or CharacterItem is null");
+                return;
+            }
 
-        if (item == null)
-        {
-            var socket = characterModel.BackpackSocket;
-            for (var i = socket.childCount - 1; i >= 0; i--) Object.Destroy(socket.GetChild(i).gameObject);
-            return;
-        }
+            var slots = characterModel.characterMainControl.CharacterItem.Slots;
+            if (slots == null)
+            {
+                Debug.LogWarning("[COOP] ChangeBackpackModel: Slots is null");
+                return;
+            }
 
-        var faceMaskSocket = characterModel.BackpackSocket;
-        var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
-        if (itemAgent == null)
-        {
-            Debug.LogError("生成的装备Item没有装备agent，Item名称：" + item.gameObject.name);
-            return;
-        }
+            var slot = slots.GetSlot("Backpack");
+            if (slot == null)
+            {
+                Debug.LogWarning("[COOP] ChangeBackpackModel: Backpack slot not found");
+                return;
+            }
 
-        if (itemAgent != null)
-        {
+            // 安全地设置槽位内容
+            if (item != null)
+            {
+                try
+                {
+                    Traverse.Create(slot).Field<Item>("content").Value = item;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[COOP] ChangeBackpackModel: Failed to set slot content: {e.Message}");
+                }
+            }
+
+            if (item == null)
+            {
+                var socket = characterModel.BackpackSocket;
+                if (socket != null)
+                {
+                    for (var i = socket.childCount - 1; i >= 0; i--) 
+                    {
+                        var child = socket.GetChild(i);
+                        if (child != null) Object.Destroy(child.gameObject);
+                    }
+                }
+                return;
+            }
+
+            var faceMaskSocket = characterModel.BackpackSocket;
+            if (faceMaskSocket == null)
+            {
+                Debug.LogWarning("[COOP] ChangeBackpackModel: BackpackSocket is null");
+                return;
+            }
+
+            if (item.AgentUtilities == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeBackpackModel: Item {item.name} has no AgentUtilities");
+                return;
+            }
+
+            var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
+            if (itemAgent == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeBackpackModel: Failed to create agent for item: {item.name}");
+                return;
+            }
+
             itemAgent.transform.SetParent(faceMaskSocket, false);
             itemAgent.transform.localRotation = Quaternion.identity;
             itemAgent.transform.localPosition = Vector3.zero;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[COOP] ChangeBackpackModel exception: {e}");
         }
     }
 
 
     public static void ChangeFaceMaskModel(CharacterModel characterModel, Item item)
     {
-        if (item != null)
+        try
         {
-            var slot = characterModel.characterMainControl.CharacterItem.Slots["FaceMask"];
-            Traverse.Create(slot).Field<Item>("content").Value = item;
-        }
+            if (characterModel == null || characterModel.characterMainControl == null || 
+                characterModel.characterMainControl.CharacterItem == null)
+            {
+                Debug.LogWarning("[COOP] ChangeFaceMaskModel: characterModel or CharacterItem is null");
+                return;
+            }
 
-        if (item == null)
-        {
-            var socket = characterModel.FaceMaskSocket;
-            for (var i = socket.childCount - 1; i >= 0; i--) Object.Destroy(socket.GetChild(i).gameObject);
-            return;
-        }
+            var slots = characterModel.characterMainControl.CharacterItem.Slots;
+            if (slots == null)
+            {
+                Debug.LogWarning("[COOP] ChangeFaceMaskModel: Slots is null");
+                return;
+            }
 
-        var faceMaskSocket = characterModel.FaceMaskSocket;
-        var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
-        if (itemAgent == null)
-        {
-            Debug.LogError("生成的装备Item没有装备agent，Item名称：" + item.gameObject.name);
-            return;
-        }
+            var slot = slots.GetSlot("FaceMask");
+            if (slot == null)
+            {
+                Debug.LogWarning("[COOP] ChangeFaceMaskModel: FaceMask slot not found");
+                return;
+            }
 
-        if (itemAgent != null)
-        {
+            // 安全地设置槽位内容
+            if (item != null)
+            {
+                try
+                {
+                    Traverse.Create(slot).Field<Item>("content").Value = item;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[COOP] ChangeFaceMaskModel: Failed to set slot content: {e.Message}");
+                }
+            }
+
+            if (item == null)
+            {
+                var socket = characterModel.FaceMaskSocket;
+                if (socket != null)
+                {
+                    for (var i = socket.childCount - 1; i >= 0; i--) 
+                    {
+                        var child = socket.GetChild(i);
+                        if (child != null) Object.Destroy(child.gameObject);
+                    }
+                }
+                return;
+            }
+
+            var faceMaskSocket = characterModel.FaceMaskSocket;
+            if (faceMaskSocket == null)
+            {
+                Debug.LogWarning("[COOP] ChangeFaceMaskModel: FaceMaskSocket is null");
+                return;
+            }
+
+            if (item.AgentUtilities == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeFaceMaskModel: Item {item.name} has no AgentUtilities");
+                return;
+            }
+
+            var itemAgent = item.AgentUtilities.CreateAgent(CharacterEquipmentController.equipmentModelHash, ItemAgent.AgentTypes.equipment);
+            if (itemAgent == null)
+            {
+                Debug.LogWarning($"[COOP] ChangeFaceMaskModel: Failed to create agent for item: {item.name}");
+                return;
+            }
+
             itemAgent.transform.SetParent(faceMaskSocket, false);
             itemAgent.transform.localRotation = Quaternion.identity;
             itemAgent.transform.localPosition = Vector3.zero;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[COOP] ChangeFaceMaskModel exception: {e}");
         }
     }
 

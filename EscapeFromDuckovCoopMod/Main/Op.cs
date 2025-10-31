@@ -65,6 +65,7 @@ public enum Op : byte
 
     DEAD_LOOT_DESPAWN = 247, // 主机 -> 客户端：AI 死亡掉落的箱子被移除（可选，先不强制使用）
     DEAD_LOOT_SPAWN = 248, // 主机 -> 客户端：AI 死亡掉落箱子生成（包含 scene 与变换）
+    TOMBSTONE_RESTORE = 249, // 主机 -> 客户端：墓碑恢复（玩家死亡墓碑的专用消息）
 
     SCENE_GATE_READY = 228, // 客户端 -> 主机：我已加载完成，正在等待放行
     SCENE_GATE_RELEASE = 229, // 主机 -> 客户端：放行，退出加载界面进入游戏
@@ -93,5 +94,5 @@ public enum Op : byte
     LOOT_REQ_TAKE = 253, // 客户端 -> 主机：请求“取出”
     LOOT_PUT_OK = 254, // 主机 -> 发起客户端：确认“放入”成功，附回执 token
     LOOT_TAKE_OK = 255, // 主机 -> 发起客户端：确认“取出”成功 + 返回 Item 快照
-    LOOT_DENY = 249 // 主机 -> 发起客户端：拒绝（例如并发冲突/格子无物品/容量不足）
+    LOOT_DENY = 26 // 主机 -> 发起客户端：拒绝（例如并发冲突/格子无物品/容量不足）
 }

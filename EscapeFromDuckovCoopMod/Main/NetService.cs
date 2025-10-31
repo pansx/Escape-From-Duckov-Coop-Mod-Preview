@@ -96,7 +96,21 @@ public class NetService : MonoBehaviour, INetEventListener
                 Debug.Log($"[COOP] 自动重连成功，不更新缓存: {peer.EndPoint.Address}:{peer.EndPoint.Port}");
             }
             
+            // 客户端连接成功时清除战利品缓存，确保完全同步
+            ClearClientLootCache();
+            
             Send_ClientStatus.Instance.SendClientStatusUpdate();
+            
+            // 延迟一点时间后强制重新同步所有战利品箱
+            UniTask.Void(async () =>
+            {
+                await UniTask.Delay(2000); // 等待连接完全稳定
+                if (LootManager.Instance != null && connectedPeer != null)
+                {
+                    Debug.Log("[COOP] 连接成功，开始强制重新同步所有战利品箱");
+                    LootManager.Instance.Client_ForceResyncAllLootboxes();
+                }
+            });
         }
 
         if (!playerStatuses.ContainsKey(peer))
@@ -489,6 +503,52 @@ public class NetService : MonoBehaviour, INetEventListener
     }
 
     /// <summary>
+    /// 清除客户端战利品箱缓存，强制重新同步所有战利品箱
+    /// </summary>
+    private void ClearClientLootCache()
+    {
+        if (IsServer)
+        {
+            Debug.Log("[COOP] 服务器模式，跳过清除战利品缓存");
+            return;
+        }
+
+        try
+        {
+            if (LootManager.Instance != null)
+            {
+                var clearedCount = LootManager.Instance._cliLootByUid.Count;
+                LootManager.Instance._cliLootByUid.Clear();
+                LootManager.Instance._pendingLootStatesByUid.Clear();
+                Debug.Log($"[COOP] 已清除客户端战利品缓存，共清除 {clearedCount} 个战利品箱");
+            }
+
+            if (COOPManager.LootNet != null)
+            {
+                var pendingCount = COOPManager.LootNet._cliPendingPut.Count;
+                COOPManager.LootNet._cliPendingPut.Clear();
+                COOPManager.LootNet._cliSwapByVictim.Clear();
+                Debug.Log($"[COOP] 已清除客户端待处理的战利品操作，共清除 {pendingCount} 个待处理操作");
+            }
+
+            if (LootManager.Instance != null)
+            {
+                var takeCount = LootManager.Instance._cliPendingTake.Count;
+                var reorderCount = LootManager.Instance._cliPendingReorder.Count;
+                LootManager.Instance._cliPendingTake.Clear();
+                LootManager.Instance._cliPendingReorder.Clear();
+                Debug.Log($"[COOP] 已清除客户端待处理的拾取和重排操作，拾取: {takeCount}, 重排: {reorderCount}");
+            }
+
+            Debug.Log("[COOP] 客户端战利品缓存清除完成，所有战利品箱将重新从服务端同步");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[COOP] 清除客户端战利品缓存时发生异常: {ex}");
+        }
+    }
+
+    /// <summary>
     /// 自动重连方法，不会更新缓存的连接信息
     /// </summary>
     private void AutoReconnectToHost(string ip, int port)
@@ -660,6 +720,9 @@ public class NetService : MonoBehaviour, INetEventListener
             {
                 Debug.Log($"[COOP] 场景切换后重连成功: {cachedConnectedIP}:{cachedConnectedPort}");
                 
+                // 重连成功后，清除客户端战利品箱缓存，强制重新同步
+                ClearClientLootCache();
+                
                 // 重连成功后，发送当前状态进行完全同步
                 await UniTask.Delay(1000); // 等待连接稳定
                 
@@ -676,6 +739,14 @@ public class NetService : MonoBehaviour, INetEventListener
                     {
                         Debug.Log("[COOP] 重连成功，发送场景就绪信息");
                         SceneNet.Instance.TrySendSceneReadyOnce();
+                    }
+                    
+                    // 强制重新同步所有战利品箱
+                    await UniTask.Delay(500); // 再等待一点时间确保场景就绪
+                    if (LootManager.Instance != null)
+                    {
+                        Debug.Log("[COOP] 重连成功，开始强制重新同步所有战利品箱");
+                        LootManager.Instance.Client_ForceResyncAllLootboxes();
                     }
                 }
                 catch (Exception ex)
