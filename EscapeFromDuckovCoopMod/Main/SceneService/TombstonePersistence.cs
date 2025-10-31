@@ -930,42 +930,53 @@ namespace EscapeFromDuckovCoopMod
 
                 Debug.Log($"[TOMBSTONE] Found game tombstone inventory with {inventory.Content.Count} items");
                 
-                // 清空当前库存 - 逐个移除所有物品
-                var itemCount = inventory.Content.Count;
-                for (int i = itemCount - 1; i >= 0; i--)
-                {
-                    var item = inventory.GetItemAt(i);
-                    if (item != null)
-                    {
-                        inventory.RemoveAt(i, out _);
-                    }
-                }
+                // 设置标志阻止物品掉落和其他副作用
+                COOPManager.LootNet._serverApplyingLoot = true;
                 
-                // 根据JSON数据重建库存
-                var rebuiltCount = 0;
-                foreach (var tombstoneItem in tombstoneData.items)
+                try
                 {
-                    try
+                    // 清空当前库存 - 逐个移除所有物品
+                    var itemCount = inventory.Content.Count;
+                    for (int i = itemCount - 1; i >= 0; i--)
                     {
-                        var item = ItemTool.BuildItemFromSnapshot(tombstoneItem.snapshot);
+                        var item = inventory.GetItemAt(i);
                         if (item != null)
                         {
-                            inventory.AddAt(item, tombstoneItem.position);
-                            rebuiltCount++;
-                            Debug.Log($"[TOMBSTONE] Rebuilt item in game inventory: TypeID={item.TypeID}, Name={item.name}, Position={tombstoneItem.position}");
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[TOMBSTONE] Failed to rebuild item from snapshot: TypeID={tombstoneItem.snapshot.typeId}");
+                            inventory.RemoveAt(i, out _);
                         }
                     }
-                    catch (Exception e)
+                    
+                    // 根据JSON数据重建库存
+                    var rebuiltCount = 0;
+                    foreach (var tombstoneItem in tombstoneData.items)
                     {
-                        Debug.LogError($"[TOMBSTONE] Error rebuilding item at position {tombstoneItem.position}: {e}");
+                        try
+                        {
+                            var item = ItemTool.BuildItemFromSnapshot(tombstoneItem.snapshot);
+                            if (item != null)
+                            {
+                                inventory.AddAt(item, tombstoneItem.position);
+                                rebuiltCount++;
+                                Debug.Log($"[TOMBSTONE] Rebuilt item in game inventory: TypeID={item.TypeID}, Name={item.name}, Position={tombstoneItem.position}");
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"[TOMBSTONE] Failed to rebuild item from snapshot: TypeID={tombstoneItem.snapshot.typeId}");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError($"[TOMBSTONE] Error rebuilding item at position {tombstoneItem.position}: {e}");
+                        }
                     }
+                    
+                    Debug.Log($"[TOMBSTONE] Game tombstone inventory updated: {rebuiltCount} items rebuilt");
                 }
-                
-                Debug.Log($"[TOMBSTONE] Game tombstone inventory updated: {rebuiltCount} items rebuilt");
+                finally
+                {
+                    // 确保标志被重置
+                    COOPManager.LootNet._serverApplyingLoot = false;
+                }
                 
                 // 广播更新给所有客户端
                 if (COOPManager.LootNet != null)
