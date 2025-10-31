@@ -70,6 +70,8 @@ public enum Op : byte
     SCENE_GATE_RELEASE = 229, // 主机 -> 客户端：放行，退出加载界面进入游戏
 
     PLAYER_DEAD_TREE = 173,
+    PLAYER_DEATH_EQUIPMENT = 174, // 客户端 -> 主机：上报死亡后剩余的装备
+    PLAYER_EQUIPMENT_REQUEST = 175, // 主机 -> 客户端：请求上报剩余装备
     PLAYER_HURT_EVENT = 170,
 
     HOST_BUFF_PROXY_APPLY = 172,

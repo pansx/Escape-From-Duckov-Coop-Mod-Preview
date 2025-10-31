@@ -209,4 +209,80 @@ public class SendLocalPlayerStatus : MonoBehaviour
 
         connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
     }
+
+    public void Net_ReportPlayerDeathEquipment(List<ItemSnapshot> remainingEquipment)
+    {
+        // 仅客户端上报；主机不需要发
+        if (!networkStarted || IsServer || connectedPeer == null) return;
+
+        Debug.Log($"[TOMBSTONE] Reporting remaining equipment: {remainingEquipment.Count} items");
+
+        // 组包并发送
+        writer.Reset();
+        writer.Put((byte)Op.PLAYER_DEATH_EQUIPMENT);
+        writer.Put(remainingEquipment.Count);
+
+        foreach (var itemSnapshot in remainingEquipment)
+        {
+            // 直接写入ItemSnapshot，不需要重新构建Item
+            writer.Put(itemSnapshot.typeId);
+            writer.Put(itemSnapshot.stack);
+            writer.Put(itemSnapshot.durability);
+            writer.Put(itemSnapshot.durabilityLoss);
+            writer.Put(itemSnapshot.inspected);
+
+            // 写入slots
+            writer.Put((ushort)(itemSnapshot.slots?.Count ?? 0));
+            if (itemSnapshot.slots != null)
+            {
+                foreach (var (key, slotSnapshot) in itemSnapshot.slots)
+                {
+                    writer.Put(key ?? string.Empty);
+                    WriteItemSnapshotRecursive(writer, slotSnapshot);
+                }
+            }
+
+            // 写入inventory
+            writer.Put((ushort)(itemSnapshot.inventory?.Count ?? 0));
+            if (itemSnapshot.inventory != null)
+            {
+                foreach (var invSnapshot in itemSnapshot.inventory)
+                {
+                    WriteItemSnapshotRecursive(writer, invSnapshot);
+                }
+            }
+        }
+
+        connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+    }
+
+    private void WriteItemSnapshotRecursive(NetDataWriter writer, ItemSnapshot snapshot)
+    {
+        writer.Put(snapshot.typeId);
+        writer.Put(snapshot.stack);
+        writer.Put(snapshot.durability);
+        writer.Put(snapshot.durabilityLoss);
+        writer.Put(snapshot.inspected);
+
+        // 写入slots
+        writer.Put((ushort)(snapshot.slots?.Count ?? 0));
+        if (snapshot.slots != null)
+        {
+            foreach (var (key, slotSnapshot) in snapshot.slots)
+            {
+                writer.Put(key ?? string.Empty);
+                WriteItemSnapshotRecursive(writer, slotSnapshot);
+            }
+        }
+
+        // 写入inventory
+        writer.Put((ushort)(snapshot.inventory?.Count ?? 0));
+        if (snapshot.inventory != null)
+        {
+            foreach (var invSnapshot in snapshot.inventory)
+            {
+                WriteItemSnapshotRecursive(writer, invSnapshot);
+            }
+        }
+    }
 }

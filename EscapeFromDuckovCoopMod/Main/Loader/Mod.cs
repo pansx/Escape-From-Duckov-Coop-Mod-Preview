@@ -1459,18 +1459,7 @@ public class ModBehaviourF : MonoBehaviour
                 var rot = reader.GetQuaternion();
 
                 var snap = ItemTool.ReadItemSnapshot(reader);
-                var tmpRoot = ItemTool.BuildItemFromSnapshot(snap);
-                if (!tmpRoot)
-                {
-                    Debug.LogWarning("[LOOT] PLAYER_DEAD_TREE BuildItemFromSnapshot failed.");
-                    break;
-                }
-
-                var deadPfb = LootManager.Instance.ResolveDeadLootPrefabOnServer();
-                var box = InteractableLootbox.CreateFromItem(tmpRoot, pos + Vector3.up * 0.10f, rot, true, deadPfb);
-                if (box)
-                    DeadLootBox.Instance
-                        .Server_OnDeadLootboxSpawned(box, null); // 用新版重载：会发 lootUid + aiId + 随后 LOOT_STATE
+                COOPManager.Host_Handle.Server_HandlePlayerDeadTreeWithPeer(peer, pos, rot, snap);
 
                 if (remoteCharacters.TryGetValue(peer, out var proxy) && proxy)
                 {
@@ -1488,8 +1477,6 @@ public class ModBehaviourF : MonoBehaviour
                     netManager.SendToAll(w2, DeliveryMethod.ReliableOrdered);
                 }
 
-
-                if (tmpRoot && tmpRoot.gameObject) Destroy(tmpRoot.gameObject);
                 break;
             }
 
@@ -1589,9 +1576,100 @@ public class ModBehaviourF : MonoBehaviour
             case Op.PLAYER_HURT_EVENT:
                 if (!IsServer) HealthM.Instance.Client_ApplySelfHurtFromServer(reader);
                 break;
+
+            case Op.PLAYER_EQUIPMENT_REQUEST:
+            {
+                if (IsServer) break; // 只有客户端处理
+                var userId = reader.GetString();
+                var tombstoneId = reader.GetString();
+                var lootUid = reader.GetInt();
+
+                Debug.Log($"[TOMBSTONE] Received equipment request for tombstone {tombstoneId}");
+
+                // 收集当前剩余的装备
+                var remainingEquipment = CollectRemainingEquipment();
+                SendLocalPlayerStatus.Instance.Net_ReportPlayerDeathEquipment(remainingEquipment);
+                break;
+            }
+
+            case Op.PLAYER_DEATH_EQUIPMENT:
+            {
+                if (!IsServer) break; // 只有主机处理
+                COOPManager.Host_Handle.Server_HandlePlayerDeathEquipment(peer, reader);
+                break;
+            }
         }
 
         reader.Recycle();
+    }
+
+    private List<ItemSnapshot> CollectRemainingEquipment()
+    {
+        var remainingEquipment = new List<ItemSnapshot>();
+        var mainCharacter = CharacterMainControl.Main;
+        
+        if (mainCharacter == null) return remainingEquipment;
+
+        try
+        {
+            // 收集装备槽中的物品
+            var equipmentController = mainCharacter.EquipmentController;
+            if (equipmentController != null)
+            {
+                var slotNames = new[] { "armorSlot", "helmatSlot", "faceMaskSlot", "backpackSlot", "headsetSlot" };
+                
+                foreach (var slotName in slotNames)
+                {
+                    try
+                    {
+                        var slotField = Traverse.Create(equipmentController).Field<Slot>(slotName);
+                        var slot = slotField.Value;
+                        if (slot?.Content != null)
+                        {
+                            var snapshot = ItemTool.MakeSnapshot(slot.Content);
+                            remainingEquipment.Add(snapshot);
+                            Debug.Log($"[TOMBSTONE] Found remaining equipment: {slot.Content.DisplayName} (TypeID={slot.Content.TypeID})");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"[TOMBSTONE] Error collecting equipment from slot {slotName}: {e}");
+                    }
+                }
+            }
+
+            // 收集手持武器
+            try
+            {
+                var rangedWeapon = mainCharacter.GetGun();
+                if (rangedWeapon?.Item != null)
+                {
+                    var snapshot = ItemTool.MakeSnapshot(rangedWeapon.Item);
+                    remainingEquipment.Add(snapshot);
+                    Debug.Log($"[TOMBSTONE] Found remaining ranged weapon: {rangedWeapon.Item.DisplayName} (TypeID={rangedWeapon.Item.TypeID})");
+                }
+
+                var meleeWeapon = mainCharacter.GetMeleeWeapon();
+                if (meleeWeapon?.Item != null)
+                {
+                    var snapshot = ItemTool.MakeSnapshot(meleeWeapon.Item);
+                    remainingEquipment.Add(snapshot);
+                    Debug.Log($"[TOMBSTONE] Found remaining melee weapon: {meleeWeapon.Item.DisplayName} (TypeID={meleeWeapon.Item.TypeID})");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[TOMBSTONE] Error collecting weapons: {e}");
+            }
+
+            Debug.Log($"[TOMBSTONE] Collected {remainingEquipment.Count} remaining equipment items");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Error collecting remaining equipment: {e}");
+        }
+
+        return remainingEquipment;
     }
 
     private void OnSceneLoaded_IndexDestructibles(Scene s, LoadSceneMode m)

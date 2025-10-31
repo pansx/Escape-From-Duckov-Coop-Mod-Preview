@@ -41,6 +41,7 @@ public class COOPManager
     public static WeaponRequest WeaponRequest;
     public static HostHandle Host_Handle;
     public static ItemRequest ItemRequest;
+    public static TombstonePersistence TombstonePersistence;
     private NetService Service => NetService.Instance;
 
     public static void InitManager()
@@ -63,6 +64,11 @@ public class COOPManager
         WeaponRequest = new WeaponRequest();
         Host_Handle = new HostHandle();
         ItemRequest = new ItemRequest();
+        
+        // 初始化TombstonePersistence
+        var go = new GameObject("TombstonePersistence");
+        TombstonePersistence = go.AddComponent<TombstonePersistence>();
+        Object.DontDestroyOnLoad(go);
     }
 
 
