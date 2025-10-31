@@ -66,6 +66,8 @@ public enum Op : byte
     DEAD_LOOT_DESPAWN = 247, // 主机 -> 客户端：AI 死亡掉落的箱子被移除（可选，先不强制使用）
     DEAD_LOOT_SPAWN = 248, // 主机 -> 客户端：AI 死亡掉落箱子生成（包含 scene 与变换）
     TOMBSTONE_RESTORE = 249, // 主机 -> 客户端：墓碑恢复（玩家死亡墓碑的专用消息）
+    PLAYER_DEATH_EQUIPMENT = 27, // 客户端 -> 主机：玩家死亡时上报身上的装备
+    PLAYER_EQUIPMENT_REQUEST = 28, // 主机 -> 客户端：请求上报装备信息
 
     SCENE_GATE_READY = 228, // 客户端 -> 主机：我已加载完成，正在等待放行
     SCENE_GATE_RELEASE = 229, // 主机 -> 客户端：放行，退出加载界面进入游戏

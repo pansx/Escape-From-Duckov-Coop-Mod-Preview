@@ -866,4 +866,129 @@ public class NetService : MonoBehaviour, INetEventListener
             Debug.LogError($"[TOMBSTONE] 同步墓碑给新客户端失败: {e}");
         }
     }
+
+    /// <summary>
+    /// 客户端死亡时发送剩余物品信息给服务端（用于从墓碑中减去）
+    /// </summary>
+    public void SendPlayerDeathEquipment(string userId, int lootUid)
+    {
+        if (IsServer || connectedPeer == null)
+        {
+            return;
+        }
+
+        try
+        {
+            var remainingItemTypeIds = GetPlayerEquipmentTypeIds();
+            
+            Debug.Log($"[TOMBSTONE] Sending player remaining items: userId={userId}, lootUid={lootUid}, remaining items count={remainingItemTypeIds.Count}");
+            
+            writer.Reset();
+            writer.Put((byte)Op.PLAYER_DEATH_EQUIPMENT);
+            writer.Put(userId);
+            writer.Put(lootUid);
+            writer.Put(remainingItemTypeIds.Count);
+            
+            foreach (var typeId in remainingItemTypeIds)
+            {
+                writer.Put(typeId);
+                Debug.Log($"[TOMBSTONE] Reporting remaining item: TypeID={typeId}");
+            }
+            
+            connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+            Debug.Log($"[TOMBSTONE] Sent player remaining items report to server");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Failed to send player remaining items: {e}");
+        }
+    }
+
+    /// <summary>
+    /// 获取玩家身上所有剩余物品的TypeID列表（用于从墓碑中减去）
+    /// </summary>
+    private List<int> GetPlayerEquipmentTypeIds()
+    {
+        var remainingItemTypeIds = new List<int>();
+        
+        try
+        {
+            var mainControl = CharacterMainControl.Main;
+            if (mainControl == null)
+            {
+                Debug.LogWarning("[TOMBSTONE] Main character control not found");
+                return remainingItemTypeIds;
+            }
+
+            Debug.Log("[TOMBSTONE] Collecting all remaining items on player...");
+
+            // 获取远程武器
+            var rangedWeapon = mainControl.GetGun();
+            if (rangedWeapon != null && rangedWeapon.Item != null)
+            {
+                remainingItemTypeIds.Add(rangedWeapon.Item.TypeID);
+                Debug.Log($"[TOMBSTONE] Found ranged weapon: TypeID={rangedWeapon.Item.TypeID}");
+            }
+
+            // 获取近战武器
+            var meleeWeapon = mainControl.GetMeleeWeapon();
+            if (meleeWeapon != null && meleeWeapon.Item != null)
+            {
+                remainingItemTypeIds.Add(meleeWeapon.Item.TypeID);
+                Debug.Log($"[TOMBSTONE] Found melee weapon: TypeID={meleeWeapon.Item.TypeID}");
+            }
+
+            // 获取角色身上的所有装备槽位（包括图腾等）
+            var characterItem = mainControl.CharacterItem;
+            if (characterItem != null && characterItem.Slots != null)
+            {
+                Debug.Log($"[TOMBSTONE] Checking character equipment slots");
+                
+                foreach (var slot in characterItem.Slots)
+                {
+                    if (slot != null && slot.Content != null)
+                    {
+                        remainingItemTypeIds.Add(slot.Content.TypeID);
+                        Debug.Log($"[TOMBSTONE] Found equipped item in slot '{slot.Key}': TypeID={slot.Content.TypeID}, Name={slot.Content.name}");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[TOMBSTONE] Character equipment slots not found");
+            }
+
+            // 获取背包中的所有物品
+            var playerInventory = PlayerStorage.Inventory;
+            if (playerInventory != null)
+            {
+                Debug.Log($"[TOMBSTONE] Checking player inventory with {playerInventory.Content.Count} slots");
+                
+                for (int i = 0; i < playerInventory.Content.Count; i++)
+                {
+                    var item = playerInventory.GetItemAt(i);
+                    if (item != null)
+                    {
+                        remainingItemTypeIds.Add(item.TypeID);
+                        Debug.Log($"[TOMBSTONE] Found inventory item {i}: TypeID={item.TypeID}, Name={item.name}");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[TOMBSTONE] Player inventory not found");
+            }
+
+            // 获取宠物背包中的物品 - 但不包含在剩余物品中，因为宠物背包物品不会掉落
+            // 注意：宠物背包物品不添加到remainingItemTypeIds，因为它们不会掉落也不应该从墓碑中减去
+
+            Debug.Log($"[TOMBSTONE] Total remaining items found: {remainingItemTypeIds.Count}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Error getting player remaining items: {e}");
+        }
+
+        return remainingItemTypeIds;
+    }
 }

@@ -1460,6 +1460,43 @@ public class ModBehaviourF : MonoBehaviour
                 break;
             }
 
+            case Op.PLAYER_DEATH_EQUIPMENT:
+            {
+                if (!IsServer) break;
+                
+                var userId = reader.GetString();
+                var lootUid = reader.GetInt();
+                var equipmentCount = reader.GetInt();
+                var equipmentTypeIds = new List<int>();
+                
+                for (int i = 0; i < equipmentCount; i++)
+                {
+                    equipmentTypeIds.Add(reader.GetInt());
+                }
+                
+                Debug.Log($"[TOMBSTONE] Server received PLAYER_DEATH_EQUIPMENT: userId={userId}, lootUid={lootUid}, remaining items count={equipmentCount}");
+                Debug.Log($"[TOMBSTONE] Starting subtraction: Tombstone items - Client remaining items = Final droppable items");
+                LootManager.Instance.HandlePlayerDeathEquipment(userId, lootUid, equipmentTypeIds);
+                break;
+            }
+
+            case Op.PLAYER_EQUIPMENT_REQUEST:
+            {
+                if (IsServer) break; // 只有客户端处理
+                
+                var userId = reader.GetString();
+                var lootUid = reader.GetInt();
+                
+                Debug.Log($"[TOMBSTONE] Client received PLAYER_EQUIPMENT_REQUEST: userId={userId}, lootUid={lootUid}");
+                
+                // 发送装备信息给服务端
+                if (NetService.Instance != null)
+                {
+                    NetService.Instance.SendPlayerDeathEquipment(userId, lootUid);
+                }
+                break;
+            }
+
 
             case Op.AI_NAME_ICON:
             {
@@ -1551,9 +1588,35 @@ public class ModBehaviourF : MonoBehaviour
                         Debug.Log($"[DEATH-DEBUG] Tagged tombstone with userId: {userId}");
                     }
                     
+                    // 先调用Server_OnDeadLootboxSpawned创建墓碑
                     DeadLootBox.Instance
                         .Server_OnDeadLootboxSpawned(box, null); // 用新版重载：会发 lootUid + aiId + 随后 LOOT_STATE
                     Debug.Log("[DEATH-DEBUG] Called Server_OnDeadLootboxSpawned with whoDied=null");
+                    
+                    // 获取刚创建的lootUid，请求客户端上报装备信息
+                    var lootUid = -1;
+                    var createdBoxInventory = box.Inventory;
+                    if (createdBoxInventory != null && LootManager.Instance._srvLootByUid != null)
+                    {
+                        foreach (var kv in LootManager.Instance._srvLootByUid)
+                        {
+                            if (kv.Value == createdBoxInventory)
+                            {
+                                lootUid = kv.Key;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (lootUid >= 0)
+                    {
+                        // 请求客户端上报装备信息
+                        RequestPlayerEquipmentReport(peer, userId, lootUid);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[DEATH-DEBUG] Could not find lootUid for equipment report request");
+                    }
                 }
                 else
                 {
@@ -1720,6 +1783,34 @@ public class ModBehaviourF : MonoBehaviour
     {
         if (!networkStarted) return;
         COOPManager.destructible.BuildDestructibleIndex();
+    }
+
+    /// <summary>
+    /// 请求客户端上报装备信息（用于从墓碑中移除装备）
+    /// </summary>
+    private static void RequestPlayerEquipmentReport(NetPeer peer, string userId, int lootUid)
+    {
+        if (peer == null || string.IsNullOrEmpty(userId) || lootUid < 0)
+        {
+            return;
+        }
+
+        try
+        {
+            Debug.Log($"[TOMBSTONE] Requesting equipment report from client: userId={userId}, lootUid={lootUid}");
+            
+            var writer = new NetDataWriter();
+            writer.Put((byte)Op.PLAYER_EQUIPMENT_REQUEST);
+            writer.Put(userId);
+            writer.Put(lootUid);
+            
+            peer.Send(writer, DeliveryMethod.ReliableOrdered);
+            Debug.Log($"[TOMBSTONE] Equipment report request sent to client: {peer.EndPoint}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Failed to request equipment report: {e}");
+        }
     }
 
     public struct Pending

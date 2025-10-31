@@ -1318,6 +1318,40 @@ public class LootManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 处理客户端死亡时上报的剩余物品信息（从墓碑中减去这些物品）
+    /// </summary>
+    public void HandlePlayerDeathEquipment(string userId, int lootUid, List<int> remainingItemTypeIds)
+    {
+        Debug.Log($"[TOMBSTONE] HandlePlayerDeathEquipment called - IsServer={IsServer}, TombstonePersistence.Instance={TombstonePersistence.Instance != null}");
+        
+        if (!IsServer || TombstonePersistence.Instance == null)
+        {
+            Debug.LogWarning($"[TOMBSTONE] HandlePlayerDeathEquipment early return - IsServer={IsServer}, TombstonePersistence.Instance={TombstonePersistence.Instance != null}");
+            return;
+        }
+
+        try
+        {
+            Debug.Log($"[TOMBSTONE] Received player remaining items report: userId={userId}, lootUid={lootUid}, remaining items count={remainingItemTypeIds.Count}");
+            
+            // 输出剩余物品详细信息
+            for (int i = 0; i < remainingItemTypeIds.Count; i++)
+            {
+                Debug.Log($"[TOMBSTONE] Remaining item {i}: TypeID={remainingItemTypeIds[i]}");
+            }
+            
+            // 从墓碑中移除这些剩余物品（减法操作）
+            TombstonePersistence.Instance.RemoveEquipmentFromTombstone(userId, lootUid, remainingItemTypeIds);
+            
+            Debug.Log($"[TOMBSTONE] Processed remaining items removal for player death: userId={userId}, lootUid={lootUid}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Failed to handle player remaining items: {e}");
+        }
+    }
+
+    /// <summary>
     /// 客户端重连后强制重新请求所有可见战利品箱的状态
     /// </summary>
     public void Client_ForceResyncAllLootboxes()
