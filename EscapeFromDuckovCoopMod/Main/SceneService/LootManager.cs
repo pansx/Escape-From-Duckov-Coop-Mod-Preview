@@ -222,6 +222,23 @@ public static class LootboxDetectUtil
 
         return false;
     }
+
+    public static InteractableLootbox TryGetInventoryLootBox(Inventory inv)
+    {
+        if (inv == null) return null;
+
+        // 遍历场景中的所有 InteractableLootbox 来找到对应的
+        var boxes = Object.FindObjectsOfType<InteractableLootbox>(true);
+        foreach (var box in boxes)
+        {
+            if (box && box.Inventory == inv)
+            {
+                return box;
+            }
+        }
+
+        return null;
+    }
 }
 
 public class LootManager : MonoBehaviour

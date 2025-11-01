@@ -144,11 +144,9 @@ internal static class Patch_Client_OnDead_ReportCorpseTree
         {
             Debug.LogError($"[DEATH-DEBUG] Error in corpse tree reporting: {e}");
         }
-        }
         finally
         {
             DeadLootSpawnContext.InOnDead = null;
-
         }
     }
 }

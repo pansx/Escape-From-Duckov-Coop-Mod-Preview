@@ -63,6 +63,14 @@ public class NetService : MonoBehaviour, INetEventListener
     public NetworkTransportMode TransportMode { get; private set; } = NetworkTransportMode.Direct;
     public SteamLobbyOptions LobbyOptions { get; private set; } = SteamLobbyOptions.CreateDefault();
 
+    // 连接缓存相关字段
+    private bool isManualConnection = false;
+    private string cachedConnectedIP = "";
+    private int cachedConnectedPort = 0;
+    private bool hasSuccessfulConnection = false;
+    private float lastReconnectTime = 0f;
+    private const float RECONNECT_COOLDOWN = 5f;
+
     public void OnEnable()
     {
         Instance = this;

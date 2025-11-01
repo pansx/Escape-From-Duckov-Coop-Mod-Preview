@@ -594,19 +594,8 @@ internal static class Patch_Inventory_RemoveAt_BroadcastOnServer
             return;
         }
         
-        // 使用DeferedRunner来避免在Postfix中直接执行可能有副作用的操作
-        DeferedRunner.EndOfFrame(() =>
-        {
-            try
-            {
-                COOPManager.LootNet.Server_SendLootboxState(null, __instance); // 广播给所有客户端
-                Debug.Log($"[TOMBSTONE] Broadcasted lootbox state");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"[TOMBSTONE] Failed to broadcast lootbox state: {e}");
-            }
-        });
+        // 使用协程来避免在Postfix中直接执行可能有副作用的操作
+        ModBehaviourF.Instance.StartCoroutine(InventoryPatchHelper.BroadcastLootboxStateNextFrame(__instance));
         
         // 直接执行墓碑更新，不使用DeferedRunner
         try
@@ -829,6 +818,25 @@ internal static class Patch_Inventory_AddItem_FlagUninspected_WhenApplyingLoot
         }
         catch
         {
+        }
+    }
+}
+
+// 协程方法：延迟一帧广播战利品箱状态
+internal static class InventoryPatchHelper
+{
+    public static System.Collections.IEnumerator BroadcastLootboxStateNextFrame(Inventory inventory)
+    {
+        yield return null; // 等待一帧
+        
+        try
+        {
+            COOPManager.LootNet.Server_SendLootboxState(null, inventory); // 广播给所有客户端
+            Debug.Log($"[TOMBSTONE] Broadcasted lootbox state");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Failed to broadcast lootbox state: {e}");
         }
     }
 }
