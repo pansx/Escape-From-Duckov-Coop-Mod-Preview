@@ -687,7 +687,7 @@ public class SceneNet : MonoBehaviour
             }
         }
 
-        _cliGateDeadline = Time.realtimeSinceStartup + 100f; // 可调超时（防死锁）吃保底
+        _cliGateDeadline = Time.realtimeSinceStartup + 10f; // 可调超时（防死锁）吃保底
 
         while (!_cliSceneGateReleased && Time.realtimeSinceStartup < _cliGateDeadline)
         {

@@ -14,6 +14,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
 
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
@@ -26,7 +27,7 @@ public class NetService : MonoBehaviour, INetEventListener
     public List<string> hostList = new();
     public bool isConnecting;
     public string status = "";
-    public string manualIP = "127.0.0.1";
+    public string manualIP = "r.pansx.net";
     public string manualPort = "9050"; // GTX 5090 我也想要
     public bool networkStarted;
     public float broadcastTimer;
@@ -95,7 +96,21 @@ public class NetService : MonoBehaviour, INetEventListener
                 Debug.Log($"[COOP] 自动重连成功，不更新缓存: {peer.EndPoint.Address}:{peer.EndPoint.Port}");
             }
             
+            // 客户端连接成功时清除战利品缓存，确保完全同步
+            ClearClientLootCache();
+            
             Send_ClientStatus.Instance.SendClientStatusUpdate();
+            
+            // 延迟一点时间后强制重新同步所有战利品箱
+            UniTask.Void(async () =>
+            {
+                await UniTask.Delay(2000); // 等待连接完全稳定
+                if (LootManager.Instance != null && connectedPeer != null)
+                {
+                    Debug.Log("[COOP] 连接成功，开始强制重新同步所有战利品箱");
+                    LootManager.Instance.Client_ForceResyncAllLootboxes();
+                }
+            });
         }
 
         if (!playerStatuses.ContainsKey(peer))
@@ -178,6 +193,9 @@ public class NetService : MonoBehaviour, INetEventListener
 
                     peer.Send(w, DeliveryMethod.ReliableOrdered);
                 }
+            
+            // 同步当前场景的所有墓碑给新连接的客户端
+            SyncTombstonesToNewClient(peer);
         }
     }
 
@@ -485,6 +503,52 @@ public class NetService : MonoBehaviour, INetEventListener
     }
 
     /// <summary>
+    /// 清除客户端战利品箱缓存，强制重新同步所有战利品箱
+    /// </summary>
+    private void ClearClientLootCache()
+    {
+        if (IsServer)
+        {
+            Debug.Log("[COOP] 服务器模式，跳过清除战利品缓存");
+            return;
+        }
+
+        try
+        {
+            if (LootManager.Instance != null)
+            {
+                var clearedCount = LootManager.Instance._cliLootByUid.Count;
+                LootManager.Instance._cliLootByUid.Clear();
+                LootManager.Instance._pendingLootStatesByUid.Clear();
+                Debug.Log($"[COOP] 已清除客户端战利品缓存，共清除 {clearedCount} 个战利品箱");
+            }
+
+            if (COOPManager.LootNet != null)
+            {
+                var pendingCount = COOPManager.LootNet._cliPendingPut.Count;
+                COOPManager.LootNet._cliPendingPut.Clear();
+                COOPManager.LootNet._cliSwapByVictim.Clear();
+                Debug.Log($"[COOP] 已清除客户端待处理的战利品操作，共清除 {pendingCount} 个待处理操作");
+            }
+
+            if (LootManager.Instance != null)
+            {
+                var takeCount = LootManager.Instance._cliPendingTake.Count;
+                var reorderCount = LootManager.Instance._cliPendingReorder.Count;
+                LootManager.Instance._cliPendingTake.Clear();
+                LootManager.Instance._cliPendingReorder.Clear();
+                Debug.Log($"[COOP] 已清除客户端待处理的拾取和重排操作，拾取: {takeCount}, 重排: {reorderCount}");
+            }
+
+            Debug.Log("[COOP] 客户端战利品缓存清除完成，所有战利品箱将重新从服务端同步");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[COOP] 清除客户端战利品缓存时发生异常: {ex}");
+        }
+    }
+
+    /// <summary>
     /// 自动重连方法，不会更新缓存的连接信息
     /// </summary>
     private void AutoReconnectToHost(string ip, int port)
@@ -656,6 +720,9 @@ public class NetService : MonoBehaviour, INetEventListener
             {
                 Debug.Log($"[COOP] 场景切换后重连成功: {cachedConnectedIP}:{cachedConnectedPort}");
                 
+                // 重连成功后，清除客户端战利品箱缓存，强制重新同步
+                ClearClientLootCache();
+                
                 // 重连成功后，发送当前状态进行完全同步
                 await UniTask.Delay(1000); // 等待连接稳定
                 
@@ -673,6 +740,14 @@ public class NetService : MonoBehaviour, INetEventListener
                         Debug.Log("[COOP] 重连成功，发送场景就绪信息");
                         SceneNet.Instance.TrySendSceneReadyOnce();
                     }
+                    
+                    // 强制重新同步所有战利品箱
+                    await UniTask.Delay(500); // 再等待一点时间确保场景就绪
+                    if (LootManager.Instance != null)
+                    {
+                        Debug.Log("[COOP] 重连成功，开始强制重新同步所有战利品箱");
+                        LootManager.Instance.Client_ForceResyncAllLootboxes();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -689,5 +764,231 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             Debug.LogError($"[COOP] 场景切换后重连异常: {ex}");
         }
+    }
+
+    /// <summary>
+    /// 同步当前场景的所有墓碑给新连接的客户端
+    /// </summary>
+    private void SyncTombstonesToNewClient(NetPeer peer)
+    {
+        if (!IsServer || peer == null || LootManager.Instance == null)
+        {
+            return;
+        }
+
+        try
+        {
+            Debug.Log($"[TOMBSTONE] 开始同步墓碑给新客户端: {peer.EndPoint}");
+            
+            var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            var syncCount = 0;
+            
+            // 遍历所有服务端的墓碑，发送给新客户端
+            foreach (var kv in LootManager.Instance._srvLootByUid)
+            {
+                var lootUid = kv.Key;
+                var inventory = kv.Value;
+                
+                if (inventory == null)
+                {
+                    continue;
+                }
+                
+                // 尝试获取墓碑的位置信息
+                Vector3 position = Vector3.zero;
+                Quaternion rotation = Quaternion.identity;
+                
+                if (LootManager.Instance.TryGetLootboxWorldPos(inventory, out position))
+                {
+                    // 从墓碑持久化系统获取更准确的位置和旋转信息
+                    if (TombstonePersistence.Instance != null)
+                    {
+                        // 尝试从所有用户的墓碑数据中找到匹配的墓碑
+                        var tombstoneFound = false;
+                        var tombstoneDir = Path.Combine(Application.streamingAssetsPath, "TombstoneData");
+                        
+                        if (Directory.Exists(tombstoneDir))
+                        {
+                            var tombstoneFiles = Directory.GetFiles(tombstoneDir, "*_tombstones.json");
+                            foreach (var filePath in tombstoneFiles)
+                            {
+                                try
+                                {
+                                    var fileName = Path.GetFileName(filePath);
+                                    var userId = TombstonePersistence.Instance.DecodeUserIdFromFileName(fileName);
+                                    var tombstone = TombstonePersistence.Instance.GetTombstone(userId, lootUid);
+                                    
+                                    if (tombstone != null)
+                                    {
+                                        position = tombstone.position;
+                                        rotation = tombstone.rotation;
+                                        tombstoneFound = true;
+                                        break;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.LogWarning($"[TOMBSTONE] 获取墓碑数据失败: {e.Message}");
+                                }
+                            }
+                        }
+                        
+                        if (!tombstoneFound)
+                        {
+                            Debug.LogWarning($"[TOMBSTONE] 未找到lootUid={lootUid}的墓碑数据，使用默认旋转");
+                        }
+                    }
+                    
+                    // 发送DEAD_LOOT_SPAWN消息给新客户端
+                    var writer = new NetDataWriter();
+                    writer.Put((byte)Op.DEAD_LOOT_SPAWN);
+                    writer.Put(currentScene);
+                    writer.Put(0); // aiId，对于恢复的墓碑设为0
+                    writer.Put(lootUid);
+                    writer.PutV3cm(position);
+                    writer.PutQuaternion(rotation);
+                    
+                    peer.Send(writer, DeliveryMethod.ReliableOrdered);
+                    syncCount++;
+                    
+                    Debug.Log($"[TOMBSTONE] 已同步墓碑给客户端: lootUid={lootUid}, pos={position}");
+                }
+                else
+                {
+                    Debug.LogWarning($"[TOMBSTONE] 无法获取lootUid={lootUid}的位置信息，跳过同步");
+                }
+            }
+            
+            Debug.Log($"[TOMBSTONE] 完成墓碑同步，共同步 {syncCount} 个墓碑给客户端: {peer.EndPoint}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] 同步墓碑给新客户端失败: {e}");
+        }
+    }
+
+    /// <summary>
+    /// 客户端死亡时发送剩余物品信息给服务端（用于从墓碑中减去）
+    /// </summary>
+    public void SendPlayerDeathEquipment(string userId, int lootUid)
+    {
+        if (IsServer || connectedPeer == null)
+        {
+            return;
+        }
+
+        try
+        {
+            var remainingItemTypeIds = GetPlayerEquipmentTypeIds();
+            
+            Debug.Log($"[TOMBSTONE] Sending player remaining items: userId={userId}, lootUid={lootUid}, remaining items count={remainingItemTypeIds.Count}");
+            
+            writer.Reset();
+            writer.Put((byte)Op.PLAYER_DEATH_EQUIPMENT);
+            writer.Put(userId);
+            writer.Put(lootUid);
+            writer.Put(remainingItemTypeIds.Count);
+            
+            foreach (var typeId in remainingItemTypeIds)
+            {
+                writer.Put(typeId);
+                Debug.Log($"[TOMBSTONE] Reporting remaining item: TypeID={typeId}");
+            }
+            
+            connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+            Debug.Log($"[TOMBSTONE] Sent player remaining items report to server");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Failed to send player remaining items: {e}");
+        }
+    }
+
+    /// <summary>
+    /// 获取玩家身上所有剩余物品的TypeID列表（用于从墓碑中减去）
+    /// </summary>
+    private List<int> GetPlayerEquipmentTypeIds()
+    {
+        var remainingItemTypeIds = new List<int>();
+        
+        try
+        {
+            var mainControl = CharacterMainControl.Main;
+            if (mainControl == null)
+            {
+                Debug.LogWarning("[TOMBSTONE] Main character control not found");
+                return remainingItemTypeIds;
+            }
+
+            Debug.Log("[TOMBSTONE] Collecting all remaining items on player...");
+
+            // 获取远程武器
+            var rangedWeapon = mainControl.GetGun();
+            if (rangedWeapon != null && rangedWeapon.Item != null)
+            {
+                remainingItemTypeIds.Add(rangedWeapon.Item.TypeID);
+                Debug.Log($"[TOMBSTONE] Found ranged weapon: TypeID={rangedWeapon.Item.TypeID}");
+            }
+
+            // 获取近战武器
+            var meleeWeapon = mainControl.GetMeleeWeapon();
+            if (meleeWeapon != null && meleeWeapon.Item != null)
+            {
+                remainingItemTypeIds.Add(meleeWeapon.Item.TypeID);
+                Debug.Log($"[TOMBSTONE] Found melee weapon: TypeID={meleeWeapon.Item.TypeID}");
+            }
+
+            // 获取角色身上的所有装备槽位（包括图腾等）
+            var characterItem = mainControl.CharacterItem;
+            if (characterItem != null && characterItem.Slots != null)
+            {
+                Debug.Log($"[TOMBSTONE] Checking character equipment slots");
+                
+                foreach (var slot in characterItem.Slots)
+                {
+                    if (slot != null && slot.Content != null)
+                    {
+                        remainingItemTypeIds.Add(slot.Content.TypeID);
+                        Debug.Log($"[TOMBSTONE] Found equipped item in slot '{slot.Key}': TypeID={slot.Content.TypeID}, Name={slot.Content.name}");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[TOMBSTONE] Character equipment slots not found");
+            }
+
+            // 获取背包中的所有物品
+            var playerInventory = PlayerStorage.Inventory;
+            if (playerInventory != null)
+            {
+                Debug.Log($"[TOMBSTONE] Checking player inventory with {playerInventory.Content.Count} slots");
+                
+                for (int i = 0; i < playerInventory.Content.Count; i++)
+                {
+                    var item = playerInventory.GetItemAt(i);
+                    if (item != null)
+                    {
+                        remainingItemTypeIds.Add(item.TypeID);
+                        Debug.Log($"[TOMBSTONE] Found inventory item {i}: TypeID={item.TypeID}, Name={item.name}");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[TOMBSTONE] Player inventory not found");
+            }
+
+            // 获取宠物背包中的物品 - 但不包含在剩余物品中，因为宠物背包物品不会掉落
+            // 注意：宠物背包物品不添加到remainingItemTypeIds，因为它们不会掉落也不应该从墓碑中减去
+
+            Debug.Log($"[TOMBSTONE] Total remaining items found: {remainingItemTypeIds.Count}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Error getting player remaining items: {e}");
+        }
+
+        return remainingItemTypeIds;
     }
 }

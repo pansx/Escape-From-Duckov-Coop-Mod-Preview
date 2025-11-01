@@ -578,14 +578,77 @@ internal static class Patch_Inventory_RemoveAt_BroadcastOnServer
     {
         var m = ModBehaviourF.Instance;
         if (m == null || !m.networkStarted || !m.IsServer) return; // 仅主机
+        
+        // 添加调试日志
+        Debug.Log($"[TOMBSTONE] RemoveAt Postfix called: __result={__result}, _serverApplyingLoot={COOPManager.LootNet._serverApplyingLoot}");
+        
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return; // 跳过失败/网络路径内部调用
 
+        // 只处理战利品容器，跳过玩家仓库/宠物包等私有库存
+        var isLootboxInventory = LootboxDetectUtil.IsLootboxInventory(__instance);
+        var isPrivateInventory = LootboxDetectUtil.IsPrivateInventory(__instance);
+        Debug.Log($"[TOMBSTONE] Inventory check: isLootboxInventory={isLootboxInventory}, isPrivateInventory={isPrivateInventory}");
+        
+        if (!isLootboxInventory || isPrivateInventory) 
+        {
+            Debug.Log($"[TOMBSTONE] Skipping inventory: not lootbox or is private");
+            return;
+        }
+        
+        // 使用DeferedRunner来避免在Postfix中直接执行可能有副作用的操作
         DeferedRunner.EndOfFrame(() =>
         {
-            // 只处理战利品容器，跳过玩家仓库/宠物包等私有库存
-            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
-            COOPManager.LootNet.Server_SendLootboxState(null, __instance); // 广播给所有客户端
+            try
+            {
+                COOPManager.LootNet.Server_SendLootboxState(null, __instance); // 广播给所有客户端
+                Debug.Log($"[TOMBSTONE] Broadcasted lootbox state");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[TOMBSTONE] Failed to broadcast lootbox state: {e}");
+            }
         });
+        
+        // 直接执行墓碑更新，不使用DeferedRunner
+        try
+        {
+            Debug.Log($"[TOMBSTONE] Starting tombstone update check");
+            
+            // 从LootManager中查找对应的lootUid
+            var lootUid = -1;
+            if (LootManager.Instance != null && LootManager.Instance._srvLootByUid != null)
+            {
+                Debug.Log($"[TOMBSTONE] Searching in {LootManager.Instance._srvLootByUid.Count} lootUid mappings");
+                foreach (var kv in LootManager.Instance._srvLootByUid)
+                {
+                    if (kv.Value == __instance)
+                    {
+                        lootUid = kv.Key;
+                        Debug.Log($"[TOMBSTONE] Found matching lootUid: {lootUid}");
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[TOMBSTONE] LootManager or _srvLootByUid is null");
+            }
+            
+            if (lootUid >= 0)
+            {
+                Debug.Log($"[TOMBSTONE] Calling UpdateTombstoneByLootUid with lootUid={lootUid}");
+                TombstonePersistence.Instance?.UpdateTombstoneByLootUid(lootUid, __instance);
+                Debug.Log($"[TOMBSTONE] Updated tombstone after direct inventory RemoveAt: lootUid={lootUid}");
+            }
+            else
+            {
+                Debug.Log($"[TOMBSTONE] No lootUid found for inventory, skipping tombstone update");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TOMBSTONE] Failed to update tombstone after RemoveAt: {e}");
+        }
     }
 }
 
