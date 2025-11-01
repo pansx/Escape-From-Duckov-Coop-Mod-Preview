@@ -125,6 +125,10 @@
         <Reference Include="SymmetryBreakStudio.TastyGrassShader.Examples">
             <HintPath>$(DUCKOV_GAME_MANAGED)\SymmetryBreakStudio.TastyGrassShader.Examples.dll</HintPath>
         </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Collections" />
+        <Reference Include="System.ComponentModel.Composition" />
+        <Reference Include="System.Configuration" />
         <Reference Include="TeamSoda.Duckov.Core">
             <HintPath>$(DUCKOV_GAME_MANAGED)\TeamSoda.Duckov.Core.dll</HintPath>
         </Reference>
@@ -266,10 +270,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Polyfill" Version="8.9.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+      <PackageReference Include="Polyfill" Version="8.9.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
     <!-- 包含本地化文件作为内容 -->

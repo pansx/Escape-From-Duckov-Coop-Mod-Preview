@@ -1,4 +1,4 @@
-﻿// Escape-From-Duckov-Coop-Mod-Preview
+// Escape-From-Duckov-Coop-Mod-Preview
 // Copyright (C) 2025  Mr.sans and InitLoader's team
 //
 // This program is not a free software.
@@ -529,12 +529,11 @@ internal static class Patch_Inventory_AddAt_BroadcastOnServer
         var m = ModBehaviourF.Instance;
         if (m == null || !m.networkStarted || !m.IsServer) return;
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return;
+        if (!LootboxDetectUtil.IsLootboxInventory(__instance)) return;
 
-        DeferedRunner.EndOfFrame(() =>
-        {
-            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
-            COOPManager.LootNet.Server_SendLootboxState(null, __instance);
-        });
+        if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
+
+        COOPManager.LootNet.Server_SendLootboxState(null, __instance);
     }
 }
 
@@ -548,16 +547,14 @@ internal static class Patch_Inventory_AddItem_BroadcastLootState
         if (m == null || !m.networkStarted || !m.IsServer) return;
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return;
 
-        DeferedRunner.EndOfFrame(() =>
-        {
-            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
+        if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
 
-            var dict = InteractableLootbox.Inventories;
-            var isLootInv = dict != null && dict.ContainsValue(__instance);
-            if (!isLootInv) return;
 
-            COOPManager.LootNet.Server_SendLootboxState(null, __instance);
-        });
+        var dict = InteractableLootbox.Inventories;
+        var isLootInv = dict != null && dict.ContainsValue(__instance);
+        if (!isLootInv) return;
+
+        COOPManager.LootNet.Server_SendLootboxState(null, __instance);
     }
 }
 
@@ -583,6 +580,8 @@ internal static class Patch_Inventory_RemoveAt_BroadcastOnServer
         Debug.Log($"[TOMBSTONE] RemoveAt Postfix called: __result={__result}, _serverApplyingLoot={COOPManager.LootNet._serverApplyingLoot}");
         
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return; // 跳过失败/网络路径内部调用
+        if (!LootboxDetectUtil.IsLootboxInventory(__instance)) return; // 只处理战利品容器
+        if (LootboxDetectUtil.IsPrivateInventory(__instance)) return; // 跳过玩家仓库/宠物包等私有库存
 
         // 只处理战利品容器，跳过玩家仓库/宠物包等私有库存
         var isLootboxInventory = LootboxDetectUtil.IsLootboxInventory(__instance);
@@ -715,14 +714,10 @@ internal static class Patch_ServerBroadcast_OnRemoveAt
         var m = ModBehaviourF.Instance;
         if (m == null || !m.networkStarted || !m.IsServer) return;
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return;
+        if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
 
         if (LootManager.Instance.Server_IsLootMuted(__instance)) return; // ★ 新增
-
-        DeferedRunner.EndOfFrame(() =>
-        {
-            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
-            COOPManager.LootNet.Server_SendLootboxState(null, __instance);
-        });
+        COOPManager.LootNet.Server_SendLootboxState(null, __instance);
     }
 }
 
@@ -748,15 +743,12 @@ internal static class Patch_ServerBroadcast_OnAddAt
         var m = ModBehaviourF.Instance;
         if (m == null || !m.networkStarted || !m.IsServer) return;
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return;
+        if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
 
         // ★ 新增：静音期内跳过群发（真正有人打开时仍会单播，应答不受影响）
         if (LootManager.Instance.Server_IsLootMuted(__instance)) return;
 
-        DeferedRunner.EndOfFrame(() =>
-        {
-            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
-            COOPManager.LootNet.Server_SendLootboxState(null, __instance);
-        });
+        COOPManager.LootNet.Server_SendLootboxState(null, __instance);
     }
 }
 
