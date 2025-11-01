@@ -1,4 +1,4 @@
-// Escape-From-Duckov-Coop-Mod-Preview
+﻿// Escape-From-Duckov-Coop-Mod-Preview
 // Copyright (C) 2025  Mr.sans and InitLoader's team
 //
 // This program is not a free software.
@@ -132,9 +132,7 @@ public class ModBehaviourF : MonoBehaviour
     public string status => Service?.status;
     public int port => Service?.port ?? 0;
     public float broadcastInterval => Service?.broadcastInterval ?? 5f;
-
-    public float syncInterval =>
-        Service?.syncInterval ?? 0.015f; // =========== Mod开发者注意现在是TI版本也就是满血版无同步延迟，0.03 ~33ms ===================
+    public float syncInterval => Service?.syncInterval ?? 0.015f; // =========== Mod开发者注意现在是TI版本也就是满血版无同步延迟，0.03 ~33ms ===================
 
     public Dictionary<NetPeer, GameObject> remoteCharacters => Service?.remoteCharacters;
     public Dictionary<NetPeer, PlayerStatus> playerStatuses => Service?.playerStatuses;
@@ -159,23 +157,18 @@ public class ModBehaviourF : MonoBehaviour
         if (CharacterMainControl.Main != null && !isinit)
         {
             isinit = true;
-            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("armorSlot").Value
-                    .onSlotContentChanged +=
-                LocalPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
-            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("helmatSlot").Value
-                    .onSlotContentChanged +=
-                LocalPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
-            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("faceMaskSlot").Value
-                    .onSlotContentChanged +=
-                LocalPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
-            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("backpackSlot").Value
-                    .onSlotContentChanged +=
-                LocalPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
-            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("headsetSlot").Value
-                    .onSlotContentChanged +=
-                LocalPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
+            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("armorSlot").Value.onSlotContentChanged +=
+                LoaclPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
+            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("helmatSlot").Value.onSlotContentChanged +=
+                LoaclPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
+            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("faceMaskSlot").Value.onSlotContentChanged +=
+                LoaclPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
+            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("backpackSlot").Value.onSlotContentChanged +=
+                LoaclPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
+            Traverse.Create(CharacterMainControl.Main.EquipmentController).Field<Slot>("headsetSlot").Value.onSlotContentChanged +=
+                LoaclPlayerManager.Instance.ModBehaviour_onSlotContentChanged;
 
-            CharacterMainControl.Main.OnHoldAgentChanged += LocalPlayerManager.Instance.Main_OnHoldAgentChanged;
+            CharacterMainControl.Main.OnHoldAgentChanged += LoaclPlayerManager.Instance.Main_OnHoldAgentChanged;
         }
 
 
@@ -236,8 +229,7 @@ public class ModBehaviourF : MonoBehaviour
                 //}
             }
 
-            if (!IsServer && !string.IsNullOrEmpty(SceneNet.Instance._sceneReadySidSent) &&
-                _envReqSid != SceneNet.Instance._sceneReadySidSent)
+            if (!IsServer && !string.IsNullOrEmpty(SceneNet.Instance._sceneReadySidSent) && _envReqSid != SceneNet.Instance._sceneReadySidSent)
             {
                 _envReqSid = SceneNet.Instance._sceneReadySidSent; // 本场景只请求一次
                 COOPManager.Weather.Client_RequestEnvSync(); // 向主机要时间/天气快照
@@ -304,6 +296,16 @@ public class ModBehaviourF : MonoBehaviour
                 var (id, p, f) = _pendingAiTrans.Dequeue();
                 AITool.ApplyAiTransform(id, p, f);
             }
+
+            if (NetService.Instance.netManager != null)
+            {
+                if (!SteamP2PLoader.Instance._isOptimized && SteamP2PLoader.Instance.UseSteamP2P)
+                {
+                    NetService.Instance.netManager.UpdateTime = 1;
+                    SteamP2PLoader.Instance._isOptimized = true;
+                    Debug.Log("[SteamP2P扩展] ✓ LiteNetLib网络线程已优化 (1ms 更新周期)");
+                }
+            }
         }
 
         if (networkStarted && IsServer)
@@ -316,19 +318,17 @@ public class ModBehaviourF : MonoBehaviour
             }
         }
 
-        LocalPlayerManager.Instance.UpdatePlayerStatuses();
-        LocalPlayerManager.Instance.UpdateRemoteCharacters();
+        LoaclPlayerManager.Instance.UpdatePlayerStatuses();
+        LoaclPlayerManager.Instance.UpdateRemoteCharacters();
 
-        if (Input.GetKeyDown(ModUI.Instance.toggleWindowKey))
-            ModUI.Instance.showPlayerStatusWindow = !ModUI.Instance.showPlayerStatusWindow;
+        if (Input.GetKeyDown(ModUI.Instance.toggleWindowKey)) ModUI.Instance.showPlayerStatusWindow = !ModUI.Instance.showPlayerStatusWindow;
 
         COOPManager.GrenadeM.ProcessPendingGrenades();
 
         if (!IsServer)
             if (CoopTool._cliSelfHpPending && CharacterMainControl.Main != null)
             {
-                HealthM.Instance.ApplyHealthAndEnsureBar(CharacterMainControl.Main.gameObject, CoopTool._cliSelfHpMax,
-                    CoopTool._cliSelfHpCur);
+                HealthM.Instance.ApplyHealthAndEnsureBar(CharacterMainControl.Main.gameObject, CoopTool._cliSelfHpMax, CoopTool._cliSelfHpCur);
                 CoopTool._cliSelfHpPending = false;
             }
 
@@ -370,11 +370,11 @@ public class ModBehaviourF : MonoBehaviour
             // 动态剔除“已死/被销毁/不在本地图”的目标
             Spectator.Instance._spectateList = Spectator.Instance._spectateList.Where(c =>
             {
-                if (!LocalPlayerManager.Instance.IsAlive(c)) return false;
+                if (!LoaclPlayerManager.Instance.IsAlive(c)) return false;
 
                 var mySceneId = localPlayerStatus != null ? localPlayerStatus.SceneId : null;
                 if (string.IsNullOrEmpty(mySceneId))
-                    LocalPlayerManager.Instance.ComputeIsInGame(out mySceneId);
+                    LoaclPlayerManager.Instance.ComputeIsInGame(out mySceneId);
 
                 // 反查该 CMC 对应的 peer 的 SceneId
                 string peerScene = null;
@@ -383,8 +383,7 @@ public class ModBehaviourF : MonoBehaviour
                     foreach (var kv in remoteCharacters)
                         if (kv.Value != null && kv.Value.GetComponent<CharacterMainControl>() == c)
                         {
-                            if (!SceneM._srvPeerScene.TryGetValue(kv.Key, out peerScene) &&
-                                playerStatuses.TryGetValue(kv.Key, out var st))
+                            if (!SceneM._srvPeerScene.TryGetValue(kv.Key, out peerScene) && playerStatuses.TryGetValue(kv.Key, out var st))
                                 peerScene = st?.SceneId;
                             break;
                         }
@@ -414,7 +413,7 @@ public class ModBehaviourF : MonoBehaviour
                 _spectateIdx = 0;
 
             // 当前目标若死亡，自动跳到下一个
-            if (!LocalPlayerManager.Instance.IsAlive(Spectator.Instance._spectateList[_spectateIdx]))
+            if (!LoaclPlayerManager.Instance.IsAlive(Spectator.Instance._spectateList[_spectateIdx]))
                 Spectator.Instance.SpectateNext();
 
             // 鼠标左/右键切换（加个轻微节流）
@@ -487,8 +486,7 @@ public class ModBehaviourF : MonoBehaviour
     }
 
 
-    public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channelNumber,
-        DeliveryMethod deliveryMethod)
+    public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channelNumber, DeliveryMethod deliveryMethod)
     {
         // 统一：读取 1 字节的操作码（Op）
         if (reader.AvailableBytes <= 0)
@@ -559,12 +557,9 @@ public class ModBehaviourF : MonoBehaviour
 
                         if (isInGame)
                         {
-                            if (!clientRemoteCharacters.ContainsKey(endPoint) ||
-                                clientRemoteCharacters[endPoint] == null)
+                            if (!clientRemoteCharacters.ContainsKey(endPoint) || clientRemoteCharacters[endPoint] == null)
                             {
-                                CreateRemoteCharacter
-                                    .CreateRemoteCharacterForClient(endPoint, position, rotation, customFaceJson)
-                                    .Forget();
+                                CreateRemoteCharacter.CreateRemoteCharacterForClient(endPoint, position, rotation, customFaceJson).Forget();
                             }
                             else
                             {
@@ -573,12 +568,8 @@ public class ModBehaviourF : MonoBehaviour
                                 ni?.Push(st.Position, st.Rotation);
                             }
 
-                            foreach (var e in equipmentList)
-                                COOPManager.ClientPlayer_Apply
-                                    .ApplyEquipmentUpdate_Client(endPoint, e.SlotHash, e.ItemId).Forget();
-                            foreach (var w in weaponList)
-                                COOPManager.ClientPlayer_Apply.ApplyWeaponUpdate_Client(endPoint, w.SlotHash, w.ItemId)
-                                    .Forget();
+                            foreach (var e in equipmentList) COOPManager.ClientPlayer_Apply.ApplyEquipmentUpdate_Client(endPoint, e.SlotHash, e.ItemId).Forget();
+                            foreach (var w in weaponList) COOPManager.ClientPlayer_Apply.ApplyWeaponUpdate_Client(endPoint, w.SlotHash, w.ItemId).Forget();
                         }
                     }
                 }
@@ -616,8 +607,7 @@ public class ModBehaviourF : MonoBehaviour
                         break;
 
                     if (!clientPlayerStatuses.TryGetValue(endPointS, out var st))
-                        st = clientPlayerStatuses[endPointS] = new PlayerStatus
-                            { EndPoint = endPointS, IsInGame = true };
+                        st = clientPlayerStatuses[endPointS] = new PlayerStatus { EndPoint = endPointS, IsInGame = true };
 
                     st.Position = posS;
                     st.Rotation = rotS;
@@ -636,8 +626,7 @@ public class ModBehaviourF : MonoBehaviour
                     }
                     else
                     {
-                        CreateRemoteCharacter.CreateRemoteCharacterForClient(endPointS, posS, rotS, st.CustomFaceJson)
-                            .Forget();
+                        CreateRemoteCharacter.CreateRemoteCharacterForClient(endPointS, posS, rotS, st.CustomFaceJson).Forget();
                     }
                 }
 
@@ -776,8 +765,7 @@ public class ModBehaviourF : MonoBehaviour
                     var delay = reader.GetFloat();
 
                     //先找玩家远端
-                    if (!NetService.Instance.IsSelfId(shooter) &&
-                        clientRemoteCharacters.TryGetValue(shooter, out var who) && who)
+                    if (!NetService.Instance.IsSelfId(shooter) && clientRemoteCharacters.TryGetValue(shooter, out var who) && who)
                     {
                         var anim = who.GetComponentInChildren<CharacterAnimationControl_MagicBlend>(true);
                         if (anim != null) anim.OnAttack();
@@ -789,8 +777,7 @@ public class ModBehaviourF : MonoBehaviour
                     //兼容 AI:xxx
                     else if (shooter.StartsWith("AI:"))
                     {
-                        if (int.TryParse(shooter.Substring(3), out var aiId) &&
-                            AITool.aiById.TryGetValue(aiId, out var cmc) && cmc)
+                        if (int.TryParse(shooter.Substring(3), out var aiId) && AITool.aiById.TryGetValue(aiId, out var cmc) && cmc)
                         {
                             var anim = cmc.GetComponentInChildren<CharacterAnimationControl_MagicBlend>(true);
                             if (anim != null) anim.OnAttack();
@@ -877,8 +864,7 @@ public class ModBehaviourF : MonoBehaviour
                             // 如果回显值会让血量“变多”（典型回弹），判定为陈旧 echo 丢弃
                             if (cur > localCur + 0.0001f)
                             {
-                                Debug.Log(
-                                    $"[HP][SelfEcho] drop stale echo in window: local={localCur:F3} srv={cur:F3}");
+                                Debug.Log($"[HP][SelfEcho] drop stale echo in window: local={localCur:F3} srv={cur:F3}");
 
                                 shouldApply = false;
                             }
@@ -951,8 +937,7 @@ public class ModBehaviourF : MonoBehaviour
                         break;
                     }
 
-                    if (clientRemoteCharacters != null && clientRemoteCharacters.TryGetValue(playerId, out var go) &&
-                        go)
+                    if (clientRemoteCharacters != null && clientRemoteCharacters.TryGetValue(playerId, out var go) && go)
                         HealthM.Instance.ApplyHealthAndEnsureBar(go, max, cur);
                     else
                         CoopTool._cliPendingRemoteHp[playerId] = (max, cur);
@@ -997,8 +982,7 @@ public class ModBehaviourF : MonoBehaviour
                     // ★ 主机若正处于观战，记下“投票结束就结算”的意图
                     if (Spectator.Instance._spectatorActive) Spectator.Instance._spectatorEndOnVotePending = true;
 
-                    SceneNet.Instance.Host_BeginSceneVote_Simple(targetId, curtainGuid, notifyEvac, saveToFile, useLoc,
-                        locName);
+                    SceneNet.Instance.Host_BeginSceneVote_Simple(targetId, curtainGuid, notifyEvac, saveToFile, useLoc, locName);
                 }
 
                 break;
@@ -1017,8 +1001,7 @@ public class ModBehaviourF : MonoBehaviour
                     var pid = reader.GetString();
                     var rdy = reader.GetBool();
 
-                    if (!SceneNet.Instance.sceneReady.ContainsKey(pid) &&
-                        SceneNet.Instance.sceneParticipantIds.Contains(pid))
+                    if (!SceneNet.Instance.sceneReady.ContainsKey(pid) && SceneNet.Instance.sceneParticipantIds.Contains(pid))
                         SceneNet.Instance.sceneReady[pid] = false;
 
                     if (SceneNet.Instance.sceneReady.ContainsKey(pid))
@@ -1028,8 +1011,7 @@ public class ModBehaviourF : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning(
-                            $"[SCENE] READY_SET for unknown pid '{pid}'. participants=[{string.Join(",", SceneNet.Instance.sceneParticipantIds)}]");
+                        Debug.LogWarning($"[SCENE] READY_SET for unknown pid '{pid}'. participants=[{string.Join(",", SceneNet.Instance.sceneParticipantIds)}]");
                     }
                 }
 
@@ -1200,8 +1182,7 @@ public class ModBehaviourF : MonoBehaviour
                         if (did != 0) COOPManager.destructible.Client_ApplyDestructibleDead_Snapshot(did);
                     }
 
-                    COOPManager.Weather.Client_ApplyEnvSync(day, sec, scale, seed, forceW, forceWVal, curWeather,
-                        stormLv);
+                    COOPManager.Weather.Client_ApplyEnvSync(day, sec, scale, seed, forceW, forceWVal, curWeather, stormLv);
                 }
 
                 break;
@@ -1318,11 +1299,9 @@ public class ModBehaviourF : MonoBehaviour
                         $"[AI-RECV] ver={ver} aiId={aiId} model='{modelName}' icon={iconType} showName={showName} faceLen={(faceJson != null ? faceJson.Length : 0)}");
 
                 if (AITool.aiById.TryGetValue(aiId, out var cmc) && cmc)
-                    COOPManager.AIHandle.Client_ApplyAiLoadout(aiId, equips, weapons, faceJson, modelName, iconType,
-                        showName, displayName).Forget();
+                    COOPManager.AIHandle.Client_ApplyAiLoadout(aiId, equips, weapons, faceJson, modelName, iconType, showName, displayName).Forget();
                 else
-                    COOPManager.AIHandle.pendingAiLoadouts[aiId] = (equips, weapons, faceJson, modelName, iconType,
-                        showName, displayName);
+                    COOPManager.AIHandle.pendingAiLoadouts[aiId] = (equips, weapons, faceJson, modelName, iconType, showName, displayName);
 
                 break;
             }
@@ -1417,6 +1396,13 @@ public class ModBehaviourF : MonoBehaviour
                 break;
             }
 
+            case Op.AI_HEALTH_REPORT:
+            {
+                if (IsServer)
+                    COOPManager.AIHealth.HandleAiHealthReport(peer, reader);
+                break;
+            }
+
 
             // --- 客户端：读取 aiId，并把它传下去 ---
             case Op.DEAD_LOOT_SPAWN:
@@ -1468,9 +1454,7 @@ public class ModBehaviourF : MonoBehaviour
 
                 var deadPfb = LootManager.Instance.ResolveDeadLootPrefabOnServer();
                 var box = InteractableLootbox.CreateFromItem(tmpRoot, pos + Vector3.up * 0.10f, rot, true, deadPfb);
-                if (box)
-                    DeadLootBox.Instance
-                        .Server_OnDeadLootboxSpawned(box, null); // 用新版重载：会发 lootUid + aiId + 随后 LOOT_STATE
+                if (box) DeadLootBox.Instance.Server_OnDeadLootboxSpawned(box, null); // 用新版重载：会发 lootUid + aiId + 随后 LOOT_STATE
 
                 if (remoteCharacters.TryGetValue(peer, out var proxy) && proxy)
                 {
@@ -1574,8 +1558,7 @@ public class ModBehaviourF : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning(
-                            $"[GATE] release sid mismatch: srv={sid}, cli={SceneNet.Instance._cliGateSid} — accepting");
+                        Debug.LogWarning($"[GATE] release sid mismatch: srv={sid}, cli={SceneNet.Instance._cliGateSid} — accepting");
                         SceneNet.Instance._cliGateSid = sid; // 对齐后仍放行
                         SceneNet.Instance._cliSceneGateReleased = true;
                         HealthM.Instance.Client_ReportSelfHealth_IfReadyOnce();
@@ -1611,7 +1594,7 @@ public class ModBehaviourF : MonoBehaviour
         {
             if (!networkStarted || localPlayerStatus == null) return;
 
-            var ok = LocalPlayerManager.Instance.ComputeIsInGame(out var sid);
+            var ok = LoaclPlayerManager.Instance.ComputeIsInGame(out var sid);
             localPlayerStatus.SceneId = sid;
             localPlayerStatus.IsInGame = ok;
 
