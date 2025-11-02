@@ -1,4 +1,4 @@
-﻿// Escape-From-Duckov-Coop-Mod-Preview
+// Escape-From-Duckov-Coop-Mod-Preview
 // Copyright (C) 2025  Mr.sans and InitLoader's team
 //
 // This program is not a free software.
@@ -32,7 +32,7 @@ public class NetService : MonoBehaviour, INetEventListener
     public List<string> hostList = new();
     public bool isConnecting;
     public string status = "";
-    public string manualIP = "127.0.0.1";
+    public string manualIP = "192.168.123.1";
     public string manualPort = "9050"; // GTX 5090 我也想要
     public bool networkStarted;
     public float broadcastTimer;
@@ -259,16 +259,36 @@ public class NetService : MonoBehaviour, INetEventListener
     public void OnNetworkReceiveUnconnected(IPEndPoint remoteEndPoint, NetPacketReader reader,
         UnconnectedMessageType messageType)
     {
-        var msg = reader.GetString();
+        Debug.Log($"[UDP-DEBUG] OnNetworkReceiveUnconnected被调用: 来源={remoteEndPoint}, 类型={messageType}");
+        
+        string msg = null;
+        try
+        {
+            msg = reader.GetString();
+            Debug.Log($"[UDP-DEBUG] 成功读取字符串: 长度={msg?.Length}, 内容前50字符='{(msg?.Length > 50 ? msg.Substring(0, 50) : msg)}'");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[UDP-DEBUG] 读取字符串失败: {ex.Message}");
+            return;
+        }
+        
+        // 记录所有接收到的UDP包
+        Debug.Log($"[UDP] 收到UDP包: 来源={remoteEndPoint}, 消息='{msg}', 类型={messageType}, 长度={msg.Length}");
 
+        Debug.Log($"[UDP-DEBUG] 开始处理消息: IsServer={IsServer}");
+        
         if (IsServer && msg == "DISCOVER_REQUEST")
         {
+            Debug.Log($"[UDP-DEBUG] 匹配到DISCOVER_REQUEST，准备发送响应");
             writer.Reset();
             writer.Put("DISCOVER_RESPONSE");
             netManager.SendUnconnectedMessage(writer, remoteEndPoint);
+            Debug.Log($"[UDP-DEBUG] DISCOVER_RESPONSE已发送");
         }
         else if (!IsServer && msg == "DISCOVER_RESPONSE")
         {
+            Debug.Log($"[UDP-DEBUG] 匹配到DISCOVER_RESPONSE");
             var hostInfo = remoteEndPoint.Address + ":" + port;
             if (!hostSet.Contains(hostInfo))
             {
@@ -276,6 +296,31 @@ public class NetService : MonoBehaviour, INetEventListener
                 hostList.Add(hostInfo);
                 Debug.Log(CoopLocalization.Get("net.hostDiscovered", hostInfo));
             }
+        }
+        else if (IsServer && msg.StartsWith("CHAT_MESSAGE:"))
+        {
+            Debug.Log($"[UDP-DEBUG] 匹配到CHAT_MESSAGE前缀");
+            // 处理UDP聊天消息
+            var chatJson = msg.Substring("CHAT_MESSAGE:".Length);
+            Debug.Log($"[CHAT] 收到UDP聊天消息: {remoteEndPoint} -> JSON长度={chatJson.Length}");
+            Debug.Log($"[CHAT] JSON内容: {chatJson}");
+            Debug.Log($"[CHAT] IsServer={IsServer}, ModBehaviourF.Instance={ModBehaviourF.Instance != null}");
+            
+            // 通过ModBehaviourF处理聊天消息
+            if (ModBehaviourF.Instance != null)
+            {
+                Debug.Log($"[CHAT] 调用HandleUDPChatMessage");
+                ModBehaviourF.Instance.HandleUDPChatMessage(chatJson, remoteEndPoint.ToString());
+            }
+            else
+            {
+                Debug.LogError($"[CHAT] ModBehaviourF.Instance为null，无法处理聊天消息");
+            }
+        }
+        else
+        {
+            Debug.Log($"[UDP-DEBUG] 未匹配任何已知消息类型");
+            Debug.Log($"[UDP] 未处理的UDP消息: IsServer={IsServer}, 消息前100字符='{(msg.Length > 100 ? msg.Substring(0, 100) : msg)}'");
         }
     }
 
@@ -377,9 +422,10 @@ public class NetService : MonoBehaviour, INetEventListener
 
             if (netManager != null)
             {
-                // 使用 Steam P2P 时让 LiteNetLib 不去占 UDP socket
-                netManager.UseNativeSockets = false;
-                Debug.Log("[StartNetwork] ✓ UseNativeSockets=false（P2P 模式）");
+                // 【测试模式】保持原生UDP socket监听，用于测试UDP直连聊天
+                // 正常情况下应该设置为false，但为了测试聊天功能，暂时保持true
+                netManager.UseNativeSockets = true;
+                Debug.Log("[StartNetwork] ✓ UseNativeSockets=true（P2P模式 + UDP测试）");
             }
 
             // 保险：确保必要组件存在（Loader.Init 一般已创建）
@@ -410,6 +456,9 @@ public class NetService : MonoBehaviour, INetEventListener
                 }
             }
         }
+
+        // 初始化统一聊天传输层
+        EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.InitializeTransport(IsServer, p2pAvailable);
 
 
 
