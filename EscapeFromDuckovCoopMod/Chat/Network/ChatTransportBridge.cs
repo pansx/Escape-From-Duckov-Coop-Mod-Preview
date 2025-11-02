@@ -152,20 +152,43 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
         private static CSteamID GetCurrentLobbyId(bool useSteamP2P)
         {
             if (!useSteamP2P)
+            {
+                Debug.Log($"[ChatTransportBridge] 不使用 Steam P2P，返回默认大厅 ID");
                 return default;
+            }
 
             try
             {
-                if (SteamLobbyManager.Instance != null && SteamLobbyManager.Instance.IsInLobby)
+                Debug.Log($"[ChatTransportBridge] 尝试获取 Steam 大厅 ID...");
+                Debug.Log($"[ChatTransportBridge] SteamLobbyManager.Instance = {(SteamLobbyManager.Instance != null ? "存在" : "null")}");
+                
+                if (SteamLobbyManager.Instance != null)
                 {
-                    return SteamLobbyManager.Instance.CurrentLobbyId;
+                    Debug.Log($"[ChatTransportBridge] IsInLobby = {SteamLobbyManager.Instance.IsInLobby}");
+                    
+                    if (SteamLobbyManager.Instance.IsInLobby)
+                    {
+                        var lobbyId = SteamLobbyManager.Instance.CurrentLobbyId;
+                        Debug.Log($"[ChatTransportBridge] 获取到大厅 ID: {lobbyId}");
+                        return lobbyId;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[ChatTransportBridge] 当前不在大厅中");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[ChatTransportBridge] SteamLobbyManager 未初始化");
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[ChatTransportBridge] 获取大厅 ID 时发生异常: {ex.Message}");
+                Debug.LogError($"[ChatTransportBridge] 获取大厅 ID 时发生异常: {ex.Message}");
+                Debug.LogError($"[ChatTransportBridge] 异常堆栈: {ex.StackTrace}");
             }
 
+            Debug.LogWarning($"[ChatTransportBridge] 返回默认大厅 ID");
             return default;
         }
 

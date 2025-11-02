@@ -105,6 +105,18 @@ public class NetService : MonoBehaviour, INetEventListener
             }
             
             Send_ClientStatus.Instance.SendClientStatusUpdate();
+            
+            // 注册主机的 Steam ID 映射（如果使用 Steam P2P）
+            RegisterHostSteamId(peer);
+            
+            // 【调试】客机连接成功后自动发送测试消息
+            SendDebugChatMessage();
+        }
+
+        // 【调试】如果是主机，当客机连接时发送欢迎消息
+        if (IsServer)
+        {
+            SendHostWelcomeMessage(peer);
         }
 
         if (!playerStatuses.ContainsKey(peer))
@@ -860,10 +872,196 @@ public class NetService : MonoBehaviour, INetEventListener
         }
     }
 
+    /// <summary>
+    /// 【调试】主机发送欢迎消息
+    /// </summary>
+    /// <param name="clientPeer">客机的 NetPeer</param>
+    private void SendHostWelcomeMessage(NetPeer clientPeer)
+    {
+        try
+        {
+            Debug.Log($"[CHAT-DEBUG] 主机准备发送欢迎消息给客机: {clientPeer.EndPoint}");
 
+            // 延迟2秒发送，确保客机已完全连接
+            StartCoroutine(SendHostWelcomeMessageDelayed(clientPeer));
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[CHAT-DEBUG] 主机发送欢迎消息时发生异常: {ex.Message}");
+        }
+    }
 
+    /// <summary>
+    /// 【调试】延迟发送主机欢迎消息
+    /// </summary>
+    private System.Collections.IEnumerator SendHostWelcomeMessageDelayed(NetPeer clientPeer)
+    {
+        yield return new WaitForSeconds(2f);
 
+        Debug.Log("[CHAT-DEBUG] 主机开始发送欢迎消息");
 
+        // 获取当前用户信息
+        var steamUserService = new EscapeFromDuckovCoopMod.Chat.Services.SteamUserService();
+        var userInfoTask = steamUserService.GetCurrentUserInfo();
+        
+        // 等待用户信息获取完成
+        while (!userInfoTask.IsCompleted)
+        {
+            yield return null;
+        }
 
+        var userInfo = userInfoTask.Result;
+        if (userInfo == null)
+        {
+            Debug.LogWarning("[CHAT-DEBUG] 主机无法获取用户信息，使用默认信息");
+            userInfo = new EscapeFromDuckovCoopMod.Chat.Models.UserInfo
+            {
+                UserName = "主机",
+                DisplayName = "主机"
+            };
+        }
 
+        // 创建欢迎消息
+        var welcomeMessage = new EscapeFromDuckovCoopMod.Chat.Models.ChatMessage
+        {
+            Content = $"【主机自动消息】欢迎 {clientPeer.EndPoint} 加入游戏！",
+            Sender = userInfo,
+            Type = EscapeFromDuckovCoopMod.Chat.Models.MessageType.System,
+            Timestamp = System.DateTime.UtcNow
+        };
+
+        // 序列化消息
+        string messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(welcomeMessage);
+        Debug.Log($"[CHAT-DEBUG] 主机欢迎消息 JSON: {messageJson}");
+
+        // 通过桥接器广播消息
+        bool success = EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.SendChatMessage(messageJson);
+        Debug.Log($"[CHAT-DEBUG] 主机欢迎消息发送结果: {success}");
+        Debug.Log($"[CHAT-DEBUG] 传输状态: {EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.GetTransportStatus()}");
+    }
+
+    /// <summary>
+    /// 注册主机的 Steam ID 映射
+    /// </summary>
+    /// <param name="peer">主机的 NetPeer</param>
+    private void RegisterHostSteamId(NetPeer peer)
+    {
+        try
+        {
+            if (peer == null)
+            {
+                Debug.LogWarning("[CHAT-DEBUG] 无法注册主机 SteamID：peer 为 null");
+                return;
+            }
+
+            Debug.Log($"[CHAT-DEBUG] 尝试注册主机 SteamID，端点: {peer.EndPoint}");
+
+            // 尝试从 SteamEndPointMapper 获取主机的 SteamID
+            if (SteamEndPointMapper.Instance != null)
+            {
+                var hostEndpoint = peer.EndPoint;
+                Steamworks.CSteamID hostSteamId;
+                
+                if (SteamEndPointMapper.Instance.TryGetSteamID(hostEndpoint, out hostSteamId))
+                {
+                    Debug.Log($"[CHAT-DEBUG] 找到主机 SteamID: {hostSteamId}，注册到聊天传输层");
+                    EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.RegisterClientSteamId(hostEndpoint.ToString(), hostSteamId);
+                }
+                else
+                {
+                    Debug.LogWarning($"[CHAT-DEBUG] 无法获取主机的 SteamID，端点: {hostEndpoint}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[CHAT-DEBUG] SteamEndPointMapper 未初始化");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[CHAT-DEBUG] 注册主机 SteamID 时发生异常: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 【调试】发送测试聊天消息
+    /// </summary>
+    private void SendDebugChatMessage()
+    {
+        try
+        {
+            Debug.Log("[CHAT-DEBUG] 客机连接成功，准备发送测试消息");
+
+            // 延迟1秒发送，确保网络已完全建立
+            StartCoroutine(SendDebugChatMessageDelayed());
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[CHAT-DEBUG] 发送测试消息时发生异常: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 【调试】延迟发送测试聊天消息
+    /// </summary>
+    private System.Collections.IEnumerator SendDebugChatMessageDelayed()
+    {
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log("[CHAT-DEBUG] 开始发送测试消息");
+
+        // 获取当前用户信息
+        var steamUserService = new EscapeFromDuckovCoopMod.Chat.Services.SteamUserService();
+        var userInfoTask = steamUserService.GetCurrentUserInfo();
+        
+        // 等待用户信息获取完成
+        while (!userInfoTask.IsCompleted)
+        {
+            yield return null;
+        }
+
+        var userInfo = userInfoTask.Result;
+        if (userInfo == null)
+        {
+            Debug.LogWarning("[CHAT-DEBUG] 无法获取用户信息，使用默认信息");
+            userInfo = new EscapeFromDuckovCoopMod.Chat.Models.UserInfo
+            {
+                UserName = "测试客机",
+                DisplayName = "测试客机"
+            };
+        }
+
+        // 创建测试消息
+        var testMessage = new EscapeFromDuckovCoopMod.Chat.Models.ChatMessage
+        {
+            Content = "【自动测试】客机已连接，聊天系统测试中...",
+            Sender = userInfo,
+            Type = EscapeFromDuckovCoopMod.Chat.Models.MessageType.Normal,
+            Timestamp = System.DateTime.UtcNow
+        };
+
+        // 序列化消息
+        string messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(testMessage);
+        Debug.Log($"[CHAT-DEBUG] 测试消息 JSON: {messageJson}");
+
+        // 通过 UDP 发送消息
+        if (connectedPeer != null && connectedPeer.ConnectionState == ConnectionState.Connected)
+        {
+            var writer = new NetDataWriter();
+            writer.Put((byte)Op.CHAT_MESSAGE_SEND);
+            writer.Put(messageJson);
+
+            connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+            Debug.Log($"[CHAT-DEBUG] 测试消息已通过 UDP 发送到主机: {connectedPeer.EndPoint}");
+        }
+        else
+        {
+            Debug.LogWarning("[CHAT-DEBUG] 无法发送测试消息：未连接到主机");
+        }
+
+        // 同时尝试通过统一传输层发送
+        bool transportSuccess = EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.SendChatMessage(messageJson);
+        Debug.Log($"[CHAT-DEBUG] 统一传输层发送结果: {transportSuccess}");
+        Debug.Log($"[CHAT-DEBUG] 传输状态: {EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.GetTransportStatus()}");
+    }
 }
