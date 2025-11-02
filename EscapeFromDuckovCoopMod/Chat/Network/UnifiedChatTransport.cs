@@ -105,6 +105,16 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
         private readonly Dictionary<string, CSteamID> _endpointToSteamId = new Dictionary<string, CSteamID>();
 
         /// <summary>
+        /// 已处理的消息 ID 缓存（用于去重）
+        /// </summary>
+        private readonly HashSet<string> _processedMessageIds = new HashSet<string>();
+
+        /// <summary>
+        /// 消息 ID 缓存的最大大小
+        /// </summary>
+        private const int MAX_MESSAGE_CACHE_SIZE = 1000;
+
+        /// <summary>
         /// Steam P2P 会话请求回调
         /// </summary>
         private Callback<P2PSessionRequest_t> _p2pSessionRequestCallback;
@@ -237,6 +247,16 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
             IsHost = true;
             CurrentLobbyId = lobbyId;
             LogInfo($"设置为主机模式，Steam 大厅 ID: {(lobbyId.IsValid() ? lobbyId.ToString() : "无")}");
+            
+            // 发送系统消息
+            if (lobbyId.IsValid())
+            {
+                SendSystemChatMessage($"聊天服务已启动（主机模式 - Steam 大厅）");
+            }
+            else
+            {
+                SendSystemChatMessage($"聊天服务已启动（主机模式 - 直连 UDP）");
+            }
         }
 
         /// <summary>
@@ -248,6 +268,16 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
             IsHost = false;
             CurrentLobbyId = lobbyId;
             LogInfo($"设置为客户端模式，Steam 大厅 ID: {(lobbyId.IsValid() ? lobbyId.ToString() : "无")}");
+            
+            // 发送系统消息
+            if (lobbyId.IsValid())
+            {
+                SendSystemChatMessage($"正在连接聊天服务（Steam P2P 模式）...");
+            }
+            else
+            {
+                SendSystemChatMessage($"正在连接聊天服务（直连 UDP 模式）...");
+            }
         }
 
         /// <summary>
@@ -524,6 +554,9 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
             {
                 uint messageSize;
 
+                // 获取当前用户的 Steam ID（用于过滤自己发送的消息）
+                CSteamID mySteamId = SteamUser.GetSteamID();
+
                 // 检查是否有待处理的消息
                 while (SteamNetworking.IsP2PPacketAvailable(out messageSize, STEAM_CHAT_CHANNEL))
                 {
@@ -538,8 +571,22 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
                     // 读取消息
                     if (SteamNetworking.ReadP2PPacket(_receiveBuffer, messageSize, out messageSize, out senderId, STEAM_CHAT_CHANNEL))
                     {
+                        // 过滤掉自己发送的消息（避免无限循环）
+                        if (senderId == mySteamId)
+                        {
+                            LogDebug($"忽略来自自己的 Steam P2P 消息: {senderId}");
+                            continue;
+                        }
+
                         // 将字节数组转换为字符串
                         string messageJson = System.Text.Encoding.UTF8.GetString(_receiveBuffer, 0, (int)messageSize);
+
+                        // 检查消息是否已处理（去重）
+                        if (!ShouldProcessMessage(messageJson))
+                        {
+                            LogDebug($"忽略重复的 Steam P2P 消息: {senderId}");
+                            continue;
+                        }
 
                         // 获取发送者端点
                         string senderEndpoint = _steamClientMap.ContainsKey(senderId) 
@@ -569,6 +616,13 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
             try
             {
                 LogDebug($"收到直连 UDP 聊天消息: {senderEndpoint}");
+
+                // 检查消息是否已处理（去重）
+                if (!ShouldProcessMessage(messageJson))
+                {
+                    LogDebug($"忽略重复的 UDP 消息: {senderEndpoint}");
+                    return;
+                }
 
                 // 触发消息接收事件
                 OnChatMessageReceived?.Invoke(messageJson, senderEndpoint);
@@ -614,6 +668,9 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
                         // 接受会话请求
                         SteamNetworking.AcceptP2PSessionWithUser(callback.m_steamIDRemote);
                         LogInfo($"已接受 Steam P2P 会话请求: {callback.m_steamIDRemote}");
+                        
+                        // 发送系统消息到聊天
+                        SendSystemChatMessage($"Steam P2P 连接已建立: {callback.m_steamIDRemote}");
                     }
                     else
                     {
@@ -625,6 +682,9 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
                     // 如果没有大厅，默认接受（兼容直连模式）
                     SteamNetworking.AcceptP2PSessionWithUser(callback.m_steamIDRemote);
                     LogInfo($"已接受 Steam P2P 会话请求（无大厅验证）: {callback.m_steamIDRemote}");
+                    
+                    // 发送系统消息到聊天
+                    SendSystemChatMessage($"Steam P2P 连接已建立（直连模式）: {callback.m_steamIDRemote}");
                 }
             }
             catch (Exception ex)
@@ -636,6 +696,106 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
         #endregion
 
         #region 辅助方法
+
+        /// <summary>
+        /// 检查消息是否应该被处理（去重）
+        /// </summary>
+        /// <param name="messageJson">消息 JSON</param>
+        /// <returns>是否应该处理</returns>
+        private bool ShouldProcessMessage(string messageJson)
+        {
+            try
+            {
+                // 尝试从 JSON 中提取消息 ID
+                var message = ChatMessage.FromJson(messageJson);
+                if (message == null || string.IsNullOrEmpty(message.Id))
+                {
+                    LogWarning("无法从消息中提取 ID，允许处理");
+                    return true;
+                }
+
+                // 检查消息 ID 是否已处理
+                if (_processedMessageIds.Contains(message.Id))
+                {
+                    return false; // 已处理，跳过
+                }
+
+                // 添加到已处理集合
+                _processedMessageIds.Add(message.Id);
+
+                // 如果缓存过大，清理旧的消息 ID
+                if (_processedMessageIds.Count > MAX_MESSAGE_CACHE_SIZE)
+                {
+                    // 简单策略：清空一半
+                    var toRemove = _processedMessageIds.Count / 2;
+                    var itemsToRemove = new List<string>();
+                    
+                    foreach (var id in _processedMessageIds)
+                    {
+                        itemsToRemove.Add(id);
+                        if (itemsToRemove.Count >= toRemove)
+                            break;
+                    }
+
+                    foreach (var id in itemsToRemove)
+                    {
+                        _processedMessageIds.Remove(id);
+                    }
+
+                    LogDebug($"清理消息 ID 缓存，移除 {itemsToRemove.Count} 个旧 ID");
+                }
+
+                return true; // 新消息，允许处理
+            }
+            catch (Exception ex)
+            {
+                LogError($"检查消息去重时发生异常: {ex.Message}");
+                return true; // 出错时允许处理
+            }
+        }
+
+        /// <summary>
+        /// 发送系统消息到聊天
+        /// </summary>
+        /// <param name="message">系统消息内容</param>
+        private void SendSystemChatMessage(string message)
+        {
+            try
+            {
+                // 创建系统用户
+                var systemUser = new UserInfo(0, "系统")
+                {
+                    DisplayName = "系统"
+                };
+
+                // 创建系统消息
+                var systemMessage = new ChatMessage
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Content = message,
+                    Sender = systemUser,
+                    Type = MessageType.System,
+                    Timestamp = DateTime.UtcNow,
+                    Metadata = new Dictionary<string, object>()
+                };
+
+                // 直接调用 ModUI 显示系统消息
+                var modUI = ModUI.Instance;
+                if (modUI != null)
+                {
+                    modUI.AddChatMessage(systemMessage.GetDisplayText());
+                    LogDebug($"系统消息已添加到聊天: {message}");
+                }
+                else
+                {
+                    LogWarning("ModUI 实例未找到，无法显示系统消息");
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError($"发送系统消息时发生异常: {ex.Message}");
+            }
+        }
 
         /// <summary>
         /// 获取传输状态描述

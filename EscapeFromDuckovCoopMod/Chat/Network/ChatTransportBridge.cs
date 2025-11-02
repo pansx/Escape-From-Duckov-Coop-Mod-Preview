@@ -30,7 +30,7 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
         /// 初始化聊天传输层
         /// </summary>
         /// <param name="isServer">是否为主机</param>
-        /// <param name="useSteamP2P">是否使用 Steam P2P</param>
+        /// <param name="useSteamP2P">是否使用 Steam P2P（仅客机端使用，主机端忽略此参数）</param>
         public static void InitializeTransport(bool isServer, bool useSteamP2P)
         {
             try
@@ -42,28 +42,59 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
                 // 设置传输模式
                 if (isServer)
                 {
-                    // 获取当前 Steam 大厅 ID（如果有）
-                    CSteamID lobbyId = GetCurrentLobbyId(useSteamP2P);
+                    // 主机模式：始终支持双模（Steam P2P + 直连 UDP 9050）
+                    // 主机不管 TransportMode 开关，同时建立 P2P 和直连监听
+                    CSteamID lobbyId = GetCurrentLobbyId(true); // 主机始终尝试获取大厅 ID
                     transport.SetAsHost(lobbyId);
-                    Debug.Log($"[ChatTransportBridge] 设置为主机模式，大厅 ID: {(lobbyId.IsValid() ? lobbyId.ToString() : "无")}");
+                    Debug.Log($"[ChatTransportBridge] ✓ 设置为主机模式（双模支持）");
+                    Debug.Log($"[ChatTransportBridge] ✓ Steam 大厅 ID: {(lobbyId.IsValid() ? lobbyId.ToString() : "无（仅直连 UDP）")}");
+                    Debug.Log($"[ChatTransportBridge] ✓ 主机将同时监听 Steam P2P 和直连 UDP 9050");
                 }
                 else
                 {
-                    // 获取当前 Steam 大厅 ID（如果有）
-                    CSteamID lobbyId = GetCurrentLobbyId(useSteamP2P);
+                    // 客机模式：根据 TransportMode 决定是直连还是 P2P
+                    // 但仍然尝试获取大厅 ID，以便在 P2P 模式下使用
+                    CSteamID lobbyId = GetCurrentLobbyId(useSteamP2P); // 只有在 P2P 模式下才获取大厅 ID
                     transport.SetAsClient(lobbyId);
-                    Debug.Log($"[ChatTransportBridge] 设置为客户端模式，大厅 ID: {(lobbyId.IsValid() ? lobbyId.ToString() : "无")}");
+                    
+                    if (useSteamP2P && lobbyId.IsValid())
+                    {
+                        Debug.Log($"[ChatTransportBridge] ✓ 设置为客户端模式（Steam P2P）");
+                        Debug.Log($"[ChatTransportBridge] ✓ Steam 大厅 ID: {lobbyId}");
+                        
+                        // 立即从大厅获取主机的 SteamID 并注册到聊天传输层
+                        CSteamID hostSteamId = GetLobbyOwner(lobbyId);
+                        if (hostSteamId.IsValid())
+                        {
+                            // 注册主机的 SteamID（使用虚拟端点格式）
+                            string hostEndpoint = $"10.255.0.1:27015"; // 主机的虚拟端点
+                            transport.RegisterClientSteamId(hostEndpoint, hostSteamId);
+                            Debug.Log($"[ChatTransportBridge] ✓ 已注册主机 SteamID: {hostEndpoint} <-> {hostSteamId}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[ChatTransportBridge] ⚠ 无法获取大厅主机的 SteamID");
+                        }
+                    }
+                    else if (useSteamP2P && !lobbyId.IsValid())
+                    {
+                        Debug.LogWarning($"[ChatTransportBridge] ⚠ 客户端请求 Steam P2P 但未找到大厅，将回退到直连 UDP");
+                    }
+                    else
+                    {
+                        Debug.Log($"[ChatTransportBridge] ✓ 设置为客户端模式（直连 UDP）");
+                    }
                 }
 
                 // 订阅传输层事件
                 transport.OnChatMessageReceived -= OnTransportMessageReceived;
                 transport.OnChatMessageReceived += OnTransportMessageReceived;
 
-                Debug.Log($"[ChatTransportBridge] 初始化完成，状态: {transport.GetTransportStatus()}");
+                Debug.Log($"[ChatTransportBridge] ✓ 初始化完成，状态: {transport.GetTransportStatus()}");
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[ChatTransportBridge] 初始化时发生异常: {ex.Message}");
+                Debug.LogError($"[ChatTransportBridge] ✗ 初始化时发生异常: {ex.Message}");
             }
         }
 
@@ -147,19 +178,27 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
         /// <summary>
         /// 获取当前 Steam 大厅 ID
         /// </summary>
-        /// <param name="useSteamP2P">是否使用 Steam P2P</param>
+        /// <param name="tryGetLobby">是否尝试获取大厅 ID</param>
         /// <returns>大厅 ID</returns>
-        private static CSteamID GetCurrentLobbyId(bool useSteamP2P)
+        private static CSteamID GetCurrentLobbyId(bool tryGetLobby)
         {
-            if (!useSteamP2P)
+            if (!tryGetLobby)
             {
-                Debug.Log($"[ChatTransportBridge] 不使用 Steam P2P，返回默认大厅 ID");
+                Debug.Log($"[ChatTransportBridge] 跳过获取大厅 ID");
                 return default;
             }
 
             try
             {
                 Debug.Log($"[ChatTransportBridge] 尝试获取 Steam 大厅 ID...");
+                
+                // 检查 Steam 是否初始化
+                if (!SteamManager.Initialized)
+                {
+                    Debug.LogWarning($"[ChatTransportBridge] Steam 未初始化");
+                    return default;
+                }
+
                 Debug.Log($"[ChatTransportBridge] SteamLobbyManager.Instance = {(SteamLobbyManager.Instance != null ? "存在" : "null")}");
                 
                 if (SteamLobbyManager.Instance != null)
@@ -169,7 +208,7 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
                     if (SteamLobbyManager.Instance.IsInLobby)
                     {
                         var lobbyId = SteamLobbyManager.Instance.CurrentLobbyId;
-                        Debug.Log($"[ChatTransportBridge] 获取到大厅 ID: {lobbyId}");
+                        Debug.Log($"[ChatTransportBridge] ✓ 获取到大厅 ID: {lobbyId}");
                         return lobbyId;
                     }
                     else
@@ -188,8 +227,44 @@ namespace EscapeFromDuckovCoopMod.Chat.Network
                 Debug.LogError($"[ChatTransportBridge] 异常堆栈: {ex.StackTrace}");
             }
 
-            Debug.LogWarning($"[ChatTransportBridge] 返回默认大厅 ID");
+            Debug.LogWarning($"[ChatTransportBridge] 返回默认大厅 ID（将使用直连 UDP）");
             return default;
+        }
+
+        /// <summary>
+        /// 获取大厅的主机 SteamID
+        /// </summary>
+        /// <param name="lobbyId">大厅 ID</param>
+        /// <returns>主机 SteamID</returns>
+        private static CSteamID GetLobbyOwner(CSteamID lobbyId)
+        {
+            try
+            {
+                if (!lobbyId.IsValid())
+                {
+                    Debug.LogWarning($"[ChatTransportBridge] 无效的大厅 ID");
+                    return default;
+                }
+
+                // 获取大厅所有者
+                CSteamID ownerId = SteamMatchmaking.GetLobbyOwner(lobbyId);
+                
+                if (ownerId.IsValid())
+                {
+                    Debug.Log($"[ChatTransportBridge] ✓ 获取到大厅主机 SteamID: {ownerId}");
+                    return ownerId;
+                }
+                else
+                {
+                    Debug.LogWarning($"[ChatTransportBridge] 大厅主机 SteamID 无效");
+                    return default;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[ChatTransportBridge] 获取大厅主机时发生异常: {ex.Message}");
+                return default;
+            }
         }
 
         /// <summary>

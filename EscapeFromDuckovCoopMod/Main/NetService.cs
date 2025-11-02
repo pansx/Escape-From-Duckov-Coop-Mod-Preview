@@ -430,14 +430,22 @@ public class NetService : MonoBehaviour, INetEventListener
 
         if (p2pAvailable)
         {
-            Debug.Log("[StartNetwork] 联机Mod已启动，初始化Steam P2P组件"); // ← 现在会正常打印
+            Debug.Log("[StartNetwork] 联机Mod已启动，初始化Steam P2P组件");
 
             if (netManager != null)
             {
-                // 【测试模式】保持原生UDP socket监听，用于测试UDP直连聊天
-                // 正常情况下应该设置为false，但为了测试聊天功能，暂时保持true
+                // Steam P2P 模式：客户端和主机都启用原生 Socket
+                // 通过 Harmony 补丁将所有 Socket 操作重定向到 Steam P2P
                 netManager.UseNativeSockets = true;
-                Debug.Log("[StartNetwork] ✓ UseNativeSockets=true（P2P模式 + UDP测试）");
+                
+                if (IsServer)
+                {
+                    Debug.Log("[StartNetwork] ✓ UseNativeSockets=true（主机：Steam P2P + UDP 9050 双模）");
+                }
+                else
+                {
+                    Debug.Log("[StartNetwork] ✓ UseNativeSockets=true（客机：通过补丁重定向到 Steam P2P）");
+                }
             }
 
             // 保险：确保必要组件存在（Loader.Init 一般已创建）
@@ -454,7 +462,7 @@ public class NetService : MonoBehaviour, INetEventListener
         }
         else
         {
-            // 回退到纯 UDP
+            // 直连模式：使用原生 UDP
             if (netManager != null)
             {
                 netManager.UseNativeSockets = true;
@@ -547,7 +555,8 @@ public class NetService : MonoBehaviour, INetEventListener
         if (netManager == null || !netManager.IsRunning || IsServer || !networkStarted)
             try
             {
-                StartNetwork(false); // 启动/切换到客户端模式
+                // 启动客户端网络，保持 Steam Lobby 连接（如果存在）
+                StartNetwork(isServer: false, keepSteamLobby: true);
             }
             catch (Exception e)
             {
@@ -669,7 +678,8 @@ public class NetService : MonoBehaviour, INetEventListener
         if (netManager == null || !netManager.IsRunning || IsServer || !networkStarted)
             try
             {
-                StartNetwork(false); // 启动/切换到客户端模式
+                // 启动客户端网络，保持 Steam Lobby 连接（如果存在）
+                StartNetwork(isServer: false, keepSteamLobby: true);
             }
             catch (Exception e)
             {
@@ -841,25 +851,37 @@ public class NetService : MonoBehaviour, INetEventListener
 
     public void SetTransportMode(NetworkTransportMode mode)
     {
+        Debug.Log($"[NetService] SetTransportMode 被调用: 当前={TransportMode}, 新模式={mode}, networkStarted={networkStarted}");
+        
         if (TransportMode == mode)
+        {
+            Debug.Log($"[NetService] 传输模式未改变，跳过");
             return;
+        }
 
         TransportMode = mode;
+        Debug.Log($"[NetService] ✓ TransportMode 已设置为: {TransportMode}");
 
         if (SteamP2PLoader.Instance != null)
         {
             SteamP2PLoader.Instance.UseSteamP2P = mode == NetworkTransportMode.SteamP2P;
+            Debug.Log($"[NetService] ✓ UseSteamP2P 已设置为: {SteamP2PLoader.Instance.UseSteamP2P}");
         }
 
         if (mode != NetworkTransportMode.SteamP2P && SteamLobbyManager.Instance != null)
         {
             SteamLobbyManager.Instance.LeaveLobby();
+            Debug.Log($"[NetService] ✓ 已离开 Steam Lobby（切换到直连模式）");
         }
 
         if (networkStarted)
         {
-            StopNetwork();
+            Debug.Log($"[NetService] 网络已启动，停止网络以应用新模式");
+            // 保持 Steam Lobby 连接，只停止网络服务
+            StopNetwork(leaveSteamLobby: false);
         }
+        
+        Debug.Log($"[NetService] SetTransportMode 完成: TransportMode={TransportMode}");
     }
 
     public void ConfigureLobbyOptions(SteamLobbyOptions? options)
@@ -924,7 +946,7 @@ public class NetService : MonoBehaviour, INetEventListener
         // 创建欢迎消息
         var welcomeMessage = new EscapeFromDuckovCoopMod.Chat.Models.ChatMessage
         {
-            Content = $"【主机自动消息】欢迎 {clientPeer.EndPoint} 加入游戏！",
+            Content = $"【P2P测试】欢迎 {clientPeer.EndPoint} 加入游戏！聊天系统已就绪。",
             Sender = userInfo,
             Type = EscapeFromDuckovCoopMod.Chat.Models.MessageType.System,
             Timestamp = System.DateTime.UtcNow
@@ -934,10 +956,15 @@ public class NetService : MonoBehaviour, INetEventListener
         string messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(welcomeMessage);
         Debug.Log($"[CHAT-DEBUG] 主机欢迎消息 JSON: {messageJson}");
 
-        // 通过桥接器广播消息
+        // 通过桥接器广播消息（支持 Steam P2P 和直连 UDP）
         bool success = EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.SendChatMessage(messageJson);
         Debug.Log($"[CHAT-DEBUG] 主机欢迎消息发送结果: {success}");
         Debug.Log($"[CHAT-DEBUG] 传输状态: {EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.GetTransportStatus()}");
+        
+        if (!success)
+        {
+            Debug.LogWarning("[CHAT-DEBUG] 主机欢迎消息发送失败，请检查网络连接");
+        }
     }
 
     /// <summary>
@@ -1034,7 +1061,7 @@ public class NetService : MonoBehaviour, INetEventListener
         // 创建测试消息
         var testMessage = new EscapeFromDuckovCoopMod.Chat.Models.ChatMessage
         {
-            Content = "【自动测试】客机已连接，聊天系统测试中...",
+            Content = "【P2P测试】客机已连接，聊天系统测试中...",
             Sender = userInfo,
             Type = EscapeFromDuckovCoopMod.Chat.Models.MessageType.Normal,
             Timestamp = System.DateTime.UtcNow
@@ -1044,24 +1071,25 @@ public class NetService : MonoBehaviour, INetEventListener
         string messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(testMessage);
         Debug.Log($"[CHAT-DEBUG] 测试消息 JSON: {messageJson}");
 
-        // 通过 UDP 发送消息
-        if (connectedPeer != null && connectedPeer.ConnectionState == ConnectionState.Connected)
+        // 优先通过统一传输层发送（支持 Steam P2P 和直连 UDP）
+        bool transportSuccess = EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.SendChatMessage(messageJson);
+        Debug.Log($"[CHAT-DEBUG] 统一传输层发送结果: {transportSuccess}");
+        Debug.Log($"[CHAT-DEBUG] 传输状态: {EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.GetTransportStatus()}");
+
+        // 如果统一传输层失败，回退到直接 UDP 发送
+        if (!transportSuccess && connectedPeer != null && connectedPeer.ConnectionState == ConnectionState.Connected)
         {
+            Debug.LogWarning("[CHAT-DEBUG] 统一传输层失败，回退到直接 UDP 发送");
             var writer = new NetDataWriter();
             writer.Put((byte)Op.CHAT_MESSAGE_SEND);
             writer.Put(messageJson);
 
             connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
-            Debug.Log($"[CHAT-DEBUG] 测试消息已通过 UDP 发送到主机: {connectedPeer.EndPoint}");
+            Debug.Log($"[CHAT-DEBUG] 测试消息已通过直接 UDP 发送到主机: {connectedPeer.EndPoint}");
         }
-        else
+        else if (!transportSuccess)
         {
-            Debug.LogWarning("[CHAT-DEBUG] 无法发送测试消息：未连接到主机");
+            Debug.LogWarning("[CHAT-DEBUG] 无法发送测试消息：未连接到主机且统一传输层失败");
         }
-
-        // 同时尝试通过统一传输层发送
-        bool transportSuccess = EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.SendChatMessage(messageJson);
-        Debug.Log($"[CHAT-DEBUG] 统一传输层发送结果: {transportSuccess}");
-        Debug.Log($"[CHAT-DEBUG] 传输状态: {EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.GetTransportStatus()}");
     }
 }

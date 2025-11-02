@@ -221,6 +221,7 @@ namespace EscapeFromDuckovCoopMod
             if (_currentLobbyId != CSteamID.Nil)
             {
                 Debug.Log($"[SteamLobby] 离开Lobby: {_currentLobbyId}");
+                Debug.Log($"[SteamLobby] 调用堆栈:\n{System.Environment.StackTrace}");
                 SteamMatchmaking.LeaveLobby(_currentLobbyId);
                 _currentLobbyId = CSteamID.Nil;
                 _isHost = false;
@@ -378,7 +379,17 @@ namespace EscapeFromDuckovCoopMod
                     Debug.Log($"[SteamLobby] {userName} 加入了Lobby");
                     if (SteamEndPointMapper.Instance != null)
                     {
-                        SteamEndPointMapper.Instance.RegisterSteamID(userId);
+                        var endpoint = SteamEndPointMapper.Instance.RegisterSteamID(userId);
+                        
+                        // 同时注册到聊天传输层（主机需要知道客户端的 SteamID 才能发送消息）
+                        if (endpoint != null)
+                        {
+                            EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.RegisterClientSteamId(
+                                endpoint.ToString(), 
+                                userId
+                            );
+                            Debug.Log($"[SteamLobby] ✓ 已注册客户端到聊天传输层: {endpoint} <-> {userId}");
+                        }
                     }
                     break;
                 case EChatMemberStateChange.k_EChatMemberStateChangeLeft:
@@ -386,6 +397,7 @@ namespace EscapeFromDuckovCoopMod
                     if (SteamEndPointMapper.Instance != null)
                     {
                         SteamEndPointMapper.Instance.UnregisterSteamID(userId);
+                        Debug.Log($"[SteamLobby] ✓ 已从聊天传输层移除客户端: {userId}");
                     }
                     break;
                 case EChatMemberStateChange.k_EChatMemberStateChangeDisconnected:

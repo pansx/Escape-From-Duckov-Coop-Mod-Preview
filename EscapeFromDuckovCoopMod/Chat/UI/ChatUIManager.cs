@@ -119,12 +119,64 @@ namespace EscapeFromDuckovCoopMod.Chat.UI
                     Debug.LogError("输入覆盖层组件未找到");
                 }
 
+                // 订阅 LocalChatManager 的消息接收事件
+                SubscribeToChatEvents();
+
                 isInitialized = true;
                 Debug.Log("ChatUIManager初始化完成");
             }
             catch (Exception ex)
             {
                 Debug.LogError($"ChatUIManager初始化失败: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 订阅聊天事件
+        /// </summary>
+        private void SubscribeToChatEvents()
+        {
+            try
+            {
+                var localChatManager = Managers.LocalChatManager.Instance;
+                if (localChatManager != null)
+                {
+                    localChatManager.OnMessageReceived += HandleChatMessageReceived;
+                    LogDebug("已订阅 LocalChatManager 的消息接收事件");
+                }
+                else
+                {
+                    Debug.LogWarning("LocalChatManager 实例未找到，将在稍后重试订阅");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"订阅聊天事件时发生错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 处理聊天消息接收
+        /// </summary>
+        /// <param name="message">聊天消息</param>
+        private void HandleChatMessageReceived(ChatMessage message)
+        {
+            if (message == null)
+                return;
+
+            try
+            {
+                LogDebug($"收到聊天消息: {message.GetDisplayText()}");
+                
+                // 添加消息到 UI
+                AddMessage(message);
+                
+                // 通知 ModUI 更新聊天消息显示
+                ModUI.Instance?.AddChatMessage(message.GetDisplayText());
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"处理聊天消息时发生错误: {ex.Message}");
             }
         }
 
@@ -446,6 +498,13 @@ namespace EscapeFromDuckovCoopMod.Chat.UI
             {
                 inputOverlay.OnMessageSent -= HandleMessageSent;
                 inputOverlay.OnOverlayClosed -= HandleOverlayClosed;
+            }
+
+            // 取消订阅聊天事件
+            var localChatManager = Managers.LocalChatManager.Instance;
+            if (localChatManager != null)
+            {
+                localChatManager.OnMessageReceived -= HandleChatMessageReceived;
             }
 
             if (Instance == this)

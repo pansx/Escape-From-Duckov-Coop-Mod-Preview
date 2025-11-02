@@ -173,6 +173,22 @@ namespace EscapeFromDuckovCoopMod.Chat.Managers
             AddMessageToHistory(message);
             OnMessageReceived?.Invoke(message);
             LogDebug($"接收消息: {message.GetDisplayText()}");
+            
+            // 临时调试：直接在控制台显示聊天消息
+            Debug.Log($"[CHAT] {message.Sender?.DisplayName ?? message.Sender?.UserName ?? "未知"}: {message.Content}");
+            
+            // 直接通知 ModUI 显示消息
+            var modUI = ModUI.Instance;
+            if (modUI != null)
+            {
+                string displayText = message.GetDisplayText();
+                modUI.AddChatMessage(displayText);
+                LogDebug($"消息已添加到 ModUI: {displayText}");
+            }
+            else
+            {
+                Debug.LogWarning("[LocalChatManager] ModUI 实例未找到，无法显示消息");
+            }
         }
 
         /// <summary>

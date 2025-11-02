@@ -292,13 +292,13 @@
 
         -   [x] 2.6.3 创建聊天测试客户端
 
+
             -   创建 test_chat_send.py 测试发送聊天消息
             -   创建 test_chat_broadcast.py 测试接收广播消息
             -   创建 test_chat_history.py 测试历史同步
             -   _Requirements: 5.1, 6.1, 9.1_
 
         -   [x] 2.6.4 实现 Steam P2P 聊天支持
-
 
             -   修改 SendChatMessageToNetwork 方法支持 Steam P2P 虚拟端点
             -   添加网络类型检测（直连 vs Steam P2P）

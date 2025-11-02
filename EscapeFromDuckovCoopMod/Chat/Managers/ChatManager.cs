@@ -600,6 +600,13 @@ namespace EscapeFromDuckovCoopMod.Chat.Managers
                 // 转换网络消息为显示消息
                 var displayMessage = _messageConverter.ConvertNetworkToDisplay(message);
 
+                // 如果转换器返回 null（可能是重复消息），直接使用原消息
+                if (displayMessage == null)
+                {
+                    LogDebug($"消息转换器返回 null，使用原消息: {message.Id}");
+                    displayMessage = message;
+                }
+
                 // 添加到历史记录
                 _historyManager.AddMessage(displayMessage);
 
@@ -1069,22 +1076,49 @@ namespace EscapeFromDuckovCoopMod.Chat.Managers
             {
                 LogDebug($"处理网络聊天消息: {messageJson}");
                 
-                // 解析JSON消息
-                var message = JsonUtility.FromJson<ChatMessage>(messageJson);
+                // 使用 Newtonsoft.Json 解析JSON消息（支持复杂对象）
+                var message = Newtonsoft.Json.JsonConvert.DeserializeObject<ChatMessage>(messageJson);
                 if (message == null)
                 {
                     LogError("无法解析网络聊天消息JSON");
                     return;
                 }
 
-                // 触发消息接收事件
-                OnMessageReceived?.Invoke(message);
+                // 调用现有的消息接收方法（如果已初始化）
+                if (IsInitialized)
+                {
+                    ReceiveNetworkMessage(message);
+                }
+                else
+                {
+                    // 如果未初始化，直接显示到 UI
+                    LogWarning("ChatManager 未初始化，直接显示消息到 UI");
+                    
+                    // 格式化消息并显示
+                    string displayText = message.GetDisplayText();
+                    
+                    // 直接调用 ModUI 显示消息
+                    var modUI = ModUI.Instance;
+                    if (modUI != null)
+                    {
+                        modUI.AddChatMessage(displayText);
+                        LogDebug($"消息已直接添加到 ModUI: {displayText}");
+                    }
+                    else
+                    {
+                        LogError("ModUI 实例未找到，无法显示消息");
+                    }
+                    
+                    // 同时触发事件（如果有订阅者）
+                    OnMessageReceived?.Invoke(message);
+                }
 
-                LogDebug($"网络聊天消息处理完成: {message.Sender?.GetDisplayName()}: {message.Content}");
+                LogDebug($"网络聊天消息处理完成: {message.Sender?.UserName ?? "未知"}: {message.Content}");
             }
             catch (Exception ex)
             {
                 LogError($"处理网络聊天消息时发生异常: {ex.Message}");
+                LogError($"消息内容: {messageJson}");
             }
         }
 

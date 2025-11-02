@@ -12,8 +12,15 @@ namespace EscapeFromDuckovCoopMod
     [HarmonyPatch(typeof(Socket), "get_Available")]
     public class Patch_Socket_Available
     {
+        private static bool _firstCall = true;
         static void Postfix(Socket __instance, ref int __result)
         {
+            if (_firstCall && SteamP2PLoader.Instance != null)
+            {
+                Debug.Log($"[Patch_Available] 首次调用 - UseSteamP2P={SteamP2PLoader.Instance.UseSteamP2P}, SteamInit={SteamManager.Initialized}");
+                _firstCall = false;
+            }
+            
             if (!SteamP2PLoader.Instance.UseSteamP2P || !SteamManager.Initialized)
                 return;
             try
@@ -196,6 +203,12 @@ namespace EscapeFromDuckovCoopMod
         }
         static bool Prefix(Socket __instance, byte[] buffer, int offset, int size, SocketFlags socketFlags, EndPoint remoteEP, ref int __result)
         {
+            // 第一次调用时打印日志，确认补丁被应用
+            if (_diagCount == 0)
+            {
+                Debug.Log($"[Patch_SendTo] 补丁已被调用！UseSteamP2P={SteamP2PLoader.Instance?.UseSteamP2P}, SteamInit={SteamManager.Initialized}");
+            }
+            
             if (!SteamP2PLoader.Instance.UseSteamP2P || !SteamManager.Initialized)
                 return true;
             try
@@ -211,6 +224,36 @@ namespace EscapeFromDuckovCoopMod
                 {
                     if (SteamEndPointMapper.Instance.TryGetSteamID(ipEndPoint, out CSteamID targetSteamID))
                     {
+                        // 检查 P2P 会话状态
+                        Steamworks.P2PSessionState_t sessionState;
+                        bool hasSession = Steamworks.SteamNetworking.GetP2PSessionState(targetSteamID, out sessionState);
+                        
+                        // 第一次发送时打印详细信息
+                        if (_diagCount == 0)
+                        {
+                            Debug.Log($"[Patch_SendTo] 首次发送数据到 {targetSteamID}");
+                            Debug.Log($"[Patch_SendTo] 会话状态 - 存在: {hasSession}, 活跃: {sessionState.m_bConnectionActive}, 连接中: {sessionState.m_bConnecting}");
+                            Debug.Log($"[Patch_SendTo] 数据大小: {size} 字节");
+                        }
+                        
+                        if (!hasSession || sessionState.m_bConnectionActive == 0)
+                        {
+                            // P2P 会话未建立，尝试建立
+                            if (_diagCount % 100 == 0) // 每100次打印一次，避免日志刷屏
+                            {
+                                Debug.LogWarning($"[Patch_SendTo] ⚠️ P2P会话未建立，尝试接受会话: {targetSteamID}");
+                            }
+                            
+                            Steamworks.SteamNetworking.AcceptP2PSessionWithUser(targetSteamID);
+                            
+                            // 发送握手包触发连接
+                            byte[] handshake = System.Text.Encoding.UTF8.GetBytes("HANDSHAKE");
+                            Steamworks.SteamNetworking.SendP2PPacket(
+                                targetSteamID, handshake, (uint)handshake.Length,
+                                Steamworks.EP2PSend.k_EP2PSendReliable, 0
+                            );
+                        }
+                        
                         DeliveryMethod? deliveryMethod = PacketSignature.TryGetDeliveryMethod(buffer, offset, size);
                         _diagCount++;
                         EP2PSend sendMode;
@@ -265,7 +308,6 @@ namespace EscapeFromDuckovCoopMod
                         }
                         if (_diagCount % 1000 == 0)
                         {
-                            Steamworks.P2PSessionState_t sessionState;
                             if (Steamworks.SteamNetworking.GetP2PSessionState(targetSteamID, out sessionState))
                             {
                                 if (sessionState.m_nBytesQueuedForSend > 50000)
@@ -288,7 +330,16 @@ namespace EscapeFromDuckovCoopMod
                         }
                         else
                         {
-                            Debug.LogError($"[Patch_SendTo] ❌ Steam P2P发送失败！DeliveryMethod={deliveryMethod}, Size={size}");
+                            if (_diagCount % 100 == 0) // 避免日志刷屏
+                            {
+                                Debug.LogError($"[Patch_SendTo] ❌ Steam P2P发送失败！DeliveryMethod={deliveryMethod}, Size={size}");
+                                Steamworks.P2PSessionState_t failState;
+                                if (Steamworks.SteamNetworking.GetP2PSessionState(targetSteamID, out failState))
+                                {
+                                    Debug.LogError($"[Patch_SendTo] 会话状态 - 活跃: {failState.m_bConnectionActive}, " +
+                                                  $"连接中: {failState.m_bConnecting}, 队列: {failState.m_nBytesQueuedForSend}");
+                                }
+                            }
                             return true;
                         }
                     }

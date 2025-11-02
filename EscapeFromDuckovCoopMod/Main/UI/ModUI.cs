@@ -334,6 +334,12 @@ public class ModUI : MonoBehaviour
     // 检查连接失败状态
     private void CheckConnectionFailureStatus()
     {
+        // 如果正在连接中，不检查连接失败（避免误判）
+        if (Service != null && Service.isConnecting)
+        {
+            return;
+        }
+        
         // 检查Steam连接失败
         if (LobbyManager != null && !LobbyManager.IsInLobby && _currentUIState == UIState.InRoom)
         {
@@ -587,6 +593,7 @@ public class ModUI : MonoBehaviour
     
     /// <summary>
     /// 通过网络发送聊天消息
+    /// 完全不依赖 LiteNetLib，使用统一传输层（支持 Steam P2P 和直连 UDP）
     /// </summary>
     /// <param name="message">聊天消息</param>
     private void SendChatMessageToNetwork(EscapeFromDuckovCoopMod.Chat.Models.ChatMessage message)
@@ -597,104 +604,42 @@ public class ModUI : MonoBehaviour
             
             // 序列化消息为JSON
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(message);
-            
             Debug.Log($"[ModUI] 消息已序列化: {json}");
             
-            // 通过NetService发送
-            if (Service != null && Service.netManager != null)
+            // 使用统一传输层发送消息（完全不依赖 LiteNetLib）
+            bool success = EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.SendChatMessage(json);
+            
+            if (success)
             {
-                var writer = new LiteNetLib.Utils.NetDataWriter();
-                writer.Put((byte)Op.CHAT_MESSAGE_SEND);
-                writer.Put(json);  // 直接使用 Put(string) 而不是 Put(bytes)
+                Debug.Log($"[ModUI] ✓ 聊天消息已通过统一传输层发送");
+                Debug.Log($"[ModUI] 传输状态: {EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.GetTransportStatus()}");
                 
+                // 如果是主机，本地也显示这条消息
                 if (IsServer)
                 {
-                    // 主机：直接广播给所有客户端
-                    Debug.Log($"[ModUI] 主机准备广播聊天消息");
-                    
-                    // 使用 BroadcastChatMessage 方法（在 Mod.cs 中）
-                    // 但由于我们在 ModUI 中，需要直接调用广播逻辑
-                    var broadcastWriter = new LiteNetLib.Utils.NetDataWriter();
-                    broadcastWriter.Put((byte)Op.CHAT_MESSAGE_BROADCAST);
-                    broadcastWriter.Put(json);
-                    
-                    int sentCount = 0;
-                    foreach (var peer in Service.playerStatuses.Keys)
-                    {
-                        if (peer != null && peer.ConnectionState == LiteNetLib.ConnectionState.Connected)
-                        {
-                            Debug.Log($"[ModUI] 主机发送广播到客户端: {peer.EndPoint}");
-                            peer.Send(broadcastWriter, LiteNetLib.DeliveryMethod.ReliableOrdered);
-                            sentCount++;
-                        }
-                    }
-                    
-                    Debug.Log($"[ModUI] 主机已广播聊天消息给 {sentCount} 个客户端");
-                    
-                    // 主机自己也显示这条消息
                     var displayMessage = $"{message.Sender?.UserName ?? "未知"}: {message.Content}";
                     AddChatMessage(displayMessage);
                     Debug.Log($"[ModUI] 主机本地显示自己发送的消息: {displayMessage}");
                 }
                 else
                 {
-                    // 客机：发送给主机
-                    Debug.Log($"[ModUI] 客机准备发送聊天消息到主机");
-                    Debug.Log($"[ModUI] 当前连接的 Peer 数量: {Service.netManager.ConnectedPeersCount}");
-                    
-                    // 尝试多种方式找到主机连接
-                    LiteNetLib.NetPeer server = null;
-                    
-                    // 方法1: 使用 FirstPeer
-                    server = Service.netManager.FirstPeer;
-                    if (server != null)
-                    {
-                        Debug.Log($"[ModUI] 通过 FirstPeer 找到主机: {server.EndPoint}");
-                    }
-                    
-                    // 方法2: 如果 FirstPeer 为空，遍历所有连接的 Peer
-                    if (server == null)
-                    {
-                        Debug.Log($"[ModUI] FirstPeer 为空，尝试遍历所有 Peer");
-                        foreach (var peer in Service.netManager.ConnectedPeerList)
-                        {
-                            if (peer != null && peer.ConnectionState == LiteNetLib.ConnectionState.Connected)
-                            {
-                                server = peer;
-                                Debug.Log($"[ModUI] 通过遍历找到主机: {peer.EndPoint}");
-                                break;
-                            }
-                        }
-                    }
-                    
-                    // 方法3: 检查 connectedPeer（ModUI 中保存的连接）
-                    if (server == null && connectedPeer != null)
-                    {
-                        server = connectedPeer;
-                        Debug.Log($"[ModUI] 使用 connectedPeer: {connectedPeer.EndPoint}");
-                    }
-                    
-                    if (server != null)
-                    {
-                        Debug.Log($"[ModUI] 客机发送聊天消息到主机: {server.EndPoint}");
-                        server.Send(writer, LiteNetLib.DeliveryMethod.ReliableOrdered);
-                    }
-                    else
-                    {
-                        Debug.LogError($"[ModUI] 无法找到主机连接");
-                    }
+                    // 客机发送成功后，等待主机广播回来再显示
+                    Debug.Log($"[ModUI] 客机消息已发送，等待主机广播");
                 }
-                
-                Debug.Log($"[ModUI] 网络聊天消息发送完成");
             }
             else
             {
-                Debug.LogError($"[ModUI] NetService或netManager未初始化");
+                Debug.LogError($"[ModUI] ✗ 聊天消息发送失败");
+                Debug.LogError($"[ModUI] 传输状态: {EscapeFromDuckovCoopMod.Chat.Network.ChatTransportBridge.GetTransportStatus()}");
+                
+                // 显示错误提示
+                status = "聊天消息发送失败，请检查网络连接";
             }
         }
         catch (System.Exception ex)
         {
             Debug.LogError($"[ModUI] 发送网络聊天消息时发生错误: {ex.Message}\n{ex.StackTrace}");
+            status = $"聊天消息发送异常: {ex.Message}";
         }
     }
     
