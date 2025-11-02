@@ -479,7 +479,7 @@ namespace EscapeFromDuckovCoopMod.Chat.Managers
         /// </summary>
         /// <param name="content">消息内容</param>
         /// <returns>发送是否成功</returns>
-        public async Task<bool> SendMessage(string content)
+        public new async Task<bool> SendMessage(string content)
         {
             if (!IsInitialized)
             {
