@@ -57,7 +57,7 @@ public class ModUI : MonoBehaviour
     
     // 聊天消息存储
     private readonly List<string> _chatMessages = new List<string>();
-    private readonly int _maxChatMessages = 10;
+    private readonly int _maxChatMessages = 5;
     
     // 状态切换方法
     private void ChangeUIState(UIState newState)

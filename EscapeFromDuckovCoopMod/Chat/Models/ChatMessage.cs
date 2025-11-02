@@ -121,15 +121,15 @@ namespace EscapeFromDuckovCoopMod.Chat.Models
             switch (Type)
             {
                 case MessageType.System:
-                    return $"[系统] {Content} {timeStr}";
+                    return $"[{timeStr}] [系统] {Content}";
                 case MessageType.Join:
-                    return $"[系统] {Sender?.UserName ?? "未知用户"} 加入了房间 {timeStr}";
+                    return $"[{timeStr}] [系统] {Sender?.UserName ?? "未知用户"} 加入了房间";
                 case MessageType.Leave:
-                    return $"[系统] {Sender?.UserName ?? "未知用户"} 离开了房间 {timeStr}";
+                    return $"[{timeStr}] [系统] {Sender?.UserName ?? "未知用户"} 离开了房间";
                 case MessageType.Error:
-                    return $"[错误] {Content} {timeStr}";
+                    return $"[{timeStr}] [错误] {Content}";
                 default:
-                    return $"{Sender?.UserName ?? "未知用户"}: {Content} {timeStr}";
+                    return $"[{timeStr}] {Sender?.UserName ?? "未知用户"}: {Content}";
             }
         }
     }
