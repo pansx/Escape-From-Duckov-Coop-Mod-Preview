@@ -218,8 +218,12 @@ public static class SceneVoteMessage
         // 更新时间戳
         _hostVoteState.timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
+        // 🔧 使用 Newtonsoft.Json 序列化，确保 playerList 被正确序列化
+        string json = Newtonsoft.Json.JsonConvert.SerializeObject(_hostVoteState);
+        Debug.Log($"[SceneVote] 主机广播 JSON:\n{json}");
+
         // 发送给所有客户端
-        JsonMessage.BroadcastToAllClients(_hostVoteState, DeliveryMethod.ReliableOrdered);
+        JsonMessage.BroadcastToAllClients(json, DeliveryMethod.ReliableOrdered);
     }
 
     /// <summary>
@@ -370,7 +374,8 @@ public static class SceneVoteMessage
 
         try
         {
-            var data = JsonUtility.FromJson<VoteStateData>(json);
+            // 🔧 使用 Newtonsoft.Json 反序列化，支持嵌套对象
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<VoteStateData>(json);
             if (data == null || data.type != "sceneVote")
             {
                 Debug.LogWarning("[SceneVote] 无效的投票状态数据");
@@ -457,7 +462,9 @@ public static class SceneVoteMessage
                     if (service.IsSelfId(player.playerId))
                     {
                         sceneNet.localReady = player.ready;
-                        Debug.Log($"[SceneVote] 识别到自己: {player.playerName}({player.playerId})");
+                        Debug.Log(
+                            $"[SceneVote] 识别到自己: {player.playerName}({player.playerId})"
+                        );
                     }
                 }
             }
@@ -598,7 +605,7 @@ public static class SceneVoteMessage
         try
         {
             Debug.Log($"[SceneVote] 主机收到准备状态切换消息: {json}");
-            
+
             var data = JsonUtility.FromJson<ReadyToggleData>(json);
             if (data == null || data.type != "sceneVoteReady")
             {
@@ -648,4 +655,3 @@ public static class SceneVoteMessage
         return ""; // 如果没有 Steam 或获取失败，返回空字符串
     }
 }
-
