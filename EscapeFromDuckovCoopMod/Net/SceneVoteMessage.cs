@@ -40,6 +40,15 @@ public static class SceneVoteMessage
     }
 
     /// <summary>
+    /// 玩家列表包装类（Unity JsonUtility 需要）
+    /// </summary>
+    [System.Serializable]
+    public class PlayerList
+    {
+        public PlayerInfo[] items;
+    }
+
+    /// <summary>
     /// 投票状态数据结构
     /// </summary>
     [System.Serializable]
@@ -54,7 +63,7 @@ public static class SceneVoteMessage
         public bool saveToFile; // 是否保存到文件
         public bool useLocation; // 是否使用位置
         public string hostSceneId; // 主机当前场景ID
-        public PlayerInfo[] players; // 🔧 改为对象数组，包含玩家详细信息
+        public PlayerList playerList; // 🔧 使用包装类，Unity JsonUtility 才能正确序列化
         public string timestamp; // 时间戳
     }
 
@@ -183,7 +192,7 @@ public static class SceneVoteMessage
             saveToFile = saveToFile,
             useLocation = useLocation,
             hostSceneId = hostSceneId,
-            players = players.ToArray(), // 🔧 使用玩家信息数组
+            playerList = new PlayerList { items = players.ToArray() }, // 🔧 使用包装类
             timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
         };
 
@@ -236,11 +245,11 @@ public static class SceneVoteMessage
         if (_hostVoteState == null || !_hostVoteState.active)
             return;
 
-        // 🔧 在 players 数组中查找并更新玩家的准备状态
+        // 🔧 在 playerList 中查找并更新玩家的准备状态
         bool found = false;
-        if (_hostVoteState.players != null)
+        if (_hostVoteState.playerList != null && _hostVoteState.playerList.items != null)
         {
-            foreach (var player in _hostVoteState.players)
+            foreach (var player in _hostVoteState.playerList.items)
             {
                 if (player.playerId == playerId)
                 {
@@ -262,9 +271,13 @@ public static class SceneVoteMessage
 
         // 🔧 同步更新主机的 SceneNet.sceneReady，让 UI 能读取到
         var sceneNet = SceneNet.Instance;
-        if (sceneNet != null && _hostVoteState.players != null)
+        if (
+            sceneNet != null
+            && _hostVoteState.playerList != null
+            && _hostVoteState.playerList.items != null
+        )
         {
-            foreach (var player in _hostVoteState.players)
+            foreach (var player in _hostVoteState.playerList.items)
             {
                 sceneNet.sceneReady[player.playerId] = player.ready;
             }
@@ -277,9 +290,10 @@ public static class SceneVoteMessage
 
         // 检查是否全员准备
         bool allReady =
-            _hostVoteState.players != null
-            && _hostVoteState.players.Length > 0
-            && _hostVoteState.players.All(p => p.ready);
+            _hostVoteState.playerList != null
+            && _hostVoteState.playerList.items != null
+            && _hostVoteState.playerList.items.Length > 0
+            && _hostVoteState.playerList.items.All(p => p.ready);
 
         if (allReady)
         {
@@ -413,14 +427,14 @@ public static class SceneVoteMessage
             sceneNet.sceneReady.Clear();
 
             // 🔍 详细日志：显示收到的玩家信息
-            if (data.players != null)
+            if (data.playerList != null && data.playerList.items != null)
             {
                 Debug.Log(
-                    $"[SceneVote] 收到 {data.players.Length} 个玩家信息: {string.Join(", ", data.players.Select(p => $"{p.playerName}({p.playerId})"))}"
+                    $"[SceneVote] 收到 {data.playerList.items.Length} 个玩家信息: {string.Join(", ", data.playerList.items.Select(p => $"{p.playerName}({p.playerId})"))}"
                 );
 
-                // 从主机广播的 players 数组解析玩家列表和准备状态
-                foreach (var player in data.players)
+                // 从主机广播的 playerList 解析玩家列表和准备状态
+                foreach (var player in data.playerList.items)
                 {
                     if (string.IsNullOrEmpty(player.playerId))
                         continue;
