@@ -745,8 +745,8 @@ public class ModBehaviourF : MonoBehaviour
                 break;
 
             case Op.JSON:
-                // 处理JSON消息
-                JsonMessage.HandleReceivedJson(reader);
+                // 处理JSON消息 - 使用路由器根据type字段分发
+                JsonMessageRouter.HandleJsonMessage(reader);
                 break;
 
             default:

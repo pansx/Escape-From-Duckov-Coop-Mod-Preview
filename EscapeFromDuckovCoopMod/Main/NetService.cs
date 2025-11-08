@@ -115,6 +115,11 @@ public class NetService : MonoBehaviour, INetEventListener
             isConnecting = false;
             Send_ClientStatus.Instance.SendClientStatusUpdate();
         }
+        else
+        {
+            // 🔧 主机：告诉客户端其真实网络ID
+            SetIdMessage.SendSetIdToPeer(peer);
+        }
 
         if (!playerStatuses.ContainsKey(peer))
             playerStatuses[peer] = new PlayerStatus
@@ -551,8 +556,29 @@ public class NetService : MonoBehaviour, INetEventListener
 
     public bool IsSelfId(string id)
     {
+        if (string.IsNullOrEmpty(id)) return false;
+        
         var mine = localPlayerStatus?.EndPoint;
-        return !string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(mine) && id == mine;
+        
+        // 1. 检查本地ID（SetId消息会更新这个值为主机告知的真实网络ID）
+        if (!string.IsNullOrEmpty(mine) && id == mine)
+        {
+            Debug.Log($"[IsSelfId] ✓ 匹配本地ID: {id}");
+            return true;
+        }
+        
+        // 2. 如果是客户端，检查连接的Peer地址（兜底检查）
+        if (!IsServer && connectedPeer != null)
+        {
+            var myNetworkId = connectedPeer.EndPoint?.ToString();
+            if (!string.IsNullOrEmpty(myNetworkId) && id == myNetworkId)
+            {
+                Debug.Log($"[IsSelfId] ✓ 匹配连接Peer地址: {id}");
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     public string GetPlayerId(NetPeer peer)
