@@ -858,14 +858,31 @@ public class ModBehaviourF : MonoBehaviour
                     {
                         var max = reader.GetFloat();
                         var cur = reader.GetFloat();
+                        
+                        var playerId = Service.GetPlayerId(peer);
+                        
+                        // 🔍 JSON日志：主机收到血量上报
+                        var logData = new Dictionary<string, object>
+                        {
+                            ["event"] = "Server_ReceiveHealthReport",
+                            ["playerId"] = playerId,
+                            ["maxHealth"] = max,
+                            ["currentHealth"] = cur,
+                            ["hasRemoteCharacter"] = remoteCharacters != null && remoteCharacters.ContainsKey(peer),
+                            ["time"] = Time.time
+                        };
+                        Debug.Log($"[HP_RECEIVE] {Newtonsoft.Json.JsonConvert.SerializeObject(logData)}");
+                        
                         if (max <= 0f)
                         {
+                            Debug.LogWarning($"[HP_RECEIVE] ⚠️ 收到无效血量，缓存: 玩家={playerId}, max={max}, cur={cur}");
                             HealthTool._srvPendingHp[peer] = (max, cur);
                             break;
                         }
 
                         if (remoteCharacters != null && remoteCharacters.TryGetValue(peer, out var go) && go)
                         {
+                            Debug.Log($"[HP_RECEIVE] ✓ 应用血量到远程角色: 玩家={playerId}");
                             // 主机本地先写实自己能立刻看到
                             HealthM.Instance.ApplyHealthAndEnsureBar(go, max, cur);
 
@@ -875,6 +892,7 @@ public class ModBehaviourF : MonoBehaviour
                         }
                         else
                         {
+                            Debug.LogWarning($"[HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家={playerId}");
                             //远端克隆还没创建缓存起来，等钩到 Health 后应用
                             HealthTool._srvPendingHp[peer] = (max, cur);
                         }
