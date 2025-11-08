@@ -28,6 +28,18 @@ namespace EscapeFromDuckovCoopMod.Net;
 public static class SceneVoteMessage
 {
     /// <summary>
+    /// 玩家信息（包含ID、名称、SteamID）
+    /// </summary>
+    [System.Serializable]
+    public class PlayerInfo
+    {
+        public string playerId; // 玩家网络ID（如 "Host:9050" 或 "192.168.1.1:9050"）
+        public string playerName; // 玩家名称
+        public string steamId; // Steam ID（如果有）
+        public bool ready; // 是否准备
+    }
+
+    /// <summary>
     /// 投票状态数据结构
     /// </summary>
     [System.Serializable]
@@ -42,14 +54,15 @@ public static class SceneVoteMessage
         public bool saveToFile; // 是否保存到文件
         public bool useLocation; // 是否使用位置
         public string hostSceneId; // 主机当前场景ID
-        public string readyStates; // 玩家准备状态（格式: "playerId1:true,playerId2:false"）
+        public PlayerInfo[] players; // 🔧 改为对象数组，包含玩家详细信息
         public string timestamp; // 时间戳
     }
 
     /// <summary>
-    /// 玩家准备状态
+    /// 玩家准备状态（向后兼容，已废弃）
     /// </summary>
     [System.Serializable]
+    [System.Obsolete("使用 PlayerInfo 代替")]
     public class PlayerReadyState
     {
         public string playerId; // 玩家ID
@@ -114,12 +127,22 @@ public static class SceneVoteMessage
         LocalPlayerManager.Instance.ComputeIsInGame(out hostSceneId);
         hostSceneId = hostSceneId ?? string.Empty;
 
-        // 构建玩家ID列表（只存ID，不存详细信息）
-        var playerIds = new List<string>();
+        // 🔧 构建玩家信息列表（包含ID、名称、SteamID）
+        var players = new List<PlayerInfo>();
 
         // 添加主机自己
         var hostId = service.GetPlayerId(null);
-        playerIds.Add(hostId);
+        var hostName = service.localPlayerStatus?.PlayerName ?? "Host";
+        var hostSteamId = GetSteamId(null); // 主机的SteamID
+        players.Add(
+            new PlayerInfo
+            {
+                playerId = hostId,
+                playerName = hostName,
+                steamId = hostSteamId,
+                ready = false,
+            }
+        );
 
         // 添加所有客户端
         if (service.playerStatuses != null)
@@ -130,16 +153,24 @@ public static class SceneVoteMessage
                 var status = kv.Value;
                 if (peer == null || status == null)
                     continue;
-                playerIds.Add(status.EndPoint);
+
+                var clientSteamId = GetSteamId(peer); // 客户端的SteamID
+                players.Add(
+                    new PlayerInfo
+                    {
+                        playerId = status.EndPoint,
+                        playerName = status.PlayerName ?? "Player",
+                        steamId = clientSteamId,
+                        ready = false,
+                    }
+                );
             }
         }
 
-        // 创建准备状态字符串（格式: "id1:false,id2:false"）
-        var readyStates = string.Join(",", playerIds.Select(id => $"{id}:false"));
-
-        // 🔍 详细日志：显示所有玩家ID
-        Debug.Log($"[SceneVote] 主机构建玩家列表: {string.Join(", ", playerIds)}");
-        Debug.Log($"[SceneVote] readyStates: {readyStates}");
+        // 🔍 详细日志：显示所有玩家信息
+        Debug.Log(
+            $"[SceneVote] 主机构建玩家列表: {string.Join(", ", players.Select(p => $"{p.playerName}({p.playerId})"))}"
+        );
 
         // 创建投票状态
         _hostVoteState = new VoteStateData
@@ -152,7 +183,7 @@ public static class SceneVoteMessage
             saveToFile = saveToFile,
             useLocation = useLocation,
             hostSceneId = hostSceneId,
-            readyStates = readyStates,
+            players = players.ToArray(), // 🔧 使用玩家信息数组
             timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
         };
 
@@ -160,7 +191,7 @@ public static class SceneVoteMessage
         Host_BroadcastVoteState();
         _lastBroadcastTime = Time.time;
 
-        Debug.Log($"[SceneVote] 主机发起投票: {targetSceneId}, 参与者: {playerIds.Count}");
+        Debug.Log($"[SceneVote] 主机发起投票: {targetSceneId}, 参与者: {players.Count}");
     }
 
     /// <summary>
@@ -205,42 +236,37 @@ public static class SceneVoteMessage
         if (_hostVoteState == null || !_hostVoteState.active)
             return;
 
-        // 解析当前准备状态
-        var states = new Dictionary<string, bool>();
-        if (!string.IsNullOrEmpty(_hostVoteState.readyStates))
+        // 🔧 在 players 数组中查找并更新玩家的准备状态
+        bool found = false;
+        if (_hostVoteState.players != null)
         {
-            foreach (var pair in _hostVoteState.readyStates.Split(','))
+            foreach (var player in _hostVoteState.players)
             {
-                // 🔧 修复：ID可能包含冒号，从右边找最后一个冒号
-                var lastColonIndex = pair.LastIndexOf(':');
-                if (lastColonIndex > 0 && lastColonIndex < pair.Length - 1)
+                if (player.playerId == playerId)
                 {
-                    var pid = pair.Substring(0, lastColonIndex);
-                    var readyStr = pair.Substring(lastColonIndex + 1);
-                    states[pid] = readyStr == "true";
+                    player.ready = ready;
+                    found = true;
+                    Debug.Log(
+                        $"[SceneVote] 玩家 {player.playerName}({playerId}) 准备状态: {ready}"
+                    );
+                    break;
                 }
             }
         }
 
-        // 更新或添加玩家状态
-        states[playerId] = ready;
-
-        // 重新构建字符串
-        _hostVoteState.readyStates = string.Join(
-            ",",
-            states.Select(kv => $"{kv.Key}:{(kv.Value ? "true" : "false")}")
-        );
-
-        Debug.Log($"[SceneVote] 玩家 {playerId} 准备状态: {ready}");
-        Debug.Log($"[SceneVote] 更新后的 readyStates: {_hostVoteState.readyStates}");
+        if (!found)
+        {
+            Debug.LogWarning($"[SceneVote] 未找到玩家: {playerId}");
+            return;
+        }
 
         // 🔧 同步更新主机的 SceneNet.sceneReady，让 UI 能读取到
         var sceneNet = SceneNet.Instance;
-        if (sceneNet != null)
+        if (sceneNet != null && _hostVoteState.players != null)
         {
-            foreach (var kv in states)
+            foreach (var player in _hostVoteState.players)
             {
-                sceneNet.sceneReady[kv.Key] = kv.Value;
+                sceneNet.sceneReady[player.playerId] = player.ready;
             }
             Debug.Log($"[SceneVote] 已同步更新 SceneNet.sceneReady");
         }
@@ -250,7 +276,10 @@ public static class SceneVoteMessage
         Debug.Log($"[SceneVote] 已广播更新的投票状态");
 
         // 检查是否全员准备
-        bool allReady = states.Count > 0 && states.Values.All(r => r);
+        bool allReady =
+            _hostVoteState.players != null
+            && _hostVoteState.players.Length > 0
+            && _hostVoteState.players.All(p => p.ready);
 
         if (allReady)
         {
@@ -378,47 +407,49 @@ public static class SceneVoteMessage
             sceneNet.sceneSaveToFile = data.saveToFile;
             sceneNet.sceneUseLocation = data.useLocation;
 
-            // 🔧 完全依赖主机发送的 readyStates 构建参与者列表
+            // 🔧 完全依赖主机发送的 players 数组构建参与者列表
             // 客户端不再自己构建列表，以主机为准
             sceneNet.sceneParticipantIds.Clear();
             sceneNet.sceneReady.Clear();
 
-            // 🔍 详细日志：显示收到的 readyStates
-            Debug.Log($"[SceneVote] 收到 readyStates: {data.readyStates}");
-
-            // 从主机广播的 readyStates 解析玩家列表和准备状态
-            if (!string.IsNullOrEmpty(data.readyStates))
+            // 🔍 详细日志：显示收到的玩家信息
+            if (data.players != null)
             {
-                foreach (var pair in data.readyStates.Split(','))
+                Debug.Log(
+                    $"[SceneVote] 收到 {data.players.Length} 个玩家信息: {string.Join(", ", data.players.Select(p => $"{p.playerName}({p.playerId})"))}"
+                );
+
+                // 从主机广播的 players 数组解析玩家列表和准备状态
+                foreach (var player in data.players)
                 {
-                    // 🔧 修复：ID可能包含冒号（如 "Host:9050" 或 "192.168.1.1:9050"）
-                    // 格式: "id:ready"，但id本身可能包含冒号
-                    // 所以从右边找最后一个冒号
-                    var lastColonIndex = pair.LastIndexOf(':');
-                    if (lastColonIndex > 0 && lastColonIndex < pair.Length - 1)
+                    if (string.IsNullOrEmpty(player.playerId))
+                        continue;
+
+                    Debug.Log(
+                        $"[SceneVote] 解析玩家: name='{player.playerName}', id='{player.playerId}', steamId='{player.steamId}', ready={player.ready}"
+                    );
+
+                    // 添加到参与者列表
+                    if (!sceneNet.sceneParticipantIds.Contains(player.playerId))
                     {
-                        var pid = pair.Substring(0, lastColonIndex);
-                        var readyStr = pair.Substring(lastColonIndex + 1);
-                        var isReady = readyStr == "true";
+                        sceneNet.sceneParticipantIds.Add(player.playerId);
+                        Debug.Log(
+                            $"[SceneVote] 添加参与者: {player.playerName}({player.playerId}), IsSelfId={service.IsSelfId(player.playerId)}"
+                        );
+                    }
+                    sceneNet.sceneReady[player.playerId] = player.ready;
 
-                        Debug.Log($"[SceneVote] 解析玩家: pid='{pid}', ready={isReady}");
-
-                        // 添加到参与者列表
-                        if (!sceneNet.sceneParticipantIds.Contains(pid))
-                        {
-                            sceneNet.sceneParticipantIds.Add(pid);
-                            Debug.Log($"[SceneVote] 添加参与者: {pid}, IsSelfId={service.IsSelfId(pid)}");
-                        }
-                        sceneNet.sceneReady[pid] = isReady;
-
-                        // 检查是否是自己，更新本地准备状态
-                        if (service.IsSelfId(pid))
-                        {
-                            sceneNet.localReady = isReady;
-                            Debug.Log($"[SceneVote] 识别到自己: {pid}");
-                        }
+                    // 检查是否是自己，更新本地准备状态
+                    if (service.IsSelfId(player.playerId))
+                    {
+                        sceneNet.localReady = player.ready;
+                        Debug.Log($"[SceneVote] 识别到自己: {player.playerName}({player.playerId})");
                     }
                 }
+            }
+            else
+            {
+                Debug.LogWarning("[SceneVote] 收到的投票状态没有玩家信息");
             }
 
             Debug.Log(
@@ -569,4 +600,38 @@ public static class SceneVoteMessage
             Debug.LogError($"[SceneVote] 处理准备状态失败: {ex.Message}");
         }
     }
+
+    /// <summary>
+    /// 获取玩家的 Steam ID
+    /// </summary>
+    private static string GetSteamId(NetPeer peer)
+    {
+        try
+        {
+            // 如果有 Steam 支持，尝试获取 SteamID
+            if (SteamManager.Initialized && SteamEndPointMapper.Instance != null)
+            {
+                if (peer == null)
+                {
+                    // 主机自己的 SteamID
+                    return Steamworks.SteamUser.GetSteamID().ToString();
+                }
+                else
+                {
+                    // 客户端的 SteamID
+                    if (SteamEndPointMapper.Instance.TryGetSteamID(peer.EndPoint, out var steamId))
+                    {
+                        return steamId.ToString();
+                    }
+                }
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"[SceneVote] 获取SteamID失败: {ex.Message}");
+        }
+
+        return ""; // 如果没有 Steam 或获取失败，返回空字符串
+    }
 }
+
