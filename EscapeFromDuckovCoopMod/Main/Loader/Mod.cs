@@ -744,6 +744,11 @@ public class ModBehaviourF : MonoBehaviour
                     COOPManager.WeaponHandle.HandleFireEvent(reader);
                 break;
 
+            case Op.JSON:
+                // 处理JSON消息
+                JsonMessage.HandleReceivedJson(reader);
+                break;
+
             default:
                 // 有未知 opcode 时给出警告，便于排查（比如双端没一起更新）
                 Debug.LogWarning($"Unknown opcode: {(byte)op}");

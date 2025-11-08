@@ -33,7 +33,7 @@ public class NetService : MonoBehaviour, INetEventListener
     public List<string> hostList = new();
     public bool isConnecting;
     public string status = "";
-    public string manualIP = "127.0.0.1";
+    public string manualIP = "192.168.123.1";
     public string manualPort = "9050"; // GTX 5090 我也想要
     public bool networkStarted;
     public float broadcastTimer;
@@ -197,6 +197,9 @@ public class NetService : MonoBehaviour, INetEventListener
                     peer.Send(w, DeliveryMethod.ReliableOrdered);
                 }
         }
+
+        // 🧪 发送JSON测试消息（双方都发送）
+        JsonMessage.SendTestJson(peer, writer);
     }
 
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
