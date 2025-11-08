@@ -16,6 +16,7 @@
 
 using LiteNetLib;
 using UnityEngine;
+using EscapeFromDuckovCoopMod.Net;
 
 namespace EscapeFromDuckovCoopMod;
 
@@ -70,6 +71,31 @@ public static class JsonMessageRouter
             {
                 case "setId":
                     HandleSetIdMessage(json);
+                    break;
+
+                case "lootFullSync":
+                    // 战利品箱全量同步
+                    LootFullSyncMessage.Client_OnLootFullSync(json);
+                    break;
+
+                case "sceneVote":
+                    // 场景投票状态广播
+                    SceneVoteMessage.Client_HandleVoteState(json);
+                    break;
+
+                case "sceneVoteRequest":
+                    // 客户端请求发起投票
+                    SceneVoteMessage.Host_HandleVoteRequest(json);
+                    break;
+
+                case "sceneVoteReady":
+                    // 客户端切换准备状态
+                    SceneVoteMessage.Host_HandleReadyToggle(json);
+                    break;
+
+                case "kick":
+                    // 踢人消息
+                    KickMessage.Client_HandleKickMessage(json);
                     break;
 
                 case "test":

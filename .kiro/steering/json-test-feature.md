@@ -166,3 +166,5 @@ JsonMessage.HandleReceivedJson<ItemPickupRequest>(reader, request =>
 
 完整的API文档和更多示例请参考：
 **EscapeFromDuckovCoopMod/Net/JsonMessage_Usage.md**
+
+每次修改后增加DebugVersion以明确修改生效

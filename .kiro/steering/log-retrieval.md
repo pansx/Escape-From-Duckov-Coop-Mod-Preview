@@ -1,38 +1,30 @@
 ---
-inclusion: manual
+inclusion: always
 ---
 
 # 日志获取方法
 
-## 概述
+## 推荐方法：使用批处理脚本 ⭐
 
-项目使用远程日志服务器收集游戏日志，可以通过HTTP API获取不同客户端的日志。
+**一键获取和分析日志**：
 
-## API端点
-
-- **基础URL**: `http://127.0.0.1:8080`
-- **日志API**: `/api/logs`
-- **参数**:
-  - `clientId`: 客户端ID（1=机器1，2=机器2）
-  - `page`: 页码（从0开始）
-  - `size`: 每页条数
-
-## PowerShell获取日志脚本
-
-### 获取日志
-
-```powershell
-$session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
-
-Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:8080/api/logs?clientId=1&page=0&size=30" `
-  -WebSession $session `
-  -Headers @{
-    "Accept"="application/json, text/plain, */*"
-    "Accept-Encoding"="gzip, deflate, br, zstd"
-    "Authorization"="Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImFkbWluIiwiaWF0IjoxNzYyNTQyMzQ0LCJleHAiOjE3NjI2Mjg3NDR9.I5jmhmr1GzkNXkwaHdAw4pmcvfTvdKDwhBfE8QF8I-6RO3NaSDAbx_qjT4aRDlfI"
-    "Cache-Control"="no-cache"
-    "Referer"="http://127.0.0.1:8080/"
-    "origin"="http://127.0.0.1"
-  }
+```bash
+.\get-logs.bat
 ```
 
+这个脚本会自动：
+
+1. 获取主机端日志（clientId=1）
+2. 获取客户端日志（clientId=2）
+3. 转换为易读的文本格式（.txt 文件）
+4. 搜索并显示 SetId 相关日志
+5. 显示 JSON 消息日志
+
+**生成的文件**：
+
+-   `logs_host.txt` - 主机端日志（文本格式，易读）
+-   `logs_client.txt` - 客户端日志（文本格式，易读）
+-   `logs_host.json` - 主机端日志（JSON 格式，原始数据）
+-   `logs_client.json` - 客户端日志（JSON 格式，原始数据）
+
+直接读取log文件,不要使用指令筛选

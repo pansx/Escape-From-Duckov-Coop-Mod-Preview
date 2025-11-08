@@ -187,6 +187,13 @@ public class ModBehaviourF : MonoBehaviour
         if (networkStarted)
         {
             netManager.PollEvents();
+            
+            // 🕐 主机端：检查玩家加入超时
+            if (IsServer)
+            {
+                Service.CheckJoinTimeouts();
+            }
+            
             SceneNet.Instance.TrySendSceneReadyOnce();
             if (!isinit2)
             {
@@ -342,8 +349,23 @@ public class ModBehaviourF : MonoBehaviour
         if (SceneNet.Instance.sceneVoteActive && Input.GetKeyDown(readyKey))
         {
             SceneNet.Instance.localReady = !SceneNet.Instance.localReady;
-            if (IsServer) SceneNet.Instance.Server_OnSceneReadySet(null, SceneNet.Instance.localReady); // 主机自己也走同一套
-            else SceneNet.Instance.Client_SendReadySet(SceneNet.Instance.localReady); // 客户端上报主机
+            if (IsServer)
+            {
+                // 主机使用新的 JSON 投票系统
+                var myId = Service.GetPlayerId(null);
+                SceneVoteMessage.Host_HandleReadyToggle(myId, SceneNet.Instance.localReady);
+            }
+            else
+            {
+                // 客户端使用新的 JSON 投票系统
+                SceneVoteMessage.Client_ToggleReady(SceneNet.Instance.localReady);
+            }
+        }
+
+        // 主机：定期广播投票状态
+        if (IsServer)
+        {
+            SceneVoteMessage.Host_Update();
         }
 
         if (networkStarted)
@@ -747,11 +769,6 @@ public class ModBehaviourF : MonoBehaviour
             case Op.JSON:
                 // 处理JSON消息 - 使用路由器根据type字段分发
                 JsonMessageRouter.HandleJsonMessage(reader);
-                break;
-
-            default:
-                // 有未知 opcode 时给出警告，便于排查（比如双端没一起更新）
-                Debug.LogWarning($"Unknown opcode: {(byte)op}");
                 break;
 
             case Op.GRENADE_THROW_REQUEST:
@@ -1645,6 +1662,9 @@ public class ModBehaviourF : MonoBehaviour
                                     w.Put(sid ?? "");
                                     peer.SendSmart(w, Op.SCENE_GATE_RELEASE);
                                     Debug.Log($"[GATE] 迟到放行：{status.EndPoint}");
+                                    
+                                    // 🔧 立即发送战利品箱全量同步
+                                    LootFullSyncMessage.Host_SendLootFullSync(peer);
                                 }
                             }
                             else
@@ -1689,6 +1709,11 @@ public class ModBehaviourF : MonoBehaviour
 
             case Op.PLAYER_HURT_EVENT:
                 if (!IsServer) HealthM.Instance.Client_ApplySelfHurtFromServer(reader);
+                break;
+
+            default:
+                // 有未知 opcode 时给出警告，便于排查（比如双端没一起更新）
+                Debug.LogWarning($"Unknown opcode: {(byte)op}");
                 break;
         }
 

@@ -196,6 +196,34 @@ public static class SceneVoteMessage
             timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
         };
 
+        // 🔧 同步更新 SceneNet 的状态，让主机UI能正确显示
+        var sceneNet = SceneNet.Instance;
+        if (sceneNet != null)
+        {
+            sceneNet.sceneVoteActive = true;
+            sceneNet.sceneTargetId = targetSceneId;
+            sceneNet.sceneCurtainGuid = curtainGuid;
+            sceneNet.sceneLocationName = locationName;
+            sceneNet.sceneNotifyEvac = notifyEvac;
+            sceneNet.sceneSaveToFile = saveToFile;
+            sceneNet.sceneUseLocation = useLocation;
+
+            // 🔧 更新参与者列表和准备状态
+            sceneNet.sceneParticipantIds.Clear();
+            sceneNet.sceneReady.Clear();
+            foreach (var player in players)
+            {
+                sceneNet.sceneParticipantIds.Add(player.playerId);
+                sceneNet.sceneReady[player.playerId] = false;
+            }
+
+            sceneNet.localReady = false;
+
+            Debug.Log(
+                $"[SceneVote] ✓ 已同步更新 SceneNet 状态，参与者: {sceneNet.sceneParticipantIds.Count}"
+            );
+        }
+
         // 立即广播一次
         Host_BroadcastVoteState();
         _lastBroadcastTime = Time.time;
@@ -313,6 +341,72 @@ public static class SceneVoteMessage
     {
         if (_hostVoteState == null)
             return;
+
+        // 🔧 检查并踢出没有SteamID的玩家（仅在Steam P2P模式下）
+        var service = NetService.Instance;
+        if (
+            service != null
+            && service.IsServer
+            && SteamManager.Initialized
+            && _hostVoteState.playerList != null
+            && _hostVoteState.playerList.items != null
+        )
+        {
+            var playersToKick = new System.Collections.Generic.List<string>();
+
+            foreach (var player in _hostVoteState.playerList.items)
+            {
+                // 跳过主机自己
+                if (service.GetPlayerId(null) == player.playerId)
+                    continue;
+
+                // 检查是否缺少SteamID
+                if (string.IsNullOrEmpty(player.steamId))
+                {
+                    Debug.LogWarning(
+                        $"[SceneVote] 玩家 {player.playerName}({player.playerId}) 缺少SteamID，准备踢出"
+                    );
+                    playersToKick.Add(player.playerId);
+                }
+            }
+
+            // 踢出没有SteamID的玩家
+            if (playersToKick.Count > 0)
+            {
+                Debug.LogWarning(
+                    $"[SceneVote] 发现 {playersToKick.Count} 个玩家缺少SteamID，开始踢出"
+                );
+
+                foreach (var playerId in playersToKick)
+                {
+                    // 查找对应的NetPeer
+                    if (service.playerStatuses != null)
+                    {
+                        foreach (var kv in service.playerStatuses)
+                        {
+                            var peer = kv.Key;
+                            var status = kv.Value;
+
+                            if (status != null && status.EndPoint == playerId)
+                            {
+                                Debug.LogWarning(
+                                    $"[SceneVote] 踢出玩家: {status.PlayerName}({playerId})"
+                                );
+                                try
+                                {
+                                    peer.Disconnect();
+                                }
+                                catch (System.Exception ex)
+                                {
+                                    Debug.LogError($"[SceneVote] 踢出玩家时出错: {ex.Message}");
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // 调用原有的场景加载逻辑
         var sceneNet = SceneNet.Instance;

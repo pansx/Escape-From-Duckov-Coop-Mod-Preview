@@ -1254,6 +1254,28 @@ public class MModUI : MonoBehaviour
 
         var stateText = CreateText("State", infoRow.transform, status.IsInGame ? CoopLocalization.Get("ui.playerStatus.inGameStatus") : CoopLocalization.Get("ui.playerStatus.idle"), 13,
             status.IsInGame ? ModernColors.Success : ModernColors.TextSecondary);
+
+        // 🔨 踢人按钮（只有主机且不是本地玩家时显示）
+        if (IsServer && !isLocal && isSteamMode && SteamManager.Initialized)
+        {
+            // 获取玩家的 Steam ID
+            ulong targetSteamId = 0;
+            if (isSteamMode)
+            {
+                targetSteamId = GetSteamIdFromStatus(status);
+            }
+
+            if (targetSteamId > 0)
+            {
+                // 添加踢人按钮
+                var kickButton = CreateIconButton("KickBtn", infoRow.transform, "踢", () =>
+                {
+                    // 确认踢人
+                    Debug.Log($"[MModUI] 主机踢出玩家: SteamID={targetSteamId}");
+                    KickMessage.Server_KickPlayer(targetSteamId, "被主机踢出");
+                }, 50, ModernColors.Error);
+            }
+        }
     }
 
     private void UpdateVotePanel()
@@ -2604,6 +2626,618 @@ public class MModUI : MonoBehaviour
 
         Debug.Log($"Total LootBoxes: {count}");
         SetStatusText($"[OK] " + CoopLocalization.Get("ui.debug.lootBoxCount", count), ModernColors.Success);
+    }
+
+    internal void DebugPrintRemoteCharacters()
+    {
+        if (Service == null)
+        {
+            Debug.LogWarning("[Debug] NetService 未初始化");
+            SetStatusText("[!] 网络服务未初始化", ModernColors.Warning);
+            return;
+        }
+
+        var isServer = Service.IsServer;
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+        Debug.Log($"========== Network Debug Info ==========");
+        Debug.Log($"Timestamp: {timestamp}");
+        Debug.Log($"Role: {(isServer ? "主机 (Server)" : "客户端 (Client)")}");
+        Debug.Log($"========================================");
+
+        var debugData = new Dictionary<string, object>
+        {
+            ["DebugVersion"] = "v2.0",  // 🔧 版本信息：v2.0 - 添加SetId功能支持
+            ["Timestamp"] = timestamp,
+            ["Role"] = isServer ? "Server" : "Client",
+            ["NetworkStarted"] = Service.networkStarted,
+            ["Port"] = Service.port,
+            ["Status"] = Service.status,
+            ["TransportMode"] = Service.TransportMode.ToString()
+        };
+
+        // === 本地玩家信息 ===
+        var localPlayerData = new Dictionary<string, object>();
+        if (Service.localPlayerStatus != null)
+        {
+            var lps = Service.localPlayerStatus;
+            localPlayerData["EndPoint"] = lps.EndPoint ?? "null";
+            localPlayerData["PlayerName"] = lps.PlayerName ?? "null";
+            localPlayerData["IsInGame"] = lps.IsInGame;
+            localPlayerData["SceneId"] = lps.SceneId ?? "null";
+            localPlayerData["Position"] = lps.Position.ToString();
+            localPlayerData["Rotation"] = lps.Rotation.eulerAngles.ToString();
+            localPlayerData["Latency"] = lps.Latency;
+            localPlayerData["CustomFaceJson"] = string.IsNullOrEmpty(lps.CustomFaceJson) ? "null" : $"[{lps.CustomFaceJson.Length} chars]";
+            
+            // 🔍 新增：本地玩家的网络ID信息
+            if (!isServer && Service.connectedPeer != null)
+            {
+                localPlayerData["ConnectedPeerEndPoint"] = Service.connectedPeer.EndPoint?.ToString() ?? "null";
+                localPlayerData["ConnectedPeerId"] = Service.connectedPeer.Id;
+            }
+        }
+        else
+        {
+            localPlayerData["Status"] = "null";
+        }
+        debugData["LocalPlayer"] = localPlayerData;
+        
+        // 🔍 新增：本地玩家GameObject信息
+        var localCharacterData = new Dictionary<string, object>();
+        if (CharacterMainControl.Main != null)
+        {
+            var localGO = CharacterMainControl.Main.gameObject;
+            localCharacterData["GameObjectName"] = localGO.name;
+            localCharacterData["InstanceId"] = localGO.GetInstanceID();
+            localCharacterData["Active"] = localGO.activeSelf;
+            localCharacterData["ActiveInHierarchy"] = localGO.activeInHierarchy;
+            localCharacterData["Position"] = localGO.transform.position.ToString();
+            localCharacterData["Rotation"] = localGO.transform.rotation.eulerAngles.ToString();
+            
+            // 场景路径
+            var path = "";
+            var t = localGO.transform;
+            while (t != null)
+            {
+                path = t.name + (string.IsNullOrEmpty(path) ? "" : "/" + path);
+                t = t.parent;
+            }
+            localCharacterData["ScenePath"] = path;
+            
+            // 检查是否有RemoteReplicaTag（不应该有）
+            localCharacterData["HasRemoteReplicaTag"] = localGO.GetComponent<RemoteReplicaTag>() != null;
+            
+            // 渲染器状态
+            var renderers = localGO.GetComponentsInChildren<Renderer>();
+            var enabledRenderers = renderers.Count(r => r.enabled);
+            localCharacterData["TotalRenderers"] = renderers.Length;
+            localCharacterData["EnabledRenderers"] = enabledRenderers;
+            
+            // 组件列表
+            var components = localGO.GetComponents<Component>();
+            var componentNames = new List<string>();
+            foreach (var comp in components)
+            {
+                if (comp != null) componentNames.Add(comp.GetType().Name);
+            }
+            localCharacterData["AllComponents"] = string.Join(", ", componentNames);
+            localCharacterData["ComponentCount"] = componentNames.Count;
+        }
+        else
+        {
+            localCharacterData["Status"] = "null";
+        }
+        debugData["LocalCharacter"] = localCharacterData;
+        
+        // 🔍 新增：场景中所有CharacterMainControl对象
+        var allCharactersData = new List<object>();
+        var allCharacters = UnityEngine.Object.FindObjectsOfType<CharacterMainControl>();
+        foreach (var character in allCharacters)
+        {
+            var charGO = character.gameObject;
+            var charInfo = new Dictionary<string, object>
+            {
+                ["GameObjectName"] = charGO.name,
+                ["InstanceId"] = charGO.GetInstanceID(),
+                ["IsMain"] = character == CharacterMainControl.Main,
+                ["Active"] = charGO.activeSelf,
+                ["Position"] = charGO.transform.position.ToString(),
+                ["HasRemoteReplicaTag"] = charGO.GetComponent<RemoteReplicaTag>() != null,
+                ["HasNetInterpolator"] = charGO.GetComponent<NetInterpolator>() != null,
+                ["HasAnimInterpolator"] = charGO.GetComponent<AnimParamInterpolator>() != null
+            };
+            
+            // 检查是否在remoteCharacters或clientRemoteCharacters中
+            if (isServer && Service.remoteCharacters != null)
+            {
+                charInfo["InRemoteCharacters"] = Service.remoteCharacters.Values.Contains(charGO);
+            }
+            else if (!isServer && Service.clientRemoteCharacters != null)
+            {
+                charInfo["InClientRemoteCharacters"] = Service.clientRemoteCharacters.Values.Contains(charGO);
+                // 查找对应的PlayerId
+                var playerId = Service.clientRemoteCharacters.FirstOrDefault(kv => kv.Value == charGO).Key;
+                charInfo["PlayerId"] = playerId ?? "null";
+            }
+            
+            allCharactersData.Add(charInfo);
+        }
+        debugData["AllCharactersInScene"] = new Dictionary<string, object>
+        {
+            ["Count"] = allCharacters.Length,
+            ["Data"] = allCharactersData
+        };
+
+        // === 主机端数据 ===
+        if (isServer)
+        {
+            // remoteCharacters
+            var remoteCharsData = new List<object>();
+            if (Service.remoteCharacters != null)
+            {
+                var index = 1;
+                foreach (var kv in Service.remoteCharacters)
+                {
+                    var peer = kv.Key;
+                    var go = kv.Value;
+                    var charData = new Dictionary<string, object>
+                    {
+                        ["Index"] = index++,
+                        ["PeerEndPoint"] = peer?.EndPoint?.ToString() ?? "null",
+                        ["PeerId"] = peer?.Id ?? -1,
+                        ["GameObjectName"] = go?.name ?? "null",
+                        ["GameObjectInstanceId"] = go?.GetInstanceID() ?? 0,
+                        ["GameObjectActive"] = go?.activeSelf ?? false,
+                        ["GameObjectActiveInHierarchy"] = go?.activeInHierarchy ?? false,
+                        ["Position"] = go?.transform.position.ToString() ?? "null",
+                        ["Rotation"] = go?.transform.rotation.eulerAngles.ToString() ?? "null",
+                        ["LocalPosition"] = go?.transform.localPosition.ToString() ?? "null",
+                        ["LocalRotation"] = go?.transform.localRotation.eulerAngles.ToString() ?? "null"
+                    };
+
+                    if (go != null)
+                    {
+                        // 场景路径
+                        var path = "";
+                        var t = go.transform;
+                        while (t != null)
+                        {
+                            path = t.name + (string.IsNullOrEmpty(path) ? "" : "/" + path);
+                            t = t.parent;
+                        }
+                        charData["ScenePath"] = path;
+
+                        // CharacterMainControl
+                        var cmc = go.GetComponent<CharacterMainControl>();
+                        charData["HasCharacterMainControl"] = cmc != null;
+                        if (cmc != null)
+                        {
+                            charData["CMC_Enabled"] = cmc.enabled;
+                            charData["CMC_ModelRoot"] = cmc.modelRoot?.name ?? "null";
+                            charData["CMC_CharacterModel"] = cmc.characterModel?.name ?? "null";
+                        }
+
+                        // Health
+                        var health = go.GetComponentInChildren<Health>(true);
+                        if (health != null)
+                        {
+                            charData["Health_Current"] = health.CurrentHealth;
+                            charData["Health_Max"] = health.MaxHealth;
+                            charData["Health_GameObject"] = health.gameObject.name;
+                            charData["Health_Enabled"] = health.enabled;
+                        }
+                        else
+                        {
+                            charData["Health_Status"] = "null";
+                        }
+
+                        // 网络组件
+                        var netInterp = go.GetComponent<NetInterpolator>();
+                        charData["HasNetInterpolator"] = netInterp != null;
+                        if (netInterp != null)
+                        {
+                            charData["NetInterp_Enabled"] = netInterp.enabled;
+                        }
+
+                        var animInterp = go.GetComponent<AnimParamInterpolator>();
+                        charData["HasAnimInterpolator"] = animInterp != null;
+                        if (animInterp != null)
+                        {
+                            charData["AnimInterp_Enabled"] = animInterp.enabled;
+                        }
+
+                        // 标记组件
+                        charData["HasRemoteReplicaTag"] = go.GetComponent<RemoteReplicaTag>() != null;
+                        charData["HasAutoRequestHealthBar"] = go.GetComponent<AutoRequestHealthBar>() != null;
+                        charData["HasHostForceHealthBar"] = go.GetComponent<HostForceHealthBar>() != null;
+
+                        // 物理组件状态
+                        var rb = go.GetComponent<Rigidbody>();
+                        if (rb != null)
+                        {
+                            charData["Rigidbody_IsKinematic"] = rb.isKinematic;
+                            charData["Rigidbody_Velocity"] = rb.velocity.ToString();
+                        }
+
+                        var cc = go.GetComponent<CharacterController>();
+                        charData["HasCharacterController"] = cc != null;
+                        if (cc != null)
+                        {
+                            charData["CharacterController_Enabled"] = cc.enabled;
+                        }
+
+                        // 所有组件列表
+                        var components = go.GetComponents<Component>();
+                        var componentNames = new List<string>();
+                        foreach (var comp in components)
+                        {
+                            if (comp != null)
+                            {
+                                componentNames.Add(comp.GetType().Name);
+                            }
+                        }
+                        charData["AllComponents"] = string.Join(", ", componentNames);
+                        charData["ComponentCount"] = componentNames.Count;
+                        
+                        // 🔍 新增：渲染器状态
+                        var renderers = go.GetComponentsInChildren<Renderer>();
+                        var enabledRenderers = renderers.Count(r => r.enabled);
+                        charData["TotalRenderers"] = renderers.Length;
+                        charData["EnabledRenderers"] = enabledRenderers;
+                        
+                        // 🔍 新增：父对象信息
+                        charData["ParentName"] = go.transform.parent?.name ?? "null";
+                        charData["SiblingIndex"] = go.transform.GetSiblingIndex();
+                    }
+
+                    remoteCharsData.Add(charData);
+                }
+            }
+            debugData["RemoteCharacters"] = new Dictionary<string, object>
+            {
+                ["Count"] = Service.remoteCharacters?.Count ?? 0,
+                ["Data"] = remoteCharsData
+            };
+
+            // playerStatuses
+            var playerStatusesData = new List<object>();
+            if (Service.playerStatuses != null)
+            {
+                foreach (var kv in Service.playerStatuses)
+                {
+                    var peer = kv.Key;
+                    var status = kv.Value;
+                    playerStatusesData.Add(new Dictionary<string, object>
+                    {
+                        ["PeerEndPoint"] = peer?.EndPoint?.ToString() ?? "null",
+                        ["PeerId"] = peer?.Id ?? -1,
+                        ["PlayerName"] = status.PlayerName ?? "null",
+                        ["IsInGame"] = status.IsInGame,
+                        ["SceneId"] = status.SceneId ?? "null",
+                        ["Latency"] = status.Latency,
+                        ["Position"] = status.Position.ToString(),
+                        ["EquipmentCount"] = status.EquipmentList?.Count ?? 0,
+                        ["WeaponCount"] = status.WeaponList?.Count ?? 0
+                    });
+                }
+            }
+            debugData["PlayerStatuses"] = new Dictionary<string, object>
+            {
+                ["Count"] = Service.playerStatuses?.Count ?? 0,
+                ["Data"] = playerStatusesData
+            };
+
+            // 连接的 Peer 列表
+            var connectedPeers = new List<object>();
+            if (Service.netManager != null && Service.netManager.ConnectedPeerList != null)
+            {
+                foreach (var peer in Service.netManager.ConnectedPeerList)
+                {
+                    connectedPeers.Add(new Dictionary<string, object>
+                    {
+                        ["EndPoint"] = peer?.EndPoint?.ToString() ?? "null",
+                        ["Id"] = peer?.Id ?? -1,
+                        ["Ping"] = peer?.Ping ?? -1,
+                        ["ConnectionState"] = peer?.ConnectionState.ToString() ?? "null"
+                    });
+                }
+            }
+            debugData["ConnectedPeers"] = new Dictionary<string, object>
+            {
+                ["Count"] = connectedPeers.Count,
+                ["Data"] = connectedPeers
+            };
+        }
+        // === 客户端数据 ===
+        else
+        {
+            // clientRemoteCharacters
+            var clientRemoteCharsData = new List<object>();
+            if (Service.clientRemoteCharacters != null)
+            {
+                var index = 1;
+                foreach (var kv in Service.clientRemoteCharacters)
+                {
+                    var playerId = kv.Key;
+                    var go = kv.Value;
+                    var charData = new Dictionary<string, object>
+                    {
+                        ["Index"] = index++,
+                        ["PlayerId"] = playerId ?? "null",
+                        ["GameObjectName"] = go?.name ?? "null",
+                        ["GameObjectInstanceId"] = go?.GetInstanceID() ?? 0,
+                        ["GameObjectActive"] = go?.activeSelf ?? false,
+                        ["GameObjectActiveInHierarchy"] = go?.activeInHierarchy ?? false,
+                        ["Position"] = go?.transform.position.ToString() ?? "null",
+                        ["Rotation"] = go?.transform.rotation.eulerAngles.ToString() ?? "null",
+                        ["LocalPosition"] = go?.transform.localPosition.ToString() ?? "null",
+                        ["LocalRotation"] = go?.transform.localRotation.eulerAngles.ToString() ?? "null"
+                    };
+
+                    if (go != null)
+                    {
+                        // 场景路径
+                        var path = "";
+                        var t = go.transform;
+                        while (t != null)
+                        {
+                            path = t.name + (string.IsNullOrEmpty(path) ? "" : "/" + path);
+                            t = t.parent;
+                        }
+                        charData["ScenePath"] = path;
+
+                        // CharacterMainControl
+                        var cmc = go.GetComponent<CharacterMainControl>();
+                        charData["HasCharacterMainControl"] = cmc != null;
+                        if (cmc != null)
+                        {
+                            charData["CMC_Enabled"] = cmc.enabled;
+                            charData["CMC_ModelRoot"] = cmc.modelRoot?.name ?? "null";
+                            charData["CMC_CharacterModel"] = cmc.characterModel?.name ?? "null";
+                        }
+
+                        // Health
+                        var health = go.GetComponentInChildren<Health>(true);
+                        if (health != null)
+                        {
+                            charData["Health_Current"] = health.CurrentHealth;
+                            charData["Health_Max"] = health.MaxHealth;
+                            charData["Health_GameObject"] = health.gameObject.name;
+                            charData["Health_Enabled"] = health.enabled;
+                        }
+                        else
+                        {
+                            charData["Health_Status"] = "null";
+                        }
+
+                        // 网络组件
+                        var netInterp = go.GetComponent<NetInterpolator>();
+                        charData["HasNetInterpolator"] = netInterp != null;
+                        if (netInterp != null)
+                        {
+                            charData["NetInterp_Enabled"] = netInterp.enabled;
+                        }
+
+                        var animInterp = go.GetComponent<AnimParamInterpolator>();
+                        charData["HasAnimInterpolator"] = animInterp != null;
+                        if (animInterp != null)
+                        {
+                            charData["AnimInterp_Enabled"] = animInterp.enabled;
+                        }
+
+                        // 标记组件
+                        charData["HasRemoteReplicaTag"] = go.GetComponent<RemoteReplicaTag>() != null;
+                        charData["HasAutoRequestHealthBar"] = go.GetComponent<AutoRequestHealthBar>() != null;
+
+                        // 物理组件状态
+                        var rb = go.GetComponent<Rigidbody>();
+                        if (rb != null)
+                        {
+                            charData["Rigidbody_IsKinematic"] = rb.isKinematic;
+                            charData["Rigidbody_Velocity"] = rb.velocity.ToString();
+                        }
+
+                        var cc = go.GetComponent<CharacterController>();
+                        charData["HasCharacterController"] = cc != null;
+                        if (cc != null)
+                        {
+                            charData["CharacterController_Enabled"] = cc.enabled;
+                        }
+
+                        // 所有组件列表
+                        var components = go.GetComponents<Component>();
+                        var componentNames = new List<string>();
+                        foreach (var comp in components)
+                        {
+                            if (comp != null)
+                            {
+                                componentNames.Add(comp.GetType().Name);
+                            }
+                        }
+                        charData["AllComponents"] = string.Join(", ", componentNames);
+                        charData["ComponentCount"] = componentNames.Count;
+                        
+                        // 🔍 新增：渲染器状态
+                        var renderers = go.GetComponentsInChildren<Renderer>();
+                        var enabledRenderers = renderers.Count(r => r.enabled);
+                        charData["TotalRenderers"] = renderers.Length;
+                        charData["EnabledRenderers"] = enabledRenderers;
+                        
+                        // 🔍 新增：父对象信息
+                        charData["ParentName"] = go.transform.parent?.name ?? "null";
+                        charData["SiblingIndex"] = go.transform.GetSiblingIndex();
+                        
+                        // 🔍 新增：检查是否是本地玩家的副本
+                        var isLocalPlayerDuplicate = false;
+                        if (Service.connectedPeer != null)
+                        {
+                            var myNetworkId = Service.connectedPeer.EndPoint?.ToString();
+                            isLocalPlayerDuplicate = playerId == myNetworkId;
+                        }
+                        charData["IsLocalPlayerDuplicate"] = isLocalPlayerDuplicate;
+                        
+                        // 🔍 新增：IsSelfId检查结果
+                        charData["IsSelfId_Check"] = Service.IsSelfId(playerId);
+                    }
+
+                    clientRemoteCharsData.Add(charData);
+                }
+            }
+            debugData["ClientRemoteCharacters"] = new Dictionary<string, object>
+            {
+                ["Count"] = Service.clientRemoteCharacters?.Count ?? 0,
+                ["Data"] = clientRemoteCharsData
+            };
+
+            // clientPlayerStatuses
+            var clientPlayerStatusesData = new List<object>();
+            if (Service.clientPlayerStatuses != null)
+            {
+                foreach (var kv in Service.clientPlayerStatuses)
+                {
+                    var playerId = kv.Key;
+                    var status = kv.Value;
+                    clientPlayerStatusesData.Add(new Dictionary<string, object>
+                    {
+                        ["PlayerId"] = playerId ?? "null",
+                        ["PlayerName"] = status.PlayerName ?? "null",
+                        ["IsInGame"] = status.IsInGame,
+                        ["SceneId"] = status.SceneId ?? "null",
+                        ["Latency"] = status.Latency,
+                        ["Position"] = status.Position.ToString(),
+                        ["EquipmentCount"] = status.EquipmentList?.Count ?? 0,
+                        ["WeaponCount"] = status.WeaponList?.Count ?? 0
+                    });
+                }
+            }
+            debugData["ClientPlayerStatuses"] = new Dictionary<string, object>
+            {
+                ["Count"] = Service.clientPlayerStatuses?.Count ?? 0,
+                ["Data"] = clientPlayerStatusesData
+            };
+
+            // 连接的 Peer
+            var connectedPeerData = new Dictionary<string, object>();
+            if (Service.connectedPeer != null)
+            {
+                connectedPeerData["EndPoint"] = Service.connectedPeer.EndPoint?.ToString() ?? "null";
+                connectedPeerData["Id"] = Service.connectedPeer.Id;
+                connectedPeerData["Ping"] = Service.connectedPeer.Ping;
+                connectedPeerData["ConnectionState"] = Service.connectedPeer.ConnectionState.ToString();
+            }
+            else
+            {
+                connectedPeerData["Status"] = "null";
+            }
+            debugData["ConnectedPeer"] = connectedPeerData;
+        }
+
+        // 🔍 新增：LocalPlayerManager信息
+        var localPlayerManagerData = new Dictionary<string, object>();
+        if (LocalPlayerManager.Instance != null)
+        {
+            var lpm = LocalPlayerManager.Instance;
+            var isInGame = lpm.ComputeIsInGame(out var currentSceneId);
+            localPlayerManagerData["IsInGame"] = isInGame;
+            localPlayerManagerData["CurrentSceneId"] = currentSceneId ?? "null";
+            localPlayerManagerData["HasCharacterMain"] = CharacterMainControl.Main != null;
+        }
+        else
+        {
+            localPlayerManagerData["Status"] = "null";
+        }
+        debugData["LocalPlayerManager"] = localPlayerManagerData;
+        
+        // 🔍 新增：CreateRemoteCharacter相关信息（客户端）
+        if (!isServer)
+        {
+            var createRemoteData = new Dictionary<string, object>();
+            
+            // 检查clientRemoteCharacters中是否有自己的副本
+            if (Service.clientRemoteCharacters != null && Service.connectedPeer != null)
+            {
+                var myNetworkId = Service.connectedPeer.EndPoint?.ToString();
+                var hasSelfDuplicate = Service.clientRemoteCharacters.ContainsKey(myNetworkId);
+                createRemoteData["HasSelfDuplicate"] = hasSelfDuplicate;
+                createRemoteData["MyNetworkId"] = myNetworkId ?? "null";
+                createRemoteData["MyLocalPlayerId"] = Service.localPlayerStatus?.EndPoint ?? "null";
+                
+                // 列出所有clientRemoteCharacters的PlayerId
+                var allPlayerIds = new List<string>();
+                foreach (var kv in Service.clientRemoteCharacters)
+                {
+                    allPlayerIds.Add(kv.Key);
+                }
+                createRemoteData["AllRemotePlayerIds"] = string.Join(", ", allPlayerIds);
+            }
+            
+            debugData["CreateRemoteInfo"] = createRemoteData;
+        }
+
+        // === 场景网络信息 ===
+        if (SceneNet.Instance != null)
+        {
+            var sceneNetData = new Dictionary<string, object>
+            {
+                ["SceneReadySidSent"] = SceneNet.Instance._sceneReadySidSent ?? "null",
+                ["SceneVoteActive"] = SceneNet.Instance.sceneVoteActive,
+                ["SceneTargetId"] = SceneNet.Instance.sceneTargetId ?? "null",
+                ["LocalReady"] = SceneNet.Instance.localReady,
+                ["ParticipantCount"] = SceneNet.Instance.sceneParticipantIds?.Count ?? 0,
+                ["ReadyCount"] = SceneNet.Instance.sceneReady?.Count ?? 0
+            };
+
+            if (isServer)
+            {
+                sceneNetData["SrvSceneGateOpen"] = SceneNet.Instance._srvSceneGateOpen;
+                sceneNetData["SrvGateReadyPidsCount"] = SceneNet.Instance._srvGateReadyPids?.Count ?? 0;
+            }
+            else
+            {
+                sceneNetData["CliSceneGateReleased"] = SceneNet.Instance._cliSceneGateReleased;
+            }
+
+            debugData["SceneNet"] = sceneNetData;
+        }
+
+        // === 输出格式化日志 ===
+        Debug.Log($"--- Summary ---");
+        Debug.Log($"  Role: {debugData["Role"]}");
+        Debug.Log($"  NetworkStarted: {debugData["NetworkStarted"]}");
+        Debug.Log($"  LocalPlayer: {(Service.localPlayerStatus != null ? Service.localPlayerStatus.EndPoint : "null")}");
+        
+        if (isServer)
+        {
+            Debug.Log($"  RemoteCharacters: {Service.remoteCharacters?.Count ?? 0}");
+            Debug.Log($"  PlayerStatuses: {Service.playerStatuses?.Count ?? 0}");
+            Debug.Log($"  ConnectedPeers: {Service.netManager?.ConnectedPeerList?.Count ?? 0}");
+        }
+        else
+        {
+            Debug.Log($"  ClientRemoteCharacters: {Service.clientRemoteCharacters?.Count ?? 0}");
+            Debug.Log($"  ClientPlayerStatuses: {Service.clientPlayerStatuses?.Count ?? 0}");
+            Debug.Log($"  ConnectedPeer: {(Service.connectedPeer != null ? "Connected" : "null")}");
+        }
+
+        // === 输出完整 JSON ===
+        try
+        {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(debugData, Newtonsoft.Json.Formatting.Indented);
+            Debug.Log($"========== Complete Network State JSON ==========");
+            Debug.Log(json);
+            Debug.Log($"=================================================");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Debug] JSON 序列化失败: {ex.Message}");
+            Debug.LogError($"[Debug] 堆栈: {ex.StackTrace}");
+        }
+
+        var summary = isServer 
+            ? $"主机: {Service.remoteCharacters?.Count ?? 0} 个远程玩家" 
+            : $"客户端: {Service.clientRemoteCharacters?.Count ?? 0} 个远程玩家";
+        SetStatusText($"[OK] 已输出网络状态 ({summary})", ModernColors.Success);
     }
 
     internal void OnTransportModeChanged(NetworkTransportMode newMode)

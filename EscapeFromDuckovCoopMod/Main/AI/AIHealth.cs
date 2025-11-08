@@ -229,10 +229,11 @@ public class AIHealth
 
             // 🛡️ 限制日志频率：每200次只输出1次，避免刷屏
             _pendingAiWarningCount++;
-            if (_pendingAiWarningCount == 1 || _pendingAiWarningCount % PENDING_AI_WARNING_INTERVAL == 0)
-            {
-                Debug.Log($"[AI-HP][CLIENT] pending aiId={aiId} max={max} cur={cur} (已发生 {_pendingAiWarningCount} 次)");
-            }
+            // 注释掉刷屏日志，避免干扰 Debug 输出
+            // if (_pendingAiWarningCount == 1 || _pendingAiWarningCount % PENDING_AI_WARNING_INTERVAL == 0)
+            // {
+            //     Debug.Log($"[AI-HP][CLIENT] pending aiId={aiId} max={max} cur={cur} (已发生 {_pendingAiWarningCount} 次)");
+            // }
             return;
         }
 

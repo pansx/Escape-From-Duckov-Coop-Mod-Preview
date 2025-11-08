@@ -29,7 +29,10 @@ public static class JsonMessage
     /// </summary>
     /// <param name="jsonData">要发送的JSON字符串</param>
     /// <param name="deliveryMethod">传输方式，默认为可靠有序</param>
-    public static void BroadcastToAllClients(string jsonData, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
+    public static void BroadcastToAllClients(
+        string jsonData,
+        DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered
+    )
     {
         var service = NetService.Instance;
         if (service == null || !service.IsServer)
@@ -57,7 +60,7 @@ public static class JsonMessage
             sentCount++;
         }
 
-        Debug.Log($"[JSON] 广播到 {sentCount} 个客户端");
+        Debug.Log($"[JSON] 暴力发包 {sentCount} 个客户端");
     }
 
     /// <summary>
@@ -66,7 +69,10 @@ public static class JsonMessage
     /// <typeparam name="T">可序列化的对象类型</typeparam>
     /// <param name="data">要发送的对象</param>
     /// <param name="deliveryMethod">传输方式，默认为可靠有序</param>
-    public static void BroadcastToAllClients<T>(T data, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
+    public static void BroadcastToAllClients<T>(
+        T data,
+        DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered
+    )
     {
         var json = JsonUtility.ToJson(data, true);
         BroadcastToAllClients(json, deliveryMethod);
@@ -78,7 +84,11 @@ public static class JsonMessage
     /// <param name="peer">目标Peer</param>
     /// <param name="jsonData">要发送的JSON字符串</param>
     /// <param name="deliveryMethod">传输方式，默认为可靠有序</param>
-    public static void SendToPeer(NetPeer peer, string jsonData, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
+    public static void SendToPeer(
+        NetPeer peer,
+        string jsonData,
+        DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered
+    )
     {
         if (peer == null)
         {
@@ -110,7 +120,11 @@ public static class JsonMessage
     /// <param name="peer">目标Peer</param>
     /// <param name="data">要发送的对象</param>
     /// <param name="deliveryMethod">传输方式，默认为可靠有序</param>
-    public static void SendToPeer<T>(NetPeer peer, T data, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
+    public static void SendToPeer<T>(
+        NetPeer peer,
+        T data,
+        DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered
+    )
     {
         var json = JsonUtility.ToJson(data, true);
         SendToPeer(peer, json, deliveryMethod);
@@ -121,7 +135,10 @@ public static class JsonMessage
     /// </summary>
     /// <param name="jsonData">要发送的JSON字符串</param>
     /// <param name="deliveryMethod">传输方式，默认为可靠有序</param>
-    public static void SendToHost(string jsonData, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
+    public static void SendToHost(
+        string jsonData,
+        DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered
+    )
     {
         var service = NetService.Instance;
         if (service == null)
@@ -152,7 +169,10 @@ public static class JsonMessage
     /// <typeparam name="T">可序列化的对象类型</typeparam>
     /// <param name="data">要发送的对象</param>
     /// <param name="deliveryMethod">传输方式，默认为可靠有序</param>
-    public static void SendToHost<T>(T data, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
+    public static void SendToHost<T>(
+        T data,
+        DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered
+    )
     {
         var json = JsonUtility.ToJson(data, true);
         SendToHost(json, deliveryMethod);
@@ -163,7 +183,10 @@ public static class JsonMessage
     /// </summary>
     /// <param name="reader">网络数据读取器</param>
     /// <param name="onReceived">接收回调，参数为JSON字符串</param>
-    public static void HandleReceivedJson(NetPacketReader reader, System.Action<string> onReceived = null)
+    public static void HandleReceivedJson(
+        NetPacketReader reader,
+        System.Action<string> onReceived = null
+    )
     {
         var json = reader.GetString();
         Debug.Log($"[JSON] 收到消息");
@@ -176,10 +199,13 @@ public static class JsonMessage
     /// <typeparam name="T">要解析的对象类型</typeparam>
     /// <param name="reader">网络数据读取器</param>
     /// <param name="onReceived">接收回调，参数为解析后的对象</param>
-    public static void HandleReceivedJson<T>(NetPacketReader reader, System.Action<T> onReceived = null)
+    public static void HandleReceivedJson<T>(
+        NetPacketReader reader,
+        System.Action<T> onReceived = null
+    )
     {
         var json = reader.GetString();
-        
+
         try
         {
             var data = JsonUtility.FromJson<T>(json);
@@ -204,7 +230,7 @@ public static class JsonMessage
         {
             message = "Hello from " + (isServer ? "Server" : "Client"),
             timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-            randomValue = UnityEngine.Random.Range(1, 1000)
+            randomValue = UnityEngine.Random.Range(1, 1000),
         };
 
         SendToPeer(peer, testData);
