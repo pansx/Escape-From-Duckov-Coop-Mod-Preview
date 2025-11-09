@@ -27,4 +27,4 @@ inclusion: always
 -   `logs_host.json` - 主机端日志（JSON 格式，原始数据）
 -   `logs_client.json` - 客户端日志（JSON 格式，原始数据）
 
-直接读取log文件,不要使用指令筛选
+直接读取log文件,不要使用指令筛选,禁止不执行bat就直接看老log文件

@@ -1,200 +1,200 @@
-}
+[17:23:40] [Info] [AsyncQueue] 统计 - 队列大小: 0, 已处理: 2523, 已入队: 2523, 模式: 正常
+[17:23:35] [Info] [AsyncQueue] 统计 - 队列大小: 0, 已处理: 2523, 已入队: 2523, 模式: 正常
+[17:23:33] [Info] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.123.1:9050, 原因: RemoteConnectionClose
+[17:23:33] [Info] 断开连接: 192.168.123.1:9050, 原因: RemoteConnectionClose
+[17:23:32] [Info] [AI-SEED] 收到 3 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:32] [Info] [AI-SEED] 收到 5 个 Root 的种子
+[17:23:30] [Info] [AsyncQueue] 统计 - 队列大小: 0, 已处理: 2523, 已入队: 2523, 模式: 正常
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [AI-SEED] 应用增量 Root 种子数: 2
+[17:23:30] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[17:23:29] [Info] [LootCache] 刷新缓存，找到 8 个战利品箱，映射 8 个 Inventory
+[17:23:29] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64003
+[17:23:29] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[17:23:26] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64003
+[17:23:26] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[17:23:26] [Info] [COOP][FACE] stripped 0 CustomFacePart
+[17:23:26] [Info] [LootCache] 刷新缓存，找到 8 个战利品箱，映射 8 个 Inventory
+[17:23:26] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64003
+[17:23:25] [Info] [AsyncQueue] 统计 - 队列大小: 0, 已处理: 45, 已入队: 45, 模式: 正常
+[17:23:22] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[17:23:21] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[17:23:20] [Info] [AsyncQueue] 统计 - 队列大小: 0, 已处理: 45, 已入队: 45, 模式: 批量
+[17:23:17] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64003
+[17:23:15] [Info] [AsyncQueue] 统计 - 队列大小: 0, 已处理: 45, 已入队: 45, 模式: 批量
 }
   "gameObjectActive": true
-  "currentHealth": 51.0,
-  "gameObjectActive": true
-  "maxHealth": 51.0,
-  "gameObjectName": "Character(Clone)",
   "gameObjectName": "Character(Clone)",
   "autoInit": false,
-  "event": "Client_SendSelfHealth_Debug",
-  "autoInit": false,
   "_currentHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-  "_currentHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
   "lastMaxHealth": 51.0,
-  "lastMaxHealth": 51.0,
-}
-  "defaultMaxHealth": 65,
-  "defaultMaxHealth": 65,
-  "gameObjectActive": true
-  "time": 65.08948,
-  "time": 65.08948,
-  "gameObjectName": "Character(Clone)",
-  "force": true,
+  "defaultMaxHealth": 131,
+  "time": 59.2554321,
   "force": true,
   "currentHealth": 51.0,
-  "autoInit": false,
-  "currentHealth": 51.0,
-  "_currentHealth": 51.0,
-  "maxHealth": 51.0,
-  "maxHealth": 51.0,
-  "lastMaxHealth": 51.0,
-  "event": "Client_SendSelfHealth_Debug",
-  "event": "Client_SendSelfHealth_Debug",
-  "defaultMaxHealth": 65,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-  "time": 65.08948,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-  "force": true,
-}
-}
-  "currentHealth": 51.0,
-  "gameObjectActive": true
-  "gameObjectActive": true
-  "maxHealth": 51.0,
-  "gameObjectName": "Character(Clone)",
-  "gameObjectName": "Character(Clone)",
-  "event": "Client_SendSelfHealth_Debug",
-  "autoInit": false,
-  "autoInit": false,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-  "_currentHealth": 51.0,
-  "_currentHealth": 51.0,
-  "lastMaxHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-  "lastMaxHealth": 51.0,
-  "defaultMaxHealth": 65,
-}
-  "defaultMaxHealth": 65,
-  "time": 65.08948,
-  "time": 65.08948,
-  "gameObjectActive": true
-  "force": true,
-  "force": true,
-  "gameObjectName": "Character(Clone)",
-  "currentHealth": 51.0,
-  "currentHealth": 51.0,
-  "autoInit": false,
-  "maxHealth": 51.0,
-  "_currentHealth": 51.0,
   "maxHealth": 51.0,
   "event": "Client_SendSelfHealth_Debug",
-  "lastMaxHealth": 51.0,
-  "event": "Client_SendSelfHealth_Debug",
-  "defaultMaxHealth": 65,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-  "time": 65.08948,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-}
-  "force": true,
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
 }
   "gameObjectActive": true
-  "currentHealth": 51.0,
-  "gameObjectActive": true
   "gameObjectName": "Character(Clone)",
-  "maxHealth": 51.0,
-  "gameObjectName": "Character(Clone)",
-  "autoInit": false,
-  "event": "Client_SendSelfHealth_Debug",
   "autoInit": false,
   "_currentHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-  "_currentHealth": 51.0,
   "lastMaxHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-  "lastMaxHealth": 51.0,
-  "defaultMaxHealth": 65,
-}
-  "defaultMaxHealth": 65,
-  "time": 65.08948,
-  "gameObjectActive": true
-  "time": 65.08948,
-  "force": true,
-  "gameObjectName": "Character(Clone)",
+  "defaultMaxHealth": 131,
+  "time": 59.1887665,
   "force": true,
   "currentHealth": 51.0,
-  "autoInit": false,
-  "currentHealth": 51.0,
-  "maxHealth": 51.0,
-  "_currentHealth": 51.0,
   "maxHealth": 51.0,
   "event": "Client_SendSelfHealth_Debug",
-  "lastMaxHealth": 51.0,
-  "event": "Client_SendSelfHealth_Debug",
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-  "defaultMaxHealth": 65,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-  "time": 65.08948,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-}
-  "force": true,
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
 }
   "gameObjectActive": true
-  "currentHealth": 51.0,
-  "gameObjectActive": true
   "gameObjectName": "Character(Clone)",
-  "maxHealth": 51.0,
-  "gameObjectName": "Character(Clone)",
-  "autoInit": false,
-  "event": "Client_SendSelfHealth_Debug",
   "autoInit": false,
   "_currentHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-  "_currentHealth": 51.0,
   "lastMaxHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-  "lastMaxHealth": 51.0,
-  "defaultMaxHealth": 65,
-}
-  "defaultMaxHealth": 65,
-  "time": 65.08948,
-  "gameObjectActive": true
-  "time": 65.08948,
-  "force": true,
-  "gameObjectName": "Character(Clone)",
+  "defaultMaxHealth": 131,
+  "time": 59.1387634,
   "force": true,
   "currentHealth": 51.0,
-  "autoInit": false,
-  "maxHealth": 51.0,
-  "currentHealth": 51.0,
-  "_currentHealth": 51.0,
   "maxHealth": 51.0,
   "event": "Client_SendSelfHealth_Debug",
-  "lastMaxHealth": 51.0,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-  "event": "Client_SendSelfHealth_Debug",
-  "defaultMaxHealth": 65,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-  "time": 65.08948,
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-}
-  "force": true,
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[17:23:10] [Info] [AsyncQueue] 统计 - 队列大小: 0, 已处理: 45, 已入队: 45, 模式: 批量
 }
   "gameObjectActive": true
-  "currentHealth": 51.0,
-  "gameObjectActive": true
-  "maxHealth": 51.0,
   "gameObjectName": "Character(Clone)",
   "autoInit": false,
-  "event": "Client_SendSelfHealth_Debug",
-  "gameObjectName": "Character(Clone)",
-  "_currentHealth": 51.0,
-  "autoInit": false,
-[23:48:42] [INFO] [HP_REPORT_DEBUG] {
-[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
   "_currentHealth": 51.0,
   "lastMaxHealth": 51.0,
-}
-  "lastMaxHealth": 51.0,
-  "defaultMaxHealth": 65,
-  "gameObjectActive": true
-  "defaultMaxHealth": 65,
-  "time": 65.08948,
-  "gameObjectName": "Character(Clone)",
-  "time": 65.08948,
+  "defaultMaxHealth": 131,
+  "time": 59.0720978,
   "force": true,
-  "autoInit": false,
-  "force": true,
-  "currentHealth": 51.0,
   "currentHealth": 51.0,
   "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 131,
+  "time": 59.0720978,
+  "force": true,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 131,
+  "time": 59.0221,
+  "force": true,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 131,
+  "time": 58.9721,
+  "force": true,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 131,
+  "time": 58.9721,
+  "force": true,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 131,
+  "time": 58.9721,
+  "force": true,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 131,
+  "time": 58.90543,
+  "force": true,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[17:23:10] [Info] [HP_REPORT_DEBUG] {
+[17:23:10] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
   "_currentHealth": 51.0,
   "lastMaxHealth": 51.0,

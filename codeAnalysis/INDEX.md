@@ -25,6 +25,7 @@
 | 📐 格式化总结 | 文档格式化结果 | [FORMATTING_SUMMARY.md](FORMATTING_SUMMARY.md) |
 | 🔎 审查总结 | 文档审查结果 | [DOCUMENTATION_REVIEW_SUMMARY.md](DOCUMENTATION_REVIEW_SUMMARY.md) |
 | ☑️ 审查清单 | 文档质量检查清单 | [REVIEW_CHECKLIST.md](REVIEW_CHECKLIST.md) |
+| 🚀 性能优化PR | 场景加载优化与UI增强 | [Performance_Optimization_PR.md](Performance_Optimization_PR.md) |
 
 ---
 

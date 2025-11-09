@@ -10,7 +10,6 @@ inclusion: always
 
 **在写总结之前必须编译项目！**
 
-
 ```bash
 dotnet build EscapeFromDuckovCoopMod.sln --configuration Release
 ```
@@ -18,6 +17,8 @@ dotnet build EscapeFromDuckovCoopMod.sln --configuration Release
 - ✅ 编译成功后才能写总结
 - ❌ 不允许在未编译的情况下声称"完成"
 - ⚠️ 如果有编译错误，必须先修复再总结
+
+**编译成功后的部署流程**: 参见 [Mod 部署流程文档](mod-deployment.md)
 
 ### 2. 诊断检查
 
@@ -104,10 +105,11 @@ Debug.Log(json);
 ### 测试方法
 
 1. 编译项目
-2. 启动游戏
-3. 按 `=` 键打开联机面板
-4. 点击 "调试信息" 按钮
-5. 查看 Unity 日志输出（`%AppData%\..\LocalLow\Duckov\Escape from Duckov\Player.log`）
+2. **部署 DLL** - 使用 API 上传或手动复制（详见 [Mod 部署流程](mod-deployment.md)）
+3. 启动游戏
+4. 按 `=` 键打开联机面板
+5. 点击 "调试信息" 按钮
+6. 查看 Unity 日志输出（`%AppData%\..\LocalLow\Duckov\Escape from Duckov\Player.log`）
 
 ## 最佳实践
 
@@ -154,8 +156,9 @@ Debug.Log(json);
 2. 运行 `getDiagnostics` 检查语法错误
 3. 运行 `dotnet build` 编译项目
 4. 确认编译成功（无错误）
-5. 更新相关文档（如 `客户端多余玩家问题分析.md`）
-6. 写总结
+5. **部署 DLL** - 参见 [Mod 部署流程](mod-deployment.md)
+6. 更新相关文档（如 `客户端多余玩家问题分析.md`）
+7. 写总结
 
 ## 示例：添加新的调试字段
 

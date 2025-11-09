@@ -2,6 +2,61 @@
 
 本文件记录了代码分析文档的所有重要更新和变更。
 
+## [1.1.0] - 2025-11-09
+
+### 新增 (Added)
+
+#### 性能优化PR文档
+- ✅ 新增 `Performance_Optimization_PR.md` - 性能优化与场景加载UI增强完整文档
+  - 异步消息队列系统（AsyncMessageQueue）
+  - 游戏对象缓存管理器（GameObjectCacheManager）
+  - 场景加载同步等待UI（WaitingSynchronizationUI）
+  - 场景初始化管理器（SceneInitManager）
+  - 战利品系统深度优化
+  - 性能提升数据统计
+
+#### UI模块增强
+- ✅ 更新 `Main/UI.md` - 添加 WaitingSynchronizationUI 详细文档
+  - Steam集成（头像加载、用户名获取）
+  - 任务追踪系统
+  - 地图和天气信息显示
+  - 视觉效果（淡出动画、旋转加载动画）
+  - 使用方式和集成示例
+  - 技术亮点和性能考虑
+
+#### 索引更新
+- ✅ 更新 `INDEX.md` - 添加性能优化PR文档索引
+
+### 技术亮点
+
+#### 异步消息队列
+- 批量模式：每帧处理 100 条消息（场景加载时）
+- 正常模式：每帧处理 30 条消息
+- 帧预算控制：批量模式 10ms/帧，正常模式 8ms/帧
+- 性能提升：客户端帧率从 10-20 FPS 提升至 50-60 FPS
+
+#### 缓存管理器
+- AI对象缓存（AI_PathControl, FSMOwner, Blackboard, NetAiTag）
+- 战利品缓存（InteractableLootbox）
+- 环境缓存（Door, SceneLoaderProxy, LootBoxLoader）
+- 可破坏物缓存（HealthSimpleBase + NetDestructibleTag）
+- 性能提升：减少 81% 的 FindObjectsOfType 调用
+
+#### 同步等待UI
+- Steam头像异步加载和缓存
+- 实时任务进度追踪
+- 地图和天气信息显示
+- 淡出动画效果
+- 自动完成检测
+
+### 性能数据
+
+- **客户端帧率**: 10-20 FPS → 50-60 FPS（提升 150-200%）
+- **FindObjectsOfType 调用**: 减少 81%
+- **网络广播**: 减少 70%
+- **场景加载时间**: 缩短 33%（45秒 → 30秒）
+- **主机CPU占用**: 降低 40-50%
+
 ## [1.0.0] - 2024-11-08
 
 ### 新增 (Added)
