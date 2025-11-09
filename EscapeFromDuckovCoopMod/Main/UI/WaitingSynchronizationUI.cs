@@ -304,7 +304,9 @@ public class WaitingSynchronizationUI : MonoBehaviour
             // 1. 绝对超时保护（30秒）
             if (elapsedTime > MAX_UI_DISPLAY_TIME)
             {
-                Debug.LogWarning($"[SYNC_UI] ⚠️ 超时保护触发！UI已显示 {elapsedTime:F1} 秒，强制关闭");
+                Debug.LogWarning(
+                    $"[SYNC_UI] ⚠️ 超时保护触发！UI已显示 {elapsedTime:F1} 秒，强制关闭"
+                );
                 ForceClose("超时保护");
                 return;
             }
@@ -364,21 +366,52 @@ public class WaitingSynchronizationUI : MonoBehaviour
                 _autoProgressPercent = percent;
                 _lastAutoProgressTime = Time.time;
                 Debug.Log($"[SYNC_UI] 启用自动进度增长，当前进度: {percent:F0}%");
+
+                // ✅ 启用无敌状态
+                EnableCharacterInvincibility();
             }
 
-            // ✅ 自动进度增长逻辑（每秒+1%）
+            // ✅ 自动进度增长逻辑（分阶段增长速率）
             if (_autoProgressEnabled)
             {
                 float timeSinceLastUpdate = Time.time - _lastAutoProgressTime;
                 if (timeSinceLastUpdate >= 1f)
                 {
-                    _autoProgressPercent += 1f;
+                    // 根据当前进度决定增长速率
+                    float increment;
+                    if (_autoProgressPercent < 80f)
+                    {
+                        increment = 1f; // 75%-80%: 每秒+1%
+                    }
+                    else if (_autoProgressPercent < 90f)
+                    {
+                        increment = 0.5f; // 80%-90%: 每秒+0.5%
+                    }
+                    else
+                    {
+                        increment = 0.1f; // 90%-100%: 每秒+0.1%
+                    }
+
+                    _autoProgressPercent += increment;
                     _lastAutoProgressTime = Time.time;
-                    Debug.Log($"[SYNC_UI] 自动进度增长: {_autoProgressPercent:F0}%");
                 }
 
                 // 使用自动进度（但不超过100%）
                 percent = Mathf.Min(_autoProgressPercent, 100f);
+
+                // ✅ 在99%之前保持无敌状态
+                if (percent < 99.8f)
+                {
+                    // 确保无敌状态持续启用
+                    if (
+                        _invincibilityTargetHealth != null
+                        && !_invincibilityTargetHealth.Invincible
+                    )
+                    {
+                        _invincibilityTargetHealth.SetInvincible(true);
+                        Debug.Log($"[SYNC_UI] 重新启用无敌状态 (进度: {percent:F0}%)");
+                    }
+                }
 
                 // ✅ 达到100%时立即关闭
                 if (percent >= 100f)
@@ -525,12 +558,14 @@ public class WaitingSynchronizationUI : MonoBehaviour
     /// </summary>
     private void CheckStuckTasks()
     {
-        if (_syncTasks.Count == 0) return;
+        if (_syncTasks.Count == 0)
+            return;
 
         bool anyTaskStuck = false;
         foreach (var kv in _syncTasks.ToList()) // 使用ToList避免修改集合异常
         {
-            if (kv.Value.IsCompleted) continue;
+            if (kv.Value.IsCompleted)
+                continue;
 
             // 检查任务是否长时间未更新
             if (_taskLastUpdateTime.TryGetValue(kv.Key, out float lastUpdate))
@@ -538,7 +573,9 @@ public class WaitingSynchronizationUI : MonoBehaviour
                 float timeSinceUpdate = Time.time - lastUpdate;
                 if (timeSinceUpdate > TASK_STUCK_TIMEOUT)
                 {
-                    Debug.LogWarning($"[SYNC_UI] ⚠️ 任务卡住检测：{kv.Value.Name} 已 {timeSinceUpdate:F1} 秒未更新，自动标记为完成");
+                    Debug.LogWarning(
+                        $"[SYNC_UI] ⚠️ 任务卡住检测：{kv.Value.Name} 已 {timeSinceUpdate:F1} 秒未更新，自动标记为完成"
+                    );
                     kv.Value.IsCompleted = true;
                     kv.Value.Details = "（超时自动完成）";
                     anyTaskStuck = true;
@@ -1539,7 +1576,7 @@ public class WaitingSynchronizationUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 解除角色无敌状态（恢复原始状态）
+    /// 解除角色无敌状态（恢复原始状态并回满HP）
     /// </summary>
     private void DisableCharacterInvincibility()
     {
@@ -1547,8 +1584,14 @@ public class WaitingSynchronizationUI : MonoBehaviour
         {
             if (_invincibilityTargetHealth != null && _originalInvincibleState != null)
             {
+                // 恢复无敌状态
                 _invincibilityTargetHealth.SetInvincible(_originalInvincibleState.Value);
                 Debug.Log($"[SYNC_UI] ✅ 已恢复角色无敌状态为: {_originalInvincibleState.Value}");
+
+                // ✅ 回满HP
+                float maxHealth = _invincibilityTargetHealth.MaxHealth;
+                _invincibilityTargetHealth.CurrentHealth = maxHealth;
+                Debug.Log($"[SYNC_UI] ✅ 已恢复角色HP为最大值: {maxHealth}");
             }
             else if (_invincibilityTargetHealth == null && _originalInvincibleState != null)
             {
