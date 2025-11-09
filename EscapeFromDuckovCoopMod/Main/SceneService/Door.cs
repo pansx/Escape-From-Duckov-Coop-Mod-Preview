@@ -15,6 +15,7 @@
 // GNU Affero General Public License for more details.
 
 using Object = UnityEngine.Object;
+using EscapeFromDuckovCoopMod.Net;  // 引入智能发送扩展方法
 
 namespace EscapeFromDuckovCoopMod;
 
@@ -48,32 +49,26 @@ public class Door
     public global::Door FindDoorByKey(int key)
     {
         if (key == 0) return null;
-        var doors = Object.FindObjectsOfType<global::Door>(true);
-        var fCache = AccessTools.Field(typeof(global::Door), "doorClosedDataKeyCached");
-        var mGetKey = AccessTools.Method(typeof(global::Door), "GetKey");
 
+        // ✅ 优化：优先使用缓存管理器查找
+        if (Utils.GameObjectCacheManager.Instance != null)
+        {
+            var cachedDoor = Utils.GameObjectCacheManager.Instance.Environment.FindDoorByKey(key);
+            if (cachedDoor) return cachedDoor;
+        }
+
+        // 兜底：全量扫描（直接使用 ComputeDoorKey 计算，避免访问私有字段）
+        var doors = Object.FindObjectsOfType<global::Door>(true);
         foreach (var d in doors)
         {
             if (!d) continue;
-            var k = 0;
-            try
-            {
-                k = (int)fCache.GetValue(d);
-            }
-            catch
-            {
-            }
 
-            if (k == 0)
-                try
-                {
-                    k = (int)mGetKey.Invoke(d, null);
-                }
-                catch
-                {
-                }
-
-            if (k == key) return d;
+            // 直接使用本地的 ComputeDoorKey 方法计算 key
+            var k = ComputeDoorKey(d.transform);
+            if (k == key)
+            {
+                return d;
+            }
         }
 
         return null;
@@ -103,7 +98,7 @@ public class Door
         w.Put((byte)Op.DOOR_REQ_SET);
         w.Put(key);
         w.Put(closed);
-        connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
+        connectedPeer.SendSmart(w, Op.DOOR_REQ_SET);
     }
 
     // 主机：处理客户端的设门请求
@@ -133,7 +128,7 @@ public class Door
         w.Put((byte)Op.DOOR_STATE);
         w.Put(key);
         w.Put(closed);
-        netManager.SendToAll(w, DeliveryMethod.ReliableOrdered);
+        netManager.SendSmart(w, Op.DOOR_STATE);
     }
 
     // 客户端：应用门状态（反射调用 SetClosed，确保 NavMeshCut/插值/存档一致）

@@ -18,6 +18,7 @@ using System.Reflection;
 using Duckov.UI;
 using ItemStatsSystem;
 using Object = UnityEngine.Object;
+using EscapeFromDuckovCoopMod.Net;  // 引入智能发送扩展方法
 
 namespace EscapeFromDuckovCoopMod;
 
@@ -320,7 +321,7 @@ public static class Patch_Inventory_NotifyContentChanged
         w.Reset();
         w.Put((byte)Op.ITEM_PICKUP_REQUEST);
         w.Put(id);
-        mod.connectedPeer?.Send(w, DeliveryMethod.ReliableOrdered);
+        mod.connectedPeer?.SendSmart(w, Op.ITEM_PICKUP_REQUEST);
     }
 
     private static void ServerDespawn(ModBehaviourF mod, uint id)
@@ -333,7 +334,7 @@ public static class Patch_Inventory_NotifyContentChanged
         w.Reset();
         w.Put((byte)Op.ITEM_DESPAWN);
         w.Put(id);
-        mod.netManager.SendToAll(w, DeliveryMethod.ReliableOrdered);
+        mod.netManager.SendSmart(w, Op.ITEM_DESPAWN);
     }
 
     private static void LocalDestroyAgent(Item it)
@@ -529,11 +530,55 @@ internal static class Patch_Inventory_AddAt_BroadcastOnServer
         var m = ModBehaviourF.Instance;
         if (m == null || !m.networkStarted || !m.IsServer) return;
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return;
-        if (!LootboxDetectUtil.IsLootboxInventory(__instance)) return;
 
-        if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
+        // ✅ 修复：场景切换时 LevelManager 可能正在初始化，跳过同步避免崩溃
+        try
+        {
+            if (LevelManager.Instance == null || LevelManager.LootBoxInventories == null)
+            {
+                return; // 场景初始化中，跳过
+            }
+        }
+        catch
+        {
+            return; // 访问 LootBoxInventories 失败，说明场景正在切换
+        }
 
-        COOPManager.LootNet.Server_SendLootboxState(null, __instance);
+        // ✅ 性能监控：记录检查耗时
+        var checkStartTime = Time.realtimeSinceStartup;
+        bool isLootbox = LootboxDetectUtil.IsLootboxInventory(__instance);
+        bool isPrivate = LootboxDetectUtil.IsPrivateInventory(__instance);
+        var checkDuration = (Time.realtimeSinceStartup - checkStartTime) * 1000f;
+
+        if (checkDuration > 1f) // 超过1ms记录
+        {
+            Debug.LogWarning($"[InventoryPatch] IsLootboxInventory 检查耗时: {checkDuration:F2}ms, isLootbox={isLootbox}, isPrivate={isPrivate}");
+        }
+
+        // ✅ 关键：排除私有库存和非箱子 Inventory（墓碑等）
+        if (!isLootbox || isPrivate)
+        {
+            return; // 墓碑、仓库、宠物包等不同步
+        }
+
+        // ✅ 优化：延迟到帧结束时执行，减少场景加载时的性能压力
+        DeferedRunner.EndOfFrame(() =>
+        {
+            // ✅ 二次检查：确保 Inventory 仍然有效且可同步
+            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance))
+            {
+                return;
+            }
+
+            var broadcastStartTime = Time.realtimeSinceStartup;
+            COOPManager.LootNet.Server_SendLootboxState(null, __instance);
+            var broadcastDuration = (Time.realtimeSinceStartup - broadcastStartTime) * 1000f;
+
+            if (broadcastDuration > 5f) // 超过5ms记录
+            {
+                Debug.LogWarning($"[InventoryPatch] 广播 LootboxState 耗时: {broadcastDuration:F2}ms");
+            }
+        });
     }
 }
 
@@ -547,14 +592,39 @@ internal static class Patch_Inventory_AddItem_BroadcastLootState
         if (m == null || !m.networkStarted || !m.IsServer) return;
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return;
 
+        // ✅ 修复：场景切换时 LevelManager 可能正在初始化，跳过同步避免崩溃
+        try
+        {
+            if (LevelManager.Instance == null || LevelManager.LootBoxInventories == null)
+            {
+                return; // 场景初始化中，跳过
+            }
+        }
+        catch
+        {
+            return; // 访问 LootBoxInventories 失败，说明场景正在切换
+        }
+
         if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
 
+        // ✅ 再次确认容器确实在 LootBoxInventories 中
+        try
+        {
+            var dict = InteractableLootbox.Inventories;
+            var isLootInv = dict != null && dict.ContainsValue(__instance);
+            if (!isLootInv) return;
+        }
+        catch
+        {
+            return; // 访问失败，跳过
+        }
 
-        var dict = InteractableLootbox.Inventories;
-        var isLootInv = dict != null && dict.ContainsValue(__instance);
-        if (!isLootInv) return;
-
-        COOPManager.LootNet.Server_SendLootboxState(null, __instance);
+        // ✅ 优化：延迟到帧结束时执行，减少场景加载时的性能压力
+        DeferedRunner.EndOfFrame(() =>
+        {
+            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
+            COOPManager.LootNet.Server_SendLootboxState(null, __instance);
+        });
     }
 }
 
@@ -570,16 +640,35 @@ internal static class Patch_Inventory_RemoveAt_BroadcastOnServer
         return AccessTools.Method(tInv, "RemoveAt", new[] { typeof(int), tItemByRef });
     }
 
-    // Postfix：当主机本地从“公共战利品容器”取出成功后，广播一次全量状态
+    // Postfix：当主机本地从"公共战利品容器"取出成功后，广播一次全量状态
     private static void Postfix(Inventory __instance, int position, Item __1, bool __result)
     {
         var m = ModBehaviourF.Instance;
         if (m == null || !m.networkStarted || !m.IsServer) return; // 仅主机
         if (!__result || COOPManager.LootNet._serverApplyingLoot) return; // 跳过失败/网络路径内部调用
+
+        // ✅ 修复：场景切换时 LevelManager 可能正在初始化，跳过同步避免崩溃
+        try
+        {
+            if (LevelManager.Instance == null || LevelManager.LootBoxInventories == null)
+            {
+                return; // 场景初始化中，跳过
+            }
+        }
+        catch
+        {
+            return; // 访问 LootBoxInventories 失败，说明场景正在切换
+        }
+
         if (!LootboxDetectUtil.IsLootboxInventory(__instance)) return; // 只处理战利品容器
         if (LootboxDetectUtil.IsPrivateInventory(__instance)) return; // 跳过玩家仓库/宠物包等私有库存
 
-        COOPManager.LootNet.Server_SendLootboxState(null, __instance); // 广播给所有客户端
+        // ✅ 优化：延迟到帧结束时执行，减少场景加载时的性能压力
+        DeferedRunner.EndOfFrame(() =>
+        {
+            if (!LootboxDetectUtil.IsLootboxInventory(__instance) || LootboxDetectUtil.IsPrivateInventory(__instance)) return;
+            COOPManager.LootNet.Server_SendLootboxState(null, __instance); // 广播给所有客户端
+        });
     }
 }
 

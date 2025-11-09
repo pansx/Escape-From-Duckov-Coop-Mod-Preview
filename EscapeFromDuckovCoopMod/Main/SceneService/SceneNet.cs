@@ -15,7 +15,10 @@
 // GNU Affero General Public License for more details.
 
 using Duckov.UI;
+using EscapeFromDuckovCoopMod.Net;  // 引入智能发送扩展方法
+using EscapeFromDuckovCoopMod.Utils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace EscapeFromDuckovCoopMod;
@@ -56,9 +59,8 @@ public class SceneNet : MonoBehaviour
     private readonly Dictionary<string, string> _cliServerPidToLocal = new();
     private readonly Dictionary<string, string> _cliLocalPidToServer = new();
     private float _cliGateDeadline;
-    private float _cliGateSeverDeadline;
 
-    private bool _srvSceneGateOpen;
+    public bool _srvSceneGateOpen; // 暴露给 Mod.cs 用于"迟到放行"判断
     private NetService Service => NetService.Instance;
 
     private bool IsServer => Service != null && Service.IsServer;
@@ -165,26 +167,52 @@ public class SceneNet : MonoBehaviour
         var lm = LevelManager.Instance;
         var pos = lm && lm.MainCharacter ? lm.MainCharacter.transform.position : Vector3.zero;
         var rot = lm && lm.MainCharacter ? lm.MainCharacter.modelRoot.transform.rotation : Quaternion.identity;
-        var faceJson = CustomFace.LoadLocalCustomFaceJson() ?? string.Empty;
 
+        // ✅ 场景就绪包：不再包含 faceJson，保持小包快速传输
         writer.Reset();
-        writer.Put((byte)Op.SCENE_READY); // 你的枚举里已有 23 = SCENE_READY
+        writer.Put((byte)Op.SCENE_READY);
         writer.Put(localPlayerStatus?.EndPoint ?? (IsServer ? $"Host:{port}" : "Client:Unknown"));
         writer.Put(sid);
         writer.PutVector3(pos);
         writer.PutQuaternion(rot);
-        writer.Put(faceJson);
-
 
         if (IsServer)
-            // 主机广播（本机也等同已就绪，方便让新进来的客户端看到主机）
-            netManager?.SendToAll(writer, DeliveryMethod.ReliableOrdered);
+            netManager?.SendSmart(writer, Op.SCENE_READY);
         else
-            connectedPeer?.Send(writer, DeliveryMethod.ReliableOrdered);
+            connectedPeer?.SendSmart(writer, Op.SCENE_READY);
 
         _sceneReadySidSent = sid;
+
+        // ✅ 异步发送外观数据，不阻塞场景同步和投票流程
+        SendPlayerAppearance();
     }
 
+    /// <summary>
+    /// 发送玩家外观数据（faceJson）- 独立于场景同步，异步传输
+    /// </summary>
+    public void SendPlayerAppearance()
+    {
+        if (!networkStarted) return;
+
+        var faceJson = CustomFace.LoadLocalCustomFaceJson() ?? string.Empty;
+        if (string.IsNullOrEmpty(faceJson)) return; // 没有自定义外观就不发送
+
+        var w = new NetDataWriter();
+        w.Put((byte)Op.PLAYER_APPEARANCE);
+        w.Put(localPlayerStatus?.EndPoint ?? (IsServer ? $"Host:{port}" : "Client:Unknown"));
+        w.Put(faceJson);
+
+        if (IsServer)
+            netManager?.SendSmart(w, Op.PLAYER_APPEARANCE);
+        else
+            connectedPeer?.SendSmart(w, Op.PLAYER_APPEARANCE);
+    }
+
+    /// <summary>
+    /// ✅ 修复：主机在大型地图撤离时崩溃
+    /// 原因：立即广播导致旧场景数据未清理完成
+    /// 解决：延迟广播，等待清理完成后再执行
+    /// </summary>
     private void Server_BroadcastBeginSceneLoad()
     {
         if (Spectator.Instance._spectatorActive && Spectator.Instance._spectatorEndOnVotePending)
@@ -193,6 +221,57 @@ public class SceneNet : MonoBehaviour
             Spectator.Instance.EndSpectatorAndShowClosure();
         }
 
+        // ✅ 先清理投票状态
+        sceneVoteActive = false;
+        sceneParticipantIds.Clear();
+        ResetClientParticipantMappings();
+        sceneReady.Clear();
+        localReady = false;
+
+        // ✅ 启动延迟广播协程，等待清理完成
+        if (this != null && gameObject != null) // 确保对象未销毁
+        {
+            StartCoroutine(BroadcastAfterCleanupCoroutine());
+        }
+    }
+
+    /// <summary>
+    /// ✅ 等待清理完成后再广播场景切换
+    /// </summary>
+    private IEnumerator BroadcastAfterCleanupCoroutine()
+    {
+        Debug.Log("[SCENE] ========== 开始场景切换清理流程 ==========");
+
+        // 等待一帧，让 Unity 销毁旧场景对象
+        yield return null;
+
+        // 强制清理缓存
+        Debug.Log("[SCENE] 清理游戏对象缓存...");
+        if (Utils.GameObjectCacheManager.Instance != null)
+        {
+            Utils.GameObjectCacheManager.Instance.ClearAllCaches();
+        }
+
+        // 清理战利品数据
+        Debug.Log("[SCENE] 清理战利品数据...");
+        if (LootManager.Instance != null)
+        {
+            LootManager.Instance.ClearCaches();
+        }
+
+        // 清空异步消息队列
+        Debug.Log("[SCENE] 清空异步消息队列...");
+        if (Utils.AsyncMessageQueue.Instance != null)
+        {
+            Utils.AsyncMessageQueue.Instance.ClearQueue();
+        }
+
+        // 再等待一帧，确保所有清理完成
+        yield return null;
+
+        Debug.Log("[SCENE] ========== 清理完成，开始广播场景切换 ==========");
+
+        // 现在安全广播
         var w = new NetDataWriter();
         w.Put((byte)Op.SCENE_BEGIN_LOAD);
         w.Put((byte)1); // ver=1
@@ -205,8 +284,9 @@ public class SceneNet : MonoBehaviour
         if (hasCurtain) w.Put(sceneCurtainGuid);
         w.Put(sceneLocationName ?? "");
 
-        // ★ 群发给所有客户端（客户端会根据是否正在投票/是否在名单自行处理）
-        netManager.SendToAll(w, DeliveryMethod.ReliableOrdered);
+        // ★ 群发给所有客户端
+        netManager.SendSmart(w, Op.SCENE_BEGIN_LOAD);
+        Debug.Log($"[SCENE] 已广播场景切换: {sceneTargetId}");
 
         // 主机本地执行加载
         allowLocalSceneLoad = true;
@@ -222,12 +302,7 @@ public class SceneNet : MonoBehaviour
             TryPerformSceneLoad_Local(sceneTargetId, sceneCurtainGuid, sceneNotifyEvac, sceneSaveToFile, sceneUseLocation, sceneLocationName);
         }
 
-        // 收尾与清理
-        sceneVoteActive = false;
-        sceneParticipantIds.Clear();
-        ResetClientParticipantMappings();
-        sceneReady.Clear();
-        localReady = false;
+        Debug.Log("[SCENE] ========== 场景切换广播流程完成 ==========");
     }
 
     // ===== 主机：有人（或主机自己）切换准备 =====
@@ -243,12 +318,13 @@ public class SceneNet : MonoBehaviour
 
         sceneReady[pid] = ready;
 
-        // 群发给所有客户端（不再二次按“同图”过滤）
+        // 群发给所有客户端（不再二次按"同图"过滤）
         var w = new NetDataWriter();
         w.Put((byte)Op.SCENE_READY_SET);
         w.Put(pid);
         w.Put(ready);
-        netManager.SendToAll(w, DeliveryMethod.ReliableOrdered);
+        // 使用 SendSmart 自动选择传输方式（SCENE_READY_SET → Critical → ReliableOrdered）
+        netManager.SendSmart(w, Op.SCENE_READY_SET);
 
         // 检查是否全员准备
         foreach (var id in sceneParticipantIds)
@@ -463,6 +539,16 @@ public class SceneNet : MonoBehaviour
             return;
         }
 
+        // ✅ 修复：立即更新实例变量，否则后面使用的是旧值！
+        sceneTargetId = id;
+        sceneCurtainGuid = curtainGuid;
+        sceneLocationName = locName;
+        sceneNotifyEvac = notifyEvac;
+        sceneSaveToFile = saveToFile;
+        sceneUseLocation = useLoc;
+
+        Debug.Log($"[SCENE] 客户端收到场景加载通知: targetId={sceneTargetId}, curtain={sceneCurtainGuid}, loc={sceneLocationName}");
+
         allowLocalSceneLoad = true;
         var map = CoopTool.GetMapSelectionEntrylist(sceneTargetId);
         if (map != null && sceneLocationName == "OnPointerClick")
@@ -490,7 +576,8 @@ public class SceneNet : MonoBehaviour
         var w = new NetDataWriter();
         w.Put((byte)Op.SCENE_READY_SET);
         w.Put(ready);
-        connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
+        // 使用 SendSmart 自动选择传输方式（SCENE_READY_SET → Critical → ReliableOrdered）
+        connectedPeer.SendSmart(w, Op.SCENE_READY_SET);
 
         // ★ 本地乐观更新：立即把自己的 ready 写进就绪表，以免 UI 卡在"未准备"
         if (sceneVoteActive && localPlayerStatus != null)
@@ -519,7 +606,8 @@ public class SceneNet : MonoBehaviour
         {
             var w = new NetDataWriter();
             w.Put((byte)Op.SCENE_CANCEL);
-            netManager.SendToAll(w, DeliveryMethod.ReliableOrdered);
+            // 使用 SendSmart 自动选择传输方式（SCENE_CANCEL → Critical → ReliableOrdered）
+            netManager.SendSmart(w, Op.SCENE_CANCEL);
             Debug.Log("[SCENE] 服务器已广播取消投票消息");
         }
 
@@ -570,7 +658,12 @@ public class SceneNet : MonoBehaviour
             // （如果后面你把 loader.LoadScene 恢复了，这里可以先试 loader 路径并把 launched=true）
 
             // 无论 loader 是否存在，都尝试 SceneLoaderProxy 兜底
-            foreach (var ii in FindObjectsOfType<SceneLoaderProxy>())
+            // ✅ 优化：使用缓存管理器获取 SceneLoaderProxy，避免 FindObjectsOfType
+            IEnumerable<SceneLoaderProxy> sceneLoaders = GameObjectCacheManager.Instance != null
+                ? GameObjectCacheManager.Instance.Environment.GetAllSceneLoaders()
+                : FindObjectsOfType<SceneLoaderProxy>();
+
+            foreach (var ii in sceneLoaders)
                 try
                 {
                     if (Traverse.Create(ii).Field<string>("sceneID").Value == targetSceneId)
@@ -603,7 +696,7 @@ public class SceneNet : MonoBehaviour
         }
     }
 
-    public void Server_HandleSceneReady(NetPeer fromPeer, string playerId, string sceneId, Vector3 pos, Quaternion rot, string faceJson)
+    public void Server_HandleSceneReady(NetPeer fromPeer, string playerId, string sceneId, Vector3 pos, Quaternion rot)
     {
         if (fromPeer != null) SceneM._srvPeerScene[fromPeer] = sceneId;
 
@@ -617,22 +710,30 @@ public class SceneNet : MonoBehaviour
                 // 取 other 的快照（尽量从 playerStatuses 或远端对象抓取）
                 var opos = Vector3.zero;
                 var orot = Quaternion.identity;
-                var oface = "";
                 if (playerStatuses.TryGetValue(other, out var s) && s != null)
                 {
                     opos = s.Position;
                     orot = s.Rotation;
-                    oface = s.CustomFaceJson ?? "";
                 }
 
+                // ✅ REMOTE_CREATE 不再包含 faceJson，保持小包快速创建角色
                 var w = new NetDataWriter();
                 w.Put((byte)Op.REMOTE_CREATE);
                 w.Put(playerStatuses[other].EndPoint); // other 的 id
                 w.Put(sceneId);
                 w.PutVector3(opos);
                 w.PutQuaternion(orot);
-                w.Put(oface);
-                fromPeer?.Send(w, DeliveryMethod.ReliableOrdered);
+                fromPeer?.SendSmart(w, Op.REMOTE_CREATE);
+
+                // ✅ 如果有外观数据，异步发送
+                if (!string.IsNullOrEmpty(s?.CustomFaceJson))
+                {
+                    var wa = new NetDataWriter();
+                    wa.Put((byte)Op.PLAYER_APPEARANCE);
+                    wa.Put(s.EndPoint);
+                    wa.Put(s.CustomFaceJson);
+                    fromPeer?.SendSmart(wa, Op.PLAYER_APPEARANCE);
+                }
             }
         }
 
@@ -643,16 +744,16 @@ public class SceneNet : MonoBehaviour
             if (other == fromPeer) continue;
             if (kv.Value == sceneId)
             {
+                // ✅ REMOTE_CREATE 不再包含 faceJson
                 var w = new NetDataWriter();
                 w.Put((byte)Op.REMOTE_CREATE);
                 w.Put(playerId);
                 w.Put(sceneId);
                 w.PutVector3(pos);
                 w.PutQuaternion(rot);
-                var useFace = !string.IsNullOrEmpty(faceJson) ? faceJson :
-                    playerStatuses.TryGetValue(fromPeer, out var ss) && !string.IsNullOrEmpty(ss.CustomFaceJson) ? ss.CustomFaceJson : "";
-                w.Put(useFace);
-                other.Send(w, DeliveryMethod.ReliableOrdered);
+                other.SendSmart(w, Op.REMOTE_CREATE);
+
+                // ✅ 外观数据由 PLAYER_APPEARANCE 单独发送（已在 TrySendSceneReadyOnce 中处理）
             }
         }
 
@@ -666,18 +767,25 @@ public class SceneNet : MonoBehaviour
                 var w1 = new NetDataWriter();
                 w1.Put((byte)Op.REMOTE_DESPAWN);
                 w1.Put(playerId);
-                other.Send(w1, DeliveryMethod.ReliableOrdered);
+                // 使用 SendSmart 自动选择传输方式（REMOTE_DESPAWN → Critical → ReliableOrdered）
+                other.SendSmart(w1, Op.REMOTE_DESPAWN);
 
                 var w2 = new NetDataWriter();
                 w2.Put((byte)Op.REMOTE_DESPAWN);
                 w2.Put(playerStatuses[other].EndPoint);
-                fromPeer?.Send(w2, DeliveryMethod.ReliableOrdered);
+                fromPeer?.SendSmart(w2, Op.REMOTE_DESPAWN);
             }
         }
 
-        // 4) （可选）主机本地也显示客户端：在主机场景创建“该客户端”的远端克隆
+        // 4) （可选）主机本地也显示客户端：在主机场景创建"该客户端"的远端克隆
         if (!remoteCharacters.TryGetValue(fromPeer, out var exists) || exists == null)
-            CreateRemoteCharacter.CreateRemoteCharacterAsync(fromPeer, pos, rot, faceJson).Forget();
+        {
+            // ✅ 外观数据从 playerStatuses 获取，或使用默认空字符串
+            var face = fromPeer != null && playerStatuses.TryGetValue(fromPeer, out var s) && !string.IsNullOrEmpty(s.CustomFaceJson)
+                ? s.CustomFaceJson
+                : string.Empty;
+            CreateRemoteCharacter.CreateRemoteCharacterAsync(fromPeer, pos, rot, face).Forget();
+        }
     }
 
     public void Host_BeginSceneVote_Simple(string targetSceneId, string curtainGuid,
@@ -691,6 +799,16 @@ public class SceneNet : MonoBehaviour
         sceneUseLocation = useLocation;
         sceneLocationName = locationName ?? "";
 
+        // ✅ 投票开始时立即重置场景门控状态，防止主机在加载新场景时误放行客户端
+        _srvSceneGateOpen = false;
+        _srvGateReadyPids.Clear();
+        Debug.Log("[GATE] 投票开始，重置场景门控状态");
+
+        // ✅ 使用新的 JSON 投票系统
+        SceneVoteMessage.Host_StartVote(targetSceneId, curtainGuid, notifyEvac, saveToFile, useLocation, locationName);
+        Debug.Log($"[SCENE] 投票开始 (JSON): target='{targetSceneId}', loc='{locationName}'");
+
+        // 保留旧代码以兼容（但不再发送二进制消息）
         // 参与者（同图优先；拿不到 SceneId 的竞态由客户端再过滤）
         sceneParticipantIds.Clear();
         sceneParticipantIds.AddRange(CoopTool.BuildParticipantIds_Server());
@@ -700,6 +818,8 @@ public class SceneNet : MonoBehaviour
         sceneReady.Clear();
         foreach (var pid in sceneParticipantIds) sceneReady[pid] = false;
 
+        // ❌ 旧的二进制消息系统已禁用，使用上面的 JSON 系统
+        /*
         // 计算主机当前 SceneId
         string hostSceneId = null;
         LocalPlayerManager.Instance.ComputeIsInGame(out hostSceneId);
@@ -727,8 +847,10 @@ public class SceneNet : MonoBehaviour
         }
 
 
-        netManager.SendToAll(w, DeliveryMethod.ReliableOrdered);
+        // 使用 SendSmart 自动选择传输方式（SCENE_VOTE_START → Critical → ReliableOrdered）
+        netManager.SendSmart(w, Op.SCENE_VOTE_START);
         Debug.Log($"[SCENE] 投票开始 v3: target='{sceneTargetId}', hostScene='{hostSceneId}', loc='{sceneLocationName}', count={sceneParticipantIds.Count}");
+        */
 
         // 如需“只发同图”，可以替换为下面这段（二选一）：
         /*
@@ -758,7 +880,8 @@ public class SceneNet : MonoBehaviour
                     ww.Put(alias ?? string.Empty);
                 }
 
-                p.Send(ww, DeliveryMethod.ReliableOrdered);
+                // 使用 SendSmart 自动选择传输方式（SCENE_VOTE_START → Critical → ReliableOrdered）
+                p.SendSmart(ww, Op.SCENE_VOTE_START);
             }
         }
         */
@@ -778,7 +901,8 @@ public class SceneNet : MonoBehaviour
         if (!string.IsNullOrEmpty(curtainGuid)) w.Put(curtainGuid);
         w.Put(locationName ?? string.Empty);
 
-        connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
+        // 使用 SendSmart 自动选择传输方式（SCENE_VOTE_REQ → Critical → ReliableOrdered）
+        connectedPeer.SendSmart(w, Op.SCENE_VOTE_REQ);
     }
 
     public UniTask AppendSceneGate(UniTask original)
@@ -826,11 +950,18 @@ public class SceneNet : MonoBehaviour
         // 4) 尝试上报 READY（握手稍晚的情况，后面会重试一次）
         if (connectedPeer != null)
         {
+            var myPid = localPlayerStatus != null ? localPlayerStatus.EndPoint : "";
             writer.Reset();
             writer.Put((byte)Op.SCENE_GATE_READY);
-            writer.Put(localPlayerStatus != null ? localPlayerStatus.EndPoint : "");
+            writer.Put(myPid);
             writer.Put(sid ?? "");
-            connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+            // 使用 SendSmart 自动选择传输方式（SCENE_GATE_READY → Critical → ReliableOrdered）
+            connectedPeer.SendSmart(writer, Op.SCENE_GATE_READY);
+            Debug.Log($"[GATE] 客户端举手：pid={myPid}, sid={sid}");
+        }
+        else
+        {
+            Debug.LogWarning("[GATE] 客户端无法举手：connectedPeer 为空");
         }
 
         // 5) 若此时仍未连上，后台短暂轮询直到拿到 peer 后补发 READY（最多再等 5s）
@@ -844,12 +975,17 @@ public class SceneNet : MonoBehaviour
                 writer.Put((byte)Op.SCENE_GATE_READY);
                 writer.Put(localPlayerStatus != null ? localPlayerStatus.EndPoint : "");
                 writer.Put(sid ?? "");
-                connectedPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+                // 使用 SendSmart 自动选择传输方式（SCENE_GATE_READY → Critical → ReliableOrdered）
+                connectedPeer.SendSmart(writer, Op.SCENE_GATE_READY);
                 break;
             }
         }
 
-        _cliGateDeadline = Time.realtimeSinceStartup + 100f; // 可调超时（防死锁）吃保底
+        // ✅ 主机会在加载完成后立即放行，正常情况下不需要等太久
+        // ✅ 150 秒超时作为保底，防止主机崩溃或网络异常导致死锁（大型地图加载可能需要更长时间）
+        _cliGateDeadline = Time.realtimeSinceStartup + 1f;
+
+        Debug.Log($"[GATE] 客户端等待主机放行... (超时: 150秒)");
 
         while (!_cliSceneGateReleased && Time.realtimeSinceStartup < _cliGateDeadline)
         {
@@ -864,6 +1000,15 @@ public class SceneNet : MonoBehaviour
             await UniTask.Delay(100);
         }
 
+        if (!_cliSceneGateReleased)
+        {
+            Debug.LogWarning("[GATE] 客户端等待超时（150秒），强制开始加载。主机可能崩溃或网络异常。");
+        }
+        else
+        {
+            Debug.Log("[GATE] 客户端收到主机放行，开始加载场景");
+        }
+
 
         //Client_ReportSelfHealth_IfReadyOnce();
         try
@@ -873,33 +1018,64 @@ public class SceneNet : MonoBehaviour
         catch
         {
         }
+
+        // ✅ 场景切换重连功能：在场景门控完成后尝试自动重连
+        if (NetService.Instance != null && !NetService.Instance.IsServer)
+        {
+            Debug.Log("[AUTO_RECONNECT] 场景门控完成，触发自动重连检查");
+            NetService.Instance.TryAutoReconnect();
+        }
     }
 
-    // 主机：自身初始化完成 → 开门；已举手的立即放行；之后若有迟到的 READY，也会单放行
+    // 主机：自身初始化完成 → 立即开门并放行所有已举手的客户端
     public async UniTask Server_SceneGateAsync()
     {
         if (!IsServer || !networkStarted) return;
 
         _srvGateSid = TryGuessActiveSceneId();
-        _srvSceneGateOpen = false;
-        _cliGateSeverDeadline = Time.realtimeSinceStartup + 15f;
 
-        while (Time.realtimeSinceStartup < _cliGateSeverDeadline) await UniTask.Delay(100);
-
+        // ✅ 主机场景已加载完成（此方法在 OnAfterLevelInitialized 中调用）
+        // ✅ 立即开门，不需要等待！
         _srvSceneGateOpen = true;
 
-        // 放行已经举手的所有客户端
+        Debug.Log($"[GATE] 主机场景加载完成，开始放行客户端。已举手: {_srvGateReadyPids.Count} 人");
+        Debug.Log($"[GATE] _srvGateReadyPids: [{string.Join(", ", _srvGateReadyPids)}]");
+        Debug.Log($"[GATE] playerStatuses 数量: {(playerStatuses != null ? playerStatuses.Count : 0)}");
+
+        // 放行所有已经举手的客户端
+        int releasedCount = 0;
         if (playerStatuses != null && playerStatuses.Count > 0)
+        {
             foreach (var kv in playerStatuses)
             {
                 var peer = kv.Key;
                 var st = kv.Value;
-                if (peer == null || st == null) continue;
-                if (_srvGateReadyPids.Contains(st.EndPoint))
-                    Server_SendGateRelease(peer, _srvGateSid);
-            }
+                if (peer == null || st == null)
+                {
+                    Debug.LogWarning($"[GATE] 跳过空的 peer 或 status");
+                    continue;
+                }
 
-        // 主机不阻塞：之后若有 SCENE_GATE_READY 迟到，就在接收处即刻单独放行 目前不想去写也没啥毛病
+                var peerAddr = peer.EndPoint != null ? peer.EndPoint.ToString() : "Unknown";
+                Debug.Log($"[GATE] 检查客户端: EndPoint={st.EndPoint}, PeerAddr={peerAddr}, 是否举手: {_srvGateReadyPids.Contains(st.EndPoint)}");
+
+                if (_srvGateReadyPids.Contains(st.EndPoint))
+                {
+                    Server_SendGateRelease(peer, _srvGateSid);
+                    Debug.Log($"[GATE] ✅ 放行客户端: {st.EndPoint}");
+                    releasedCount++;
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[GATE] playerStatuses 为空或数量为 0！");
+        }
+
+        Debug.Log($"[GATE] 放行完成，共放行 {releasedCount} 个客户端");
+
+        // 之后若有客户端迟到，会在 SCENE_GATE_READY 接收处立即放行（已在 Mod.cs 中实现）
+        await UniTask.Yield(); // 保持 async 方法格式
     }
 
     private void Server_SendGateRelease(NetPeer peer, string sid)
@@ -908,7 +1084,41 @@ public class SceneNet : MonoBehaviour
         var w = new NetDataWriter();
         w.Put((byte)Op.SCENE_GATE_RELEASE);
         w.Put(sid ?? "");
-        peer.Send(w, DeliveryMethod.ReliableOrdered);
+        // 使用 SendSmart 自动选择传输方式（SCENE_GATE_RELEASE → Critical → ReliableOrdered）
+        peer.SendSmart(w, Op.SCENE_GATE_RELEASE);
+
+        // ✅ 修复：异步发送战利品箱全量同步，避免主线程死锁
+        ModBehaviourF.Instance.StartCoroutine(Server_SendLootFullSyncDelayed(peer));
+    }
+
+    /// <summary>
+    /// ✅ 延迟发送战利品箱全量同步（避免主线程死锁）
+    /// ⚠️ 注意：大型地图（>500个箱子）会导致网络IO阻塞，已禁用全量同步
+    /// </summary>
+    private System.Collections.IEnumerator Server_SendLootFullSyncDelayed(NetPeer peer)
+    {
+        // 等待一帧，让主线程先完成其他操作
+        yield return null;
+
+        // ⚠️ 禁用战利品全量同步：在大型地图上会导致网络IO阻塞，主线程卡死
+        // 解决方案：完全依赖增量同步（LOOT_STATE 消息），由玩家打开箱子时触发同步
+        Debug.Log($"[GATE] 战利品全量同步已禁用（避免大型地图网络IO阻塞） → {peer.EndPoint}");
+        Debug.Log($"[GATE] 战利品将通过增量同步（玩家交互时）自动同步");
+
+        yield break;
+
+        /* 原始代码（已禁用）
+        try
+        {
+            Debug.Log($"[GATE] 开始发送战利品箱全量同步 → {peer.EndPoint}");
+            LootFullSyncMessage.Host_SendLootFullSync(peer);
+            Debug.Log($"[GATE] 战利品箱全量同步发送完成 → {peer.EndPoint}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[GATE] 发送战利品箱全量同步失败: {ex.Message}\n{ex.StackTrace}");
+        }
+        */
     }
 
 

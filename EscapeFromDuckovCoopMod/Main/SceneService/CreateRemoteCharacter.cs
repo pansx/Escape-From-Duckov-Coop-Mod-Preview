@@ -28,6 +28,11 @@ public static class CreateRemoteCharacter
     private static NetManager netManager => Service?.netManager;
     private static NetDataWriter writer => Service?.writer;
     private static NetPeer connectedPeer => Service?.connectedPeer;
+
+    // 日志频率限制
+    private static int _createRemoteLogCount = 0;
+    private static System.DateTime _lastCreateRemoteLogTime = System.DateTime.MinValue;
+    private const double CREATE_REMOTE_LOG_INTERVAL = 5.0;
     private static PlayerStatus localPlayerStatus => Service?.localPlayerStatus;
     private static bool networkStarted => Service != null && Service.networkStarted;
     private static Dictionary<NetPeer, GameObject> remoteCharacters => Service?.remoteCharacters;
@@ -42,13 +47,13 @@ public static class CreateRemoteCharacter
         if (levelManager == null || levelManager.MainCharacter == null) return null;
 
         var instance = GameObject.Instantiate(CharacterMainControl.Main.gameObject, position, rotation);
+        // ✅ 优化：复用组件引用，避免重复 GetComponent
         var characterModel = instance.GetComponent<CharacterMainControl>();
 
         //  cInventory = CharacterMainControl.Main.CharacterItem.Inventory;
         //  Traverse.Create(characterModel.CharacterItem).Field<Inventory>("inventory").Value = cInventory;
 
-        var cmc = instance.GetComponent<CharacterMainControl>();
-        COOPManager.StripAllHandItems(cmc);
+        COOPManager.StripAllHandItems(characterModel);
         var itemLoaded = await ItemSavesUtilities.LoadItem(LevelManager.MainCharacterItemSaveKey);
         if (itemLoaded == null)
         {
@@ -103,40 +108,59 @@ public static class CreateRemoteCharacter
 
         NetInterpUtil.Attach(instance)?.Push(position, rotation);
         AnimInterpUtil.Attach(instance); // 先挂上，样本由后续网络包填
-        cmc.gameObject.SetActive(false);
+        characterModel.gameObject.SetActive(false);
         remoteCharacters[peer] = instance;
-        cmc.gameObject.SetActive(true);
+        characterModel.gameObject.SetActive(true);
+
+        // 🕐 标记玩家已成功进入游戏，清除加入超时计时
+        Service.MarkPlayerJoinedSuccessfully(peer);
+
         return instance;
     }
 
     public static async UniTask CreateRemoteCharacterForClient(string playerId, Vector3 position, Quaternion rotation, string customFaceJson)
     {
-        if (NetService.Instance.IsSelfId(playerId)) return; // ★ 不给自己创建“远程自己”
+        if (NetService.Instance.IsSelfId(playerId)) return; // ★ 不给自己创建"远程自己"
         if (clientRemoteCharacters.ContainsKey(playerId) && clientRemoteCharacters[playerId] != null) return;
 
-        Debug.Log(playerId + " CreateRemoteCharacterForClient");
+        // 频率限制：避免刷屏
+        _createRemoteLogCount++;
+        var now = System.DateTime.Now;
+        if ((now - _lastCreateRemoteLogTime).TotalSeconds >= CREATE_REMOTE_LOG_INTERVAL)
+        {
+            if (_createRemoteLogCount > 1)
+            {
+                Debug.Log($"[CreateRemote] 创建了 {_createRemoteLogCount} 个远程角色 (最后: {playerId})");
+            }
+            else
+            {
+                Debug.Log($"[CreateRemote] {playerId} CreateRemoteCharacterForClient");
+            }
+            _createRemoteLogCount = 0;
+            _lastCreateRemoteLogTime = now;
+        }
 
         var levelManager = LevelManager.Instance;
         if (levelManager == null || levelManager.MainCharacter == null) return;
 
 
         var instance = GameObject.Instantiate(CharacterMainControl.Main.gameObject, position, rotation);
+        // ✅ 优化：复用组件引用，避免重复 GetComponent
         var characterModel = instance.GetComponent<CharacterMainControl>();
 
         var itemLoaded = await ItemSavesUtilities.LoadItem(LevelManager.MainCharacterItemSaveKey);
         if (itemLoaded == null) itemLoaded = await ItemAssetsCollection.InstantiateAsync(GameplayDataSettings.ItemAssets.DefaultCharacterItemTypeID);
         Traverse.Create(characterModel).Field<Item>("characterItem").Value = itemLoaded;
 
-        var cmc = instance.GetComponent<CharacterMainControl>();
-        COOPManager.StripAllHandItems(cmc);
+        COOPManager.StripAllHandItems(characterModel);
 
         instance.transform.SetPositionAndRotation(position, rotation);
 
-        var cmc0 = instance.GetComponentInChildren<CharacterMainControl>(true);
-        if (cmc0 && cmc0.modelRoot)
+        // ✅ 优化：复用 characterModel，GetComponentInChildren 在此场景下返回同一对象
+        if (characterModel && characterModel.modelRoot)
         {
             var e = rotation.eulerAngles;
-            cmc0.modelRoot.transform.rotation = Quaternion.Euler(0f, e.y, 0f);
+            characterModel.modelRoot.transform.rotation = Quaternion.Euler(0f, e.y, 0f);
         }
 
         MakeRemotePhysicsPassive(instance);
@@ -184,9 +208,9 @@ public static class CreateRemoteCharacter
 
         NetInterpUtil.Attach(instance)?.Push(position, rotation);
         AnimInterpUtil.Attach(instance);
-        cmc.gameObject.SetActive(false);
+        characterModel.gameObject.SetActive(false);
         clientRemoteCharacters[playerId] = instance;
-        cmc.gameObject.SetActive(true);
+        characterModel.gameObject.SetActive(true);
     }
 
     private static void MakeRemotePhysicsPassive(GameObject go)
