@@ -1,150 +1,200 @@
-[23:32:43] [INFO] ShowInventoryCount.PatchDestroyInventory
-[23:32:43] [INFO] ShowInventoryCount.PatchDestroyInventory
-[23:32:43] [INFO] ShowInventoryCount.PatchDestroyInventory
-[23:32:33] [INFO] [SceneVote] 客户端切换准备状态: True
-[23:32:33] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:33] [WARNING] [JsonMessage] 未连接到主机
-[23:32:33] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=True
-[23:32:33] [INFO] [SceneVote] 客户端切换准备状态: True
-[23:32:33] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:33] [INFO] [SceneVote] 客户端切换准备状态: True
-[23:32:33] [WARNING] [JsonMessage] 未连接到主机
-[23:32:33] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:33] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=True
-[23:32:33] [WARNING] [JsonMessage] 未连接到主机
-[23:32:33] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=True
-[23:32:32] [INFO] [SceneVote] 客户端切换准备状态: False
-[23:32:32] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:32] [WARNING] [JsonMessage] 未连接到主机
-[23:32:32] [INFO] [SceneVote] 客户端切换准备状态: False
-[23:32:32] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=False
-[23:32:32] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:32] [WARNING] [JsonMessage] 未连接到主机
-[23:32:32] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=False
-[23:32:32] [INFO] [SceneVote] 客户端切换准备状态: False
-[23:32:32] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:32] [WARNING] [JsonMessage] 未连接到主机
-[23:32:32] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=False
-[23:32:29] [INFO] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[23:32:29] [INFO] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[23:32:29] [INFO] 断开连接: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[23:32:29] [INFO] 断开连接: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[23:32:29] [INFO] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:64393
-[23:32:29] [INFO] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:64393
-[23:32:29] [INFO] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2
-[23:32:29] [INFO] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2
-[23:32:29] [INFO] [SceneVote] 识别到自己: Client(192.168.137.30:64393)
-[23:32:29] [INFO] [SceneVote] 识别到自己: Client(192.168.137.30:64393)
-[23:32:29] [INFO] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64393
-[23:32:29] [INFO] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64393
-[23:32:29] [INFO] [SceneVote] 添加参与者: Client(192.168.137.30:64393), IsSelfId=True
-[23:32:29] [INFO] [SceneVote] 添加参与者: Client(192.168.137.30:64393), IsSelfId=True
-[23:32:29] [INFO] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64393
-[23:32:29] [INFO] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64393
-[23:32:29] [INFO] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:64393', steamId='', ready=True
-[23:32:29] [INFO] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:64393', steamId='', ready=True
-[23:32:29] [INFO] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
-[23:32:29] [INFO] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
-[23:32:29] [INFO] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=True
-[23:32:29] [INFO] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=True
-[23:32:29] [INFO] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:64393)
-[23:32:29] [INFO] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:64393)
-[23:32:29] [INFO] [SceneVote] 客户端收到 JSON:
-[23:32:29] [INFO] [SceneVote] 客户端收到 JSON:
-[23:32:29] [INFO] [JsonRouter] 收到JSON消息，type=sceneVote
-[23:32:29] [INFO] [JsonRouter] 收到JSON消息，type=sceneVote
-[23:32:29] [INFO] [SceneVote] 客户端切换准备状态: True
-[23:32:29] [INFO] [SceneVote] 客户端切换准备状态: True
-[23:32:29] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:29] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:29] [INFO] [JSON] 发送到 192.168.123.1:9050
-[23:32:29] [INFO] [JSON] 发送到 192.168.123.1:9050
-[23:32:29] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=True
-[23:32:29] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] 断开连接: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:64393
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 识别到自己: Client(192.168.137.30:64393)
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64393
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 添加参与者: Client(192.168.137.30:64393), IsSelfId=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:64393
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:64393', steamId='', ready=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:64393)
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 客户端收到 JSON:
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [JsonRouter] 收到JSON消息，type=sceneVote
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 客户端切换准备状态: True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 本地乐观更新完成
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [JSON] 发送到 192.168.123.1:9050
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [SceneVote] 客户端发送准备状态切换: playerId=192.168.137.30:64393, ready=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
-[23:32:29] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+}
+  "gameObjectActive": true
+  "currentHealth": 51.0,
+  "gameObjectActive": true
+  "maxHealth": 51.0,
+  "gameObjectName": "Character(Clone)",
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "event": "Client_SendSelfHealth_Debug",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+  "_currentHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "lastMaxHealth": 51.0,
+  "lastMaxHealth": 51.0,
+}
+  "defaultMaxHealth": 65,
+  "defaultMaxHealth": 65,
+  "gameObjectActive": true
+  "time": 65.08948,
+  "time": 65.08948,
+  "gameObjectName": "Character(Clone)",
+  "force": true,
+  "force": true,
+  "currentHealth": 51.0,
+  "autoInit": false,
+  "currentHealth": 51.0,
+  "_currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "maxHealth": 51.0,
+  "lastMaxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+  "event": "Client_SendSelfHealth_Debug",
+  "defaultMaxHealth": 65,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+  "time": 65.08948,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "force": true,
+}
+}
+  "currentHealth": 51.0,
+  "gameObjectActive": true
+  "gameObjectActive": true
+  "maxHealth": 51.0,
+  "gameObjectName": "Character(Clone)",
+  "gameObjectName": "Character(Clone)",
+  "event": "Client_SendSelfHealth_Debug",
+  "autoInit": false,
+  "autoInit": false,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+  "_currentHealth": 51.0,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 65,
+}
+  "defaultMaxHealth": 65,
+  "time": 65.08948,
+  "time": 65.08948,
+  "gameObjectActive": true
+  "force": true,
+  "force": true,
+  "gameObjectName": "Character(Clone)",
+  "currentHealth": 51.0,
+  "currentHealth": 51.0,
+  "autoInit": false,
+  "maxHealth": 51.0,
+  "_currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+  "lastMaxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+  "defaultMaxHealth": 65,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "time": 65.08948,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "force": true,
+}
+  "gameObjectActive": true
+  "currentHealth": 51.0,
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "maxHealth": 51.0,
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "event": "Client_SendSelfHealth_Debug",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 65,
+}
+  "defaultMaxHealth": 65,
+  "time": 65.08948,
+  "gameObjectActive": true
+  "time": 65.08948,
+  "force": true,
+  "gameObjectName": "Character(Clone)",
+  "force": true,
+  "currentHealth": 51.0,
+  "autoInit": false,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "_currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+  "lastMaxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+  "defaultMaxHealth": 65,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "time": 65.08948,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "force": true,
+}
+  "gameObjectActive": true
+  "currentHealth": 51.0,
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "maxHealth": 51.0,
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "event": "Client_SendSelfHealth_Debug",
+  "autoInit": false,
+  "_currentHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 65,
+}
+  "defaultMaxHealth": 65,
+  "time": 65.08948,
+  "gameObjectActive": true
+  "time": 65.08948,
+  "force": true,
+  "gameObjectName": "Character(Clone)",
+  "force": true,
+  "currentHealth": 51.0,
+  "autoInit": false,
+  "maxHealth": 51.0,
+  "currentHealth": 51.0,
+  "_currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "event": "Client_SendSelfHealth_Debug",
+  "lastMaxHealth": 51.0,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+  "event": "Client_SendSelfHealth_Debug",
+  "defaultMaxHealth": 65,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "time": 65.08948,
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+}
+  "force": true,
+}
+  "gameObjectActive": true
+  "currentHealth": 51.0,
+  "gameObjectActive": true
+  "maxHealth": 51.0,
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "event": "Client_SendSelfHealth_Debug",
+  "gameObjectName": "Character(Clone)",
+  "_currentHealth": 51.0,
+  "autoInit": false,
+[23:48:42] [INFO] [HP_REPORT_DEBUG] {
+[23:48:42] [INFO] [HP_REPORT] max=51.0, cur=51.0, force=True
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,
+}
+  "lastMaxHealth": 51.0,
+  "defaultMaxHealth": 65,
+  "gameObjectActive": true
+  "defaultMaxHealth": 65,
+  "time": 65.08948,
+  "gameObjectName": "Character(Clone)",
+  "time": 65.08948,
+  "force": true,
+  "autoInit": false,
+  "force": true,
+  "currentHealth": 51.0,
+  "currentHealth": 51.0,
+  "maxHealth": 51.0,
+  "_currentHealth": 51.0,
+  "lastMaxHealth": 51.0,

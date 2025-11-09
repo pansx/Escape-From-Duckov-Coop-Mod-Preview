@@ -89,6 +89,43 @@ public class HealthM : MonoBehaviour
 
         // 🔍 JSON日志：血量上报（简化版，避免循环）
         Debug.Log($"[HP_REPORT] max={max:F1}, cur={cur:F1}, force={force}");
+        
+        // 🔍 详细调试：反射读取Health内部状态
+        try
+        {
+            var debugData = new Dictionary<string, object>
+            {
+                ["event"] = "Client_SendSelfHealth_Debug",
+                ["maxHealth"] = max,
+                ["currentHealth"] = cur,
+                ["force"] = force,
+                ["time"] = Time.time
+            };
+            
+            try
+            {
+                var defaultMax = HealthTool.FI_defaultMax?.GetValue(h);
+                var lastMax = HealthTool.FI_lastMax?.GetValue(h);
+                var _current = HealthTool.FI__current?.GetValue(h);
+                
+                debugData["defaultMaxHealth"] = defaultMax;
+                debugData["lastMaxHealth"] = lastMax;
+                debugData["_currentHealth"] = _current;
+                debugData["autoInit"] = h.autoInit;
+                debugData["gameObjectName"] = h.gameObject?.name ?? "null";
+                debugData["gameObjectActive"] = h.gameObject?.activeSelf ?? false;
+            }
+            catch (Exception e)
+            {
+                debugData["reflectionError"] = e.Message;
+            }
+            
+            Debug.Log($"[HP_REPORT_DEBUG] {Newtonsoft.Json.JsonConvert.SerializeObject(debugData, Newtonsoft.Json.Formatting.Indented)}");
+        }
+        catch
+        {
+            // 静默失败，避免影响正常流程
+        }
 
         var w = new NetDataWriter();
         w.Put((byte)Op.PLAYER_HEALTH_REPORT);

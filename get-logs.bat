@@ -10,7 +10,7 @@ echo.
 set "AUTH_TOKEN=Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImFkbWluIiwiaWF0IjoxNzYyNTQyMzQ0LCJleHAiOjE3NjI2Mjg3NDR9.I5jmhmr1GzkNXkwaHdAw4pmcvfTvdKDwhBfE8QF8I-6RO3NaSDAbx_qjT4aRDlfI"
 
 echo [1/4] 获取主机端日志 (clientId=1)...
-curl -s -X GET "http://127.0.0.1:8080/api/logs?clientId=1&page=0&size=150" ^
+curl -s -X GET "http://127.0.0.1:8080/api/logs?clientId=1&page=0&size=500" ^
   -H "Accept: application/json" ^
   -H "Authorization: %AUTH_TOKEN%" ^
   -H "Cache-Control: no-cache" ^
@@ -25,7 +25,7 @@ if %errorlevel% equ 0 (
 
 echo.
 echo [2/4] 获取客户端日志 (clientId=2)...
-curl -s -X GET "http://127.0.0.1:8080/api/logs?clientId=2&page=0&size=150" ^
+curl -s -X GET "http://127.0.0.1:8080/api/logs?clientId=2&page=0&size=500" ^
   -H "Accept: application/json" ^
   -H "Authorization: %AUTH_TOKEN%" ^
   -H "Cache-Control: no-cache" ^

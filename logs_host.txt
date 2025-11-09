@@ -1,150 +1,200 @@
-[23:32:44] [INFO] [LightLootBox] 当前场景没有找到可描边容器或玩家尚未找到
-[23:32:44] [INFO] [LightLootBox] 扫描完成，收集到 0 个可描边对象
-[23:32:44] [INFO] [LightLootBox] 当前场景无需加载
-[23:32:44] [INFO] [LightLootBox] 当前场景无需加载
-[23:32:40] [INFO] ShowInventoryCount.PatchDestroyInventory
-[23:32:35] [INFO] [MModUI] 玩家列表已更新，重建UI (当前: 1, 之前: 2)
-[23:32:35] [INFO] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.137.30:64393, 原因: DisconnectPeerCalled
-[23:32:35] [INFO] 断开连接: 192.168.137.30:64393, 原因: DisconnectPeerCalled
-[23:32:35] [INFO] [SCENE] Fallback via SceneLoaderProxy -> Level_GroundZero_Main
-[23:32:35] [WARNING] [SceneVote] 踢出玩家: Client(192.168.137.30:64393)
-[23:32:35] [WARNING] [SceneVote] 发现 1 个玩家缺少SteamID，开始踢出
-[23:32:35] [WARNING] [SceneVote] 玩家 Client(192.168.137.30:64393) 缺少SteamID，准备踢出
-[23:32:35] [INFO] [SceneVote] 全员准备，开始加载场景
-[23:32:35] [INFO] [SceneVote] 已广播更新的投票状态
-[23:32:35] [INFO] [JSON] 暴力发包 1 个客户端
-[23:32:35] [INFO] [SceneVote] 主机广播 JSON:
-[23:32:35] [INFO] [SceneVote] 已同步更新 SceneNet.sceneReady
-[23:32:35] [INFO] [SceneVote] 玩家 Client(192.168.137.30:64393) 准备状态: True
-[23:32:35] [INFO] [SceneVote] 解析成功: playerId=192.168.137.30:64393, ready=True
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
 }
-    "timestamp": "2025-11-08 23:32:29.463"
-    "ready": true,
-    "playerId": "192.168.137.30:64393",
-    "type": "sceneVoteReady",
-[23:32:35] [INFO] [SceneVote] 主机收到准备状态切换消息: {
-[23:32:35] [INFO] [JsonRouter] 收到JSON消息，type=sceneVoteReady
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.4021}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.388016}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
-[23:32:35] [INFO] [HP_RECEIVE] ✓ 应用血量到远程角色: 玩家=192.168.137.30:64393
-[23:32:35] [INFO] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64393","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":102.094131}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,
+  "time": 78.8823242,
+  "force": true,
+  "currentHealth": 131.0,
+  "maxHealth": 131.0,
+  "event": "Client_SendSelfHealth_Debug",
+[23:49:05] [INFO] [HP_REPORT_DEBUG] {
+[23:49:05] [INFO] [HP_REPORT] max=131.0, cur=131.0, force=True
+}
+  "gameObjectActive": true
+  "gameObjectName": "Character(Clone)",
+  "autoInit": false,
+  "_currentHealth": 131.0,
+  "lastMaxHealth": 131.0,
+  "defaultMaxHealth": 65,

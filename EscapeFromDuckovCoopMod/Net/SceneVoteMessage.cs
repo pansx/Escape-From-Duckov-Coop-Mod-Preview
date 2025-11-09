@@ -347,7 +347,7 @@ public static class SceneVoteMessage
         if (
             service != null
             && service.IsServer
-            && service.TransportMode == NetworkTransportMode.SteamP2P  // ⚠️ 只在Steam P2P模式下检查
+            && service.TransportMode == NetworkTransportMode.SteamP2P  // ✅ 只在 Steam P2P 传输模式下才检查
             && SteamManager.Initialized
             && _hostVoteState.playerList != null
             && _hostVoteState.playerList.items != null
@@ -407,10 +407,6 @@ public static class SceneVoteMessage
                     }
                 }
             }
-        }
-        else if (service != null && service.IsServer)
-        {
-            Debug.Log($"[SceneVote] 传输模式: {service.TransportMode}, 跳过SteamID检查");
         }
 
         // 调用原有的场景加载逻辑
