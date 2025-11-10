@@ -1,200 +1,200 @@
-[22:03:19] [INFO] ReturnBaseWithFullHunger unload
-[22:03:19] [INFO] [Duckov Recipe Recorded Indicator] Harmony Patches Removed Successfully
-[22:03:18] [INFO] [Duckov Recipe Recorded Indicator] Mod uninitialization complete.
-[22:03:18] [INFO] [Duckov Recipe Recorded Indicator] ModEntry.Uninitialize invoked successfully.
-[22:03:18] [INFO] [Duckov Recipe Recorded Indicator] [ModConfig_v1] 成功移除选项变更事件委托
-[22:03:18] [INFO] [Duckov Recipe Recorded Indicator] Uninitializing Mod...
-[22:03:18] [INFO] Harmony patches removed
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] OnDisable (L38): Mod 已禁用，配置已保存
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] Save (L192): 配置已保存: C:/Users/pansx/AppData/LocalLow/TeamSoda/Duckov\Saves\DuckSortConfig.json
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] OnDisable (L33): Harmony 补丁CustomSortButtons已卸载
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] Disable (L131): AddText 已禁用
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] Disable (L127): 销毁文本对象: 单价
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] Disable (L127): 销毁文本对象: 价重比
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] Disable (L127): 销毁文本对象: 重量
-[22:03:18] [INFO] [DuckSort v1.8.0] [22:03:18] [INFO] Disable (L127): 销毁文本对象: 价格
-[22:03:18] [INFO] [ModConfig_v1] 已移除配置变更事件
-[22:03:18] [INFO] [ShowDisassemblyInfo] Lazy initializing SourcesText...
-[22:03:18] [INFO] [ShowDisassemblyInfo] Lazy initializing OutputsText...
-[22:03:18] [INFO] [ShowDisassemblyInfo] OnDisable called. Unsubscribing from events...
-[22:03:18] [INFO] [com.kangyupl.ignorequestcond] 补丁已清理
-[22:03:18] [INFO] [com.kangyupl.ignorequestcond] 已禁用
-[22:03:18] [INFO] ModConfig Disabled
-[22:03:18] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:18] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:18] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:18] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:18] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:18] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:18] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:18] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:18] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:18] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:18] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:18] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:18] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:18] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:18] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:18.022"}
-[22:03:17] [Info] [SYNC_UI] ✅ 已恢复角色HP为最大值: 156
-[22:03:17] [Info] [SYNC_UI] ✅ 已恢复角色无敌状态为: False
-[22:03:17] [Info] [SYNC_UI] 🛡️ 无敌计时器结束（持续 30 秒），解除无敌状态
-[22:03:17] [INFO] [Death-Monitor] [22:03:17.649] SaveFile 完成，耗时: 23ms
-[22:03:17] [INFO] [Death-Monitor] [22:03:17.625] SaveFile 开始 (writeSaveTime=True)
-[22:03:17] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:17] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:17] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:17] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:17] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:17] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:17] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:17] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:17] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:17] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:17] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:17] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:17] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:17] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:17] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:17.024"}
-[22:03:15] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:15] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:15] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:15] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:15] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:15] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:15] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:15] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:15] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:15] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:15] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:15] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:15] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:15] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:15] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:15.928"}
-[22:03:14] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:14] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:14] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:14] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:14] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:14] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:14] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:14] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:14] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:14] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:14] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:14] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:14] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:14] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:14] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:14.918"}
-[22:03:14] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
-[22:03:13] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:13] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:13] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:13] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:13] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:13] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:13] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:13] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:13] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:13] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:13] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:13] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:13] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:13] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:13] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:13.913"}
-[22:03:12] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:12] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:12] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:12] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:12] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:12] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:12] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:12] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:12] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:12] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:12] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:12] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:12] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:12] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:12] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:12.909"}
-[22:03:12] [INFO] [Death-Monitor] [22:03:12.465] SaveFile 完成，耗时: 22ms
-[22:03:12] [INFO] [Death-Monitor] [22:03:12.442] SaveFile 开始 (writeSaveTime=True)
-[22:03:11] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:11] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:11] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:11] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:11] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:11] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:11] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:11] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:11] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:11] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:11] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:11] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:11] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:11] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:11] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:11.908"}
-[22:03:10] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:10] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:10] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:10] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:10] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:10] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:10] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:10] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:10] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:10] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:10] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:10] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:10] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:10] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:61501, displayName=CLIENT_ransx, displayId=76561198135351010
-[22:03:10] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
-[22:03:10] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:61501, steamName=ransx
-[22:03:10] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:10] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:61501, 投票数据玩家数=2
-[22:03:10] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:10] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:10] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:10] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
-[22:03:10] [Info] [SCENE] 投票开始 (JSON): target='Level_Farm_Main', loc='OnPointerClick'
-[22:03:10] [Info] [SceneVote] 主机发起投票: Level_Farm_Main, 参与者: 2
-[22:03:10] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:10] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61501","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:03:10.902"}
-[22:03:10] [Info] [SceneVote] ✓ 已同步更新 SceneNet 状态，参与者: 2
-[22:03:10] [Info] [SceneVote] 主机发起投票，voteId=2
-[22:03:10] [Info] [SceneVote] 主机构建玩家列表: Host(Host:9050), Client(192.168.137.30:61501)
-[22:03:10] [Info] [SceneVote] 从缓存获取 Steam 名字: 76561198135351010 -> ransx
-[22:03:10] [Info] [SceneVote] 从虚拟 IP 获取 SteamID: 192.168.137.30:61501 -> 76561198135351010
-[22:03:10] [Info] [SceneVote] 从虚拟 IP 获取 SteamID: 192.168.137.30:61501 -> 76561198135351010
-[22:03:10] [Info] [GATE] 投票开始，重置场景门控状态
-[22:03:07] [INFO] [Death-Monitor] [22:03:07.308] SaveFile 完成，耗时: 54ms
-[22:03:07] [INFO] [Death-Monitor] [22:03:07.252] SaveFile 开始 (writeSaveTime=True)
-[22:03:06] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:06] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:06] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:06] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:06] [Info] [MModUI] 房主取消了投票
-[22:03:06] [Info] [SceneTriggerResetter] 总共完成 55 项重置操作
-[22:03:06] [Info] [SceneTriggerResetter] 成功重置 50 个 InteractableBase 交互状态
-[22:03:06] [Info] [SceneTriggerResetter] 成功重置 MultiSceneTeleporter 传送冷却时间
-[22:03:06] [Info] [SceneTriggerResetter] 成功重置 4 个 OnTriggerEnterEvent 触发器
-[22:03:06] [Info] [SceneTriggerResetter] 成功初始化触发器重置工具
-[22:03:06] [Info] [SceneTriggerResetter] 在程序集 TeamSoda.Duckov.Core 中找到 InteractableBase 类型
-[22:03:06] [Info] [SceneTriggerResetter] 在程序集 TeamSoda.Duckov.Core 中找到 MultiSceneTeleporter 类型
-[22:03:06] [Info] [SceneTriggerResetter] 在程序集 TeamSoda.Duckov.Core 中找到 OnTriggerEnterEvent 类型
-[22:03:06] [Info] [SCENE] 服务器已广播取消投票消息（JSON + 二进制）
-[22:03:06] [Info] [SceneVote] 主机取消投票，voteId=1
-[22:03:06] [Info] [SCENE] 取消投票，重置场景触发器
-[22:03:06] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:06] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false}]},"totalPlayers":1,"readyPlayers":0,"timestamp":"2025-11-10 22:03:06.640"}
-[22:03:06] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:06] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
-[22:03:06] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
-[22:03:06] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=1
-[22:03:05] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:61501 <-> 76561198135351010
-[22:03:05] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
-[22:03:05] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:61501, SteamID=76561198135351010, SteamName=ransx, Name=Client
-[22:03:05] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
-[22:03:05] [Info] [JSON] 暴力发包 1 个客户端
-[22:03:05] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false}]},"totalPlayers":1,"readyPlayers":0,"timestamp":"2025-11-10 22:03:05.640"}
-[22:03:05] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
-[22:03:05] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:22] [INFO] [Death-Monitor] [22:10:22.895] SaveFile 完成，耗时: 23ms
+[22:10:22] [INFO] [Death-Monitor] [22:10:22.871] SaveFile 开始 (writeSaveTime=True)
+[22:10:22] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:22] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:22] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:22] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:22] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:22] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:22] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:22] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:22] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:22] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:22] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:22.596"}
+[22:10:21] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:21] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:21] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:21] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:21] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:21] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:21] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:21] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:21] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:21] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:21] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:21.586"}
+[22:10:20] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:20] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:20] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:20] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:20] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:20] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:20] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:20] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:20] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:20] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:20] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:20] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:20] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:20] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:20] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:20.579"}
+[22:10:19] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:19] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:19] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:19] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:19] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:19] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:19] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:19] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:19] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:19] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:19] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:19] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:19] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:19] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:19] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:19.575"}
+[22:10:18] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:18] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:18] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:18] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:18] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:18] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:18] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:18] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:18] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:18] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:18] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:18] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:18] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:18] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:18] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:18.569"}
+[22:10:17] [INFO] [Death-Monitor] [22:10:17.756] SaveFile 完成，耗时: 52ms
+[22:10:17] [INFO] [Death-Monitor] [22:10:17.704] SaveFile 开始 (writeSaveTime=True)
+[22:10:17] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:17] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:17] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:17] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:17] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:17] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:17] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:17] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:17] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:17] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:17] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:17] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:17] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:17] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:17] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:17.524"}
+[22:10:16] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:16] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:16] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:16] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:16] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:16] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:16] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:16] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:16] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:16] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:16] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:16] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:16] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:16] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:16] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:16.520"}
+[22:10:15] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:15] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:15] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:15] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:15] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:15] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:15] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:15] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:15] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:15] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:15] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:15] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:15] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:15] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:50908, displayName=CLIENT_ransx, displayId=76561198135351010
+[22:10:15] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[22:10:15] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:50908, steamName=ransx
+[22:10:15] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:15] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:50908, 投票数据玩家数=2
+[22:10:15] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[22:10:15] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[22:10:15] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[22:10:15] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[22:10:15] [Info] [SCENE] 投票开始 (JSON): target='Level_Farm_Main', loc='OnPointerClick'
+[22:10:15] [Info] [SceneVote] 主机发起投票: Level_Farm_Main, 参与者: 2
+[22:10:15] [Info] [JSON] 暴力发包 1 个客户端
+[22:10:15] [Info] [SceneVote] 主机广播 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:50908","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 22:10:15.522"}
+[22:10:15] [Info] [SceneVote] ✓ 已同步更新 SceneNet 状态，参与者: 2
+[22:10:15] [Info] [SceneVote] 主机发起投票，voteId=1
+[22:10:15] [Info] [SceneVote] 主机构建玩家列表: Host(Host:9050), Client(192.168.137.30:50908)
+[22:10:15] [Info] [SceneVote] 从缓存获取 Steam 名字: 76561198135351010 -> ransx
+[22:10:15] [Info] [SceneVote] 从虚拟 IP 获取 SteamID: 192.168.137.30:50908 -> 76561198135351010
+[22:10:15] [Info] [SceneVote] 从虚拟 IP 获取 SteamID: 192.168.137.30:50908 -> 76561198135351010
+[22:10:15] [Info] [GATE] 投票开始，重置场景门控状态
+[22:10:12] [INFO] [Death-Monitor] [22:10:12.597] SaveFile 完成，耗时: 52ms
+[22:10:12] [INFO] [Death-Monitor] [22:10:12.545] SaveFile 开始 (writeSaveTime=True)
+[22:10:09] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[22:10:08] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:08] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:08] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:08] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+}
+    "randomValue": 273
+    "timestamp": "2025-11-10 22:09:57",
+    "message": "Hello from Client",
+[22:10:08] [Warning] [JsonRouter] JSON消息缺少type字段: {
+[22:10:08] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:08] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:08] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:08] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:08] [Info] [JOIN_TIMEOUT] 玩家 192.168.137.30:50908 成功加入游戏，耗时: 0.02秒
+[22:10:08] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[22:10:08] [WARNING] Setting angular velocity of a kinematic body is not supported.
+[22:10:08] [WARNING] Setting linear velocity of a kinematic body is not supported.
+[22:10:08] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 1)
+[22:10:08] [Info] [JSON] 发送到 192.168.137.30:50908
+[22:10:08] [Info] [JOIN_TIMEOUT] 玩家 192.168.137.30:50908 开始加入，超时时限: 10秒
+[22:10:08] [Info] [SetId] 发送SetId给客户端: 192.168.137.30:50908
+[22:10:08] [Info] [JSON] 发送到 192.168.137.30:50908
+[22:10:08] [Info] 连接成功: 192.168.137.30:50908
+[22:10:08] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 1, 之前: 2)
+[22:10:08] [Info] [Patch_OnPeerDisconnected] ✓ 已清理映射
+[22:10:08] [Info] [SteamEndPointMapper] 移除映射: 76561198135351010 <-> 192.168.137.30:50908
+[22:10:08] [Info] [Patch_OnPeerDisconnected] 关闭Steam P2P会话: 76561198135351010
+[22:10:08] [Info] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.137.30:50908, 原因: RemoteConnectionClose
+[22:10:08] [Info] 断开连接: 192.168.137.30:50908, 原因: RemoteConnectionClose
+[22:10:08] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:50908 <-> 76561198135351010
+[22:10:08] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:10:08] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:50908, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:10:08] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+}
+    "randomValue": 841
+    "timestamp": "2025-11-10 22:09:57",
+    "message": "Hello from Client",
+[22:10:08] [Warning] [JsonRouter] JSON消息缺少type字段: {
+[22:10:08] [Warning] [JsonRouter] 找不到对应的peer: Client:6e7cda8d
+[22:10:08] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:10:08] [Info] [JOIN_TIMEOUT] 玩家 192.168.137.30:50908 成功加入游戏，耗时: 0.02秒
+[22:10:08] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[22:10:08] [WARNING] Setting angular velocity of a kinematic body is not supported.
+[22:10:08] [WARNING] Setting linear velocity of a kinematic body is not supported.
+[22:10:08] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 1)
+[22:10:08] [Info] [JSON] 发送到 192.168.137.30:50908
+[22:10:08] [Info] [JOIN_TIMEOUT] 玩家 192.168.137.30:50908 开始加入，超时时限: 10秒
+[22:10:08] [Info] [SetId] 发送SetId给客户端: 192.168.137.30:50908
+[22:10:08] [Info] [JSON] 发送到 192.168.137.30:50908
+[22:10:08] [Info] 连接成功: 192.168.137.30:50908
+[22:10:07] [INFO] [Death-Monitor] [22:10:07.443] SaveFile 完成，耗时: 28ms
+[22:10:07] [INFO] [Death-Monitor] [22:10:07.415] SaveFile 开始 (writeSaveTime=True)
+[22:10:02] [INFO] [Death-Monitor] [22:10:02.310] SaveFile 完成，耗时: 21ms
+[22:10:02] [INFO] [Death-Monitor] [22:10:02.288] SaveFile 开始 (writeSaveTime=True)
+[22:09:59] [Info] [SYNC_UI] 淡出完成，隐藏同步等待界面
+[22:09:58] [Info] [SYNC_UI] 开始淡出隐藏同步等待界面
+[22:09:57] [Info] [SYNC_UI] ✅ 所有任务完成，1秒后隐藏
+[22:09:57] [Info] [SYNC_UI] 任务状态更新: AI装备同步 - 完成 已发送 6 个AI
+[22:09:57] [Info] [AI-LOADOUT] 所有批次发送完成，共 6 个AI
+[22:09:57] [Info] [AI-LOADOUT] 已发送批次 3：2 个AI
+[22:09:57] [Info] [AI-SEND] ver=5 aiId=460317387 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:09:57] [Info] [AI-SEND] ver=5 aiId=477095006 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:09:57] [Info] [AI-LOADOUT] 已发送批次 2：2 个AI

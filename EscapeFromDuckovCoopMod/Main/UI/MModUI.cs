@@ -1164,35 +1164,37 @@ public class MModUI : MonoBehaviour
         string displayName = status.PlayerName;
         string displayId = status.EndPoint;
 
-        // ✅ 优先从投票数据中获取 Steam 信息
-        bool foundInVoteData = false;
-        if (SceneNet.Instance?.cachedVoteData?.playerList?.items != null)
+        if (isSteamMode)
         {
-            foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+            // ✅ 优先从投票数据中获取 Steam 信息
+            bool foundInVoteData = false;
+            if (SceneNet.Instance?.cachedVoteData?.playerList?.items != null)
             {
-                if (player.playerId == status.EndPoint && !string.IsNullOrEmpty(player.steamName))
+                foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
                 {
-                    bool isHost = player.playerId.StartsWith("Host:");
-                    string prefix = isHost ? "HOST" : "CLIENT";
-                    displayName = $"{prefix}_{player.steamName}";
-                    displayId = player.steamId;
-                    foundInVoteData = true;
-                    LoggerHelper.Log($"[MModUI] 玩家状态面板从投票数据获取名字: {displayName}");
-                    break;
+                    if (player.playerId == status.EndPoint && !string.IsNullOrEmpty(player.steamName))
+                    {
+                        bool isHostFromVote = player.playerId.StartsWith("Host:");
+                        string prefix = isHostFromVote ? "HOST" : "CLIENT";
+                        displayName = $"{prefix}_{player.steamName}";
+                        displayId = player.steamId;
+                        foundInVoteData = true;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (isSteamMode && !foundInVoteData)
-        {
-            // Steam模式：使用缓存获取Steam用户名和SteamID
-            string steamUsername = "Unknown";
-            ulong steamId = 0;
-            bool isHost = false;
-
-            try
+            // 如果投票数据中没有找到，使用原来的逻辑
+            if (!foundInVoteData)
             {
-                if (SteamManager.Initialized)
+                // Steam模式：使用缓存获取Steam用户名和SteamID
+                string steamUsername = "Unknown";
+                ulong steamId = 0;
+                bool isHost = false;
+
+                try
+                {
+                    if (SteamManager.Initialized)
                 {
                     if (isLocal)
                     {
@@ -1246,12 +1248,13 @@ public class MModUI : MonoBehaviour
                 steamUsername = $"Player_{(steamId > 0 ? steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4)) : "????")}";
             }
 
-            // 添加前缀（基于房间所有者判断，而不是本地IsServer状态）
-            string prefix = isHost ? "HOST" : "CLIENT";
-            displayName = $"{prefix}_{steamUsername}";
+                // 添加前缀（基于房间所有者判断，而不是本地IsServer状态）
+                string prefix = isHost ? "HOST" : "CLIENT";
+                displayName = $"{prefix}_{steamUsername}";
 
-            // Steam模式：显示完整SteamID
-            displayId = steamId > 0 ? steamId.ToString() : status.EndPoint;
+                // Steam模式：显示完整SteamID
+                displayId = steamId > 0 ? steamId.ToString() : status.EndPoint;
+            }
         }
 
         var nameText = CreateText("Name", headerRow.transform, displayName, 16, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
