@@ -17,6 +17,7 @@
 using Steamworks;
 using System.Net;
 using System.Net.Sockets;
+using EscapeFromDuckovCoopMod.Net;
 
 namespace EscapeFromDuckovCoopMod;
 
@@ -131,6 +132,8 @@ public class NetService : MonoBehaviour, INetEventListener
             status = CoopLocalization.Get("net.connectedTo", peer.EndPoint.ToString());
             isConnecting = false;
             Send_ClientStatus.Instance.SendClientStatusUpdate();
+
+            // 🆕 ClientStatus 将在 SetId 消息处理后发送，不在这里发送
 
             // ✅ 场景切换重连功能：仅在手动连接成功时缓存IP和端口
             if (isManualConnection && peer.EndPoint is IPEndPoint ipEndPoint)

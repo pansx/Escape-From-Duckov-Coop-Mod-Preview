@@ -89,7 +89,7 @@ public class HealthM : MonoBehaviour
         if (!force && Time.time < _cliNextSendHp) return;
 
         // 🔍 JSON日志：血量上报（简化版，避免循环）
-        LoggerHelper.Log($"[HP_REPORT] max={max:F1}, cur={cur:F1}, force={force}");
+        // LoggerHelper.Log($"[HP_REPORT] max={max:F1}, cur={cur:F1}, force={force}");
         
         // 🔍 详细调试：反射读取Health内部状态
         try
@@ -121,7 +121,7 @@ public class HealthM : MonoBehaviour
                 debugData["reflectionError"] = e.Message;
             }
             
-            LoggerHelper.Log($"[HP_REPORT_DEBUG] {Newtonsoft.Json.JsonConvert.SerializeObject(debugData, Newtonsoft.Json.Formatting.None)}");
+            // LoggerHelper.Log($"[HP_REPORT_DEBUG] {Newtonsoft.Json.JsonConvert.SerializeObject(debugData, Newtonsoft.Json.Formatting.None)}");
         }
         catch
         {

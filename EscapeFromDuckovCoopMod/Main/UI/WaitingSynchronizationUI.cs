@@ -59,6 +59,8 @@ public class WaitingSynchronizationUI : MonoBehaviour
     // 无敌状态管理
     private Health _invincibilityTargetHealth = null;
     private bool? _originalInvincibleState = null;
+    private Coroutine _invincibilityTimerCoroutine = null;
+    private const float INVINCIBILITY_DURATION = 30f; // 无敌持续时间（秒）
 
     public class SyncTaskStatus
     {
@@ -1314,8 +1316,8 @@ public class WaitingSynchronizationUI : MonoBehaviour
     /// </summary>
     public void Hide()
     {
-        // ✅ 强制解除角色无敌
-        DisableCharacterInvincibility();
+        // ✅ 启动无敌计时器（延迟解除无敌）
+        StartInvincibilityTimer();
 
         if (_panel != null && _panel.activeSelf)
         {
@@ -1341,8 +1343,8 @@ public class WaitingSynchronizationUI : MonoBehaviour
     /// </summary>
     public void Close()
     {
-        // ✅ 强制解除角色无敌
-        DisableCharacterInvincibility();
+        // ✅ 启动无敌计时器（延迟解除无敌）
+        StartInvincibilityTimer();
 
         // 停止淡出协程（如果有）
         if (_fadeOutCoroutine != null)
@@ -1604,6 +1606,98 @@ public class WaitingSynchronizationUI : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogError($"[SYNC_UI] 解除无敌失败: {ex.Message}\n{ex.StackTrace}");
+        }
+    }
+
+    /// <summary>
+    /// 启动无敌计时器（在Hide/Close时调用，延迟解除无敌）
+    /// </summary>
+    private void StartInvincibilityTimer()
+    {
+        // 停止之前的计时器（如果有）
+        if (_invincibilityTimerCoroutine != null)
+        {
+            StopCoroutine(_invincibilityTimerCoroutine);
+            _invincibilityTimerCoroutine = null;
+        }
+
+        // 启动新的计时器
+        _invincibilityTimerCoroutine = StartCoroutine(InvincibilityTimerCoroutine());
+    }
+
+    /// <summary>
+    /// 无敌计时器协程：每帧满血+无敌，持续指定时间后解除
+    /// </summary>
+    private IEnumerator InvincibilityTimerCoroutine()
+    {
+        float elapsed = 0f;
+
+        var character = CharacterMainControl.Main;
+        if (character == null)
+        {
+            Debug.LogWarning("[SYNC_UI] 无敌计时器：角色为空，提前结束");
+            _invincibilityTimerCoroutine = null;
+            yield break;
+        }
+
+        var health = character.Health;
+        if (health == null)
+        {
+            Debug.LogWarning("[SYNC_UI] 无敌计时器：Health组件为空，提前结束");
+            _invincibilityTimerCoroutine = null;
+            yield break;
+        }
+
+        // 确保无敌状态启用
+        if (!health.Invincible)
+        {
+            health.SetInvincible(true);
+        }
+
+        // 每帧满血+无敌，持续指定时间
+        while (elapsed < INVINCIBILITY_DURATION)
+        {
+            if (health == null)
+            {
+                Debug.LogWarning("[SYNC_UI] 无敌计时器：Health对象已失效，提前结束");
+                _invincibilityTimerCoroutine = null;
+                yield break;
+            }
+
+            try
+            {
+                // 每帧满血（不输出日志）
+                health.CurrentHealth = health.MaxHealth;
+
+                // 确保无敌状态保持启用
+                if (!health.Invincible)
+                {
+                    health.SetInvincible(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[SYNC_UI] 无敌计时器帧更新异常: {ex.Message}");
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 计时器结束，解除无敌
+        Debug.Log($"[SYNC_UI] 🛡️ 无敌计时器结束（持续 {INVINCIBILITY_DURATION} 秒），解除无敌状态");
+        
+        try
+        {
+            DisableCharacterInvincibility();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[SYNC_UI] 解除无敌异常: {ex.Message}\n{ex.StackTrace}");
+        }
+        finally
+        {
+            _invincibilityTimerCoroutine = null;
         }
     }
 }
