@@ -1105,8 +1105,8 @@ public class WaitingSynchronizationUI : MonoBehaviour
         horizontalLayout.childForceExpandHeight = false;
         horizontalLayout.childForceExpandWidth = false;
 
-        // ✅ Steam P2P 模式下获取 Steam 用户名
-        string displayName = playerName;
+        // ✅ 优先从投票数据中获取 Steam 名字
+        string displayName = GetSteamNameFromVoteData(playerEndPoint) ?? playerName;
         ulong steamId = 0;
         bool isSteamMode = NetService.Instance?.TransportMode == NetworkTransportMode.SteamP2P;
 
@@ -1698,6 +1698,44 @@ public class WaitingSynchronizationUI : MonoBehaviour
         finally
         {
             _invincibilityTimerCoroutine = null;
+        }
+    }
+
+    /// <summary>
+    /// 从投票数据中获取指定 EndPoint 的 Steam 名字
+    /// </summary>
+    private string GetSteamNameFromVoteData(string endPoint)
+    {
+        try
+        {
+            // 获取缓存的投票数据
+            var cachedVoteData = SceneNet.Instance?.cachedVoteData;
+            if (cachedVoteData?.playerList?.items == null)
+            {
+                return null;
+            }
+
+            // 查找匹配的玩家
+            foreach (var player in cachedVoteData.playerList.items)
+            {
+                if (player.playerId == endPoint && !string.IsNullOrEmpty(player.steamName))
+                {
+                    // 判断是否是主机
+                    bool isHost = player.playerId.StartsWith("Host:");
+                    string prefix = isHost ? "HOST" : "CLIENT";
+                    string displayName = $"{prefix}_{player.steamName}";
+                    Debug.Log($"[SYNC_UI] 从投票数据获取 Steam 名字: {endPoint} -> {displayName}");
+                    return displayName;
+                }
+            }
+
+            Debug.Log($"[SYNC_UI] 投票数据中未找到 {endPoint} 的 Steam 名字");
+            return null;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[SYNC_UI] 获取投票数据 Steam 名字失败: {ex.Message}");
+            return null;
         }
     }
 }
