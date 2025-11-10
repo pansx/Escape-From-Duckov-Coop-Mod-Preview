@@ -182,3 +182,4 @@ internal static class PreventClientEnsureSelfDeathEventPatch
         return true; // 允许其他情况正常执行
     }
 }
+

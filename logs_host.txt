@@ -1,200 +1,200 @@
-[17:23:40] [INFO] [ModConfig_v1] 已移除配置变更事件
-[17:23:40] [INFO] hifumi Log: OnDisable!
-[17:23:40] [INFO] ModConfig Disabled
-[17:23:39] [Info] [SYNC_UI] 任务状态更新: AI种子同步 - 完成 已发送 48 条
-[17:23:39] [Info] [AI-SEED] 所有批次发送完成，共 48 条
-[17:23:39] [Info] [AI-SEED] 已发送批次 10：3 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 9：5 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 8：5 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 7：5 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 6：5 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 5：5 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 4：5 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 3：5 条数据
-[17:23:39] [Info] [AI-SEED] 已发送批次 2：5 条数据
-[17:23:39] [Info] [SYNC_UI] 任务状态更新: 可破坏物扫描 - 完成 发现 0 个已破坏物体
-[17:23:39] [Info] [Destructible] 扫描完成，共处理 79 个物体，用时 3 帧，发现 0 个已破坏物体
-[17:23:39] [Info] [AI-SEED] 已发送批次 1：5 条数据
-[17:23:39] [Info] [AI-SEED] 种子计算完成，开始分批发送 48 条映射，每批 5 条
-[17:23:39] [Info] [SYNC_UI] 任务状态更新: AI种子同步 - 进行中 计算中...
-[17:23:39] [Info] [AI-SEED] 找到 24 个 AI Root，准备在后台线程计算种子...
-[17:23:39] [Info] [AICache] 刷新 CharacterSpawnerRoot 缓存，找到 24 个
-[17:23:39] [Info] [Destructible] 开始扫描 79 个可破坏物，每帧处理 20 个
-[17:23:38] [Info] [SYNC_UI] 任务状态更新: 可破坏物扫描 - 完成 发现 0 个已破坏物体
-[17:23:38] [Info] [Destructible] 扫描完成，共处理 79 个物体，用时 3 帧，发现 0 个已破坏物体
-[17:23:38] [Info] [Destructible] 开始扫描 79 个可破坏物，每帧处理 20 个
-[17:23:37] [Info] [GATE] 放行完成，共放行 0 个客户端
-[17:23:37] [Info] [GATE] 检查客户端: EndPoint=192.168.137.30:64003, PeerAddr=192.168.137.30:64003, 是否举手: False
-[17:23:37] [Info] [GATE] playerStatuses 数量: 1
-[17:23:37] [Info] [GATE] _srvGateReadyPids: []
-[17:23:37] [Info] [GATE] 主机场景加载完成，开始放行客户端。已举手: 0 人
-[17:23:37] [INFO] [Level Initialization] Done!
-[17:23:37] [INFO] [Level Initialization] Setting character position...
-[17:23:37] [INFO] [Level Initialization] Creating map element...
-[17:23:37] [INFO] [Level Initialization] Spawing exits...
-[17:23:37] [INFO] [Level Initialization] Healing...
-[17:23:37] [Info] [SYNC_UI] 注册任务: AI名称初始化
-[17:23:37] [Info] [SYNC_UI] 注册任务: 可破坏物扫描
-[17:23:37] [Info] [SYNC_UI] 注册任务: AI装备同步
-[17:23:37] [Info] [SYNC_UI] 注册任务: AI种子同步
-[17:23:37] [Info] [MOD] 注册同步任务
-[17:23:37] [Info] [LootManager] 缓存已清理
-[17:23:37] [Info] [CacheManager] 所有缓存已刷新
-[17:23:37] [Info] [LootCache] 刷新缓存，找到 758 个战利品箱，映射 757 个 Inventory
-[17:23:37] [Info] [EnvironmentCache] 刷新缓存：757 个 LootBoxLoader, 252 个 Door, 1 个 SceneLoaderProxy
-[17:23:37] [Info] [DestructibleCache] 刷新缓存，找到 79 个可破坏物
-[17:23:37] [Info] [SYNC_UI] 更新玩家列表完成，共 2 名玩家
-[17:23:37] [Info] [SYNC_UI] 直连模式，使用默认头像
-[17:23:37] [Info] [SYNC_UI] 直连模式，使用默认头像
-[17:23:37] [Info] [SYNC_UI] 显示同步等待界面完成
-[17:23:37] [Info] [SYNC_UI] ✅ 已启用角色无敌
-[17:23:37] [Info] [SYNC_UI] 保存原始无敌状态: False
-[17:23:37] [Info] [SYNC_UI] Panel已激活
-[17:23:37] [Info] [SYNC_UI] Canvas已启用，sortingOrder=9999
-[17:23:37] [Info] [SYNC_UI] Show() 被调用，_panel=存在, _canvas=存在
-[17:23:37] [Info] [MOD] 找到同步UI实例，开始显示
-[17:23:37] [Info] [MOD] LevelManager_OnLevelInitialized 开始，准备显示同步UI
-[17:23:37] [INFO] [Level Initialization] Invoking initialized event...
-[17:23:37] [INFO] [Level Initialization] Handling raid initialization...
-[17:23:37] [INFO] [Level Initialization] Waiting for other initialization...
-[17:23:37] [INFO] [Level Initialization] Setting character items...
-[17:23:37] [INFO] [Level Initialization] Setting up pet...
-[17:23:37] [INFO] [Level Initialization] Setting up character status...
-[17:23:37] [INFO] [Level Initialization] Spawning bodies
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Reach location task caching
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Reach location task caching
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Reach location task caching
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning prefabs for task
-[17:23:37] [INFO] [Level Initialization] Spawning item for task
-[17:23:37] [INFO] [Level Initialization] Hearing Buses
-[17:23:37] [INFO] [Level Initialization] Hearing Ambient
-[17:23:37] [INFO] [Level Initialization] Opening ears
-[17:23:36] [Info] [LootManager] 刷新缓存完成，找到 757 个战利品箱
-[17:23:36] [Info] [LootCache] 刷新缓存，找到 758 个战利品箱，映射 757 个 Inventory
-[17:23:36] [INFO] 存在门存档信息：True
-[17:23:36] [INFO] 存在门存档信息：True
-[17:23:36] [INFO] 存在门存档信息：True
-[17:23:33] [INFO] [Level Initialization] Teleporting to location...
-[17:23:33] [INFO] [Level Initialization] Creating character at location...
-[17:23:33] [INFO] [Level Initialization] Setting start position...
-[17:23:33] [INFO] [Level Initialization] Creating location info...
-[17:23:33] [INFO] [Level Initialization] Getting location...
-[17:23:33] [INFO] Rule is:均衡,Recoil:1
-[17:23:33] [INFO] [Level Initialization] Setting up rule...
-[17:23:33] [INFO] [Level Initialization] Invoking Beginning Event...
-[17:23:33] [INFO] [Level Initialization] Starting up...
-[17:23:33] [Info] [LootManager] 刷新缓存完成，找到 1 个战利品箱
-[17:23:33] [Info] [LootCache] 刷新缓存，找到 1 个战利品箱，映射 1 个 Inventory
-[17:23:33] [INFO] tree data is empty
-[17:23:27] [Info] [LootManager] 清理完成：移除 0 个过期静音记录，6 个失效缓存
-[17:23:26] [Info] [CacheManager] 定期清理完成，移除 28 个无效引用
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
-[17:23:24] [Info] [HP_RECEIVE] {"event":"Server_ReceiveHealthReport","playerId":"192.168.137.30:64003","maxHealth":51.0,"currentHealth":51.0,"hasRemoteCharacter":true,"time":48.6767731}
-[17:23:24] [Warning] [HP_RECEIVE] ⚠️ 远程角色未创建，缓存血量: 玩家=192.168.137.30:64003
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True

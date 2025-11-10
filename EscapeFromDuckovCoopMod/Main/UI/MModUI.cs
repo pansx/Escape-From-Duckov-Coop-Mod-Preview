@@ -18,15 +18,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EscapeFromDuckovCoopMod.Utils.Logger.Tools;
-using LeTai.Asset.TranslucentImage;
-using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using LeTai.Asset.TranslucentImage;
+using Steamworks;
 using static BakeryLightmapGroup;
 using RenderMode = UnityEngine.RenderMode;
+using EscapeFromDuckovCoopMod.Utils.Logger.Tools;
 
 namespace EscapeFromDuckovCoopMod;
 
@@ -44,13 +44,13 @@ public class MModUI : MonoBehaviour
 
     public bool showUI = true;
     public bool showPlayerStatusWindow;
-    public KeyCode toggleUIKey = KeyCode.Equals; // = 键
+    public KeyCode toggleUIKey = KeyCode.Equals;  // = 键
     public KeyCode togglePlayerStatusKey = KeyCode.P;
     public readonly KeyCode readyKey = KeyCode.J;
 
     // 🛡️ 日志频率限制
     private static int _noSteamIdWarningCount = 0;
-    private const int NO_STEAMID_WARNING_INTERVAL = 300; // 每300次只警告1次
+    private const int NO_STEAMID_WARNING_INTERVAL = 300;  // 每300次只警告1次
 
     private readonly List<string> _hostList = new();
     private readonly HashSet<string> _hostSet = new();
@@ -61,17 +61,18 @@ public class MModUI : MonoBehaviour
 
     private readonly Dictionary<string, GameObject> _hostEntries = new();
     private readonly Dictionary<string, GameObject> _playerEntries = new();
-    private readonly HashSet<string> _displayedPlayerIds = new(); // 缓存已显示的玩家ID
-    private readonly Dictionary<string, TMP_Text> _playerPingTexts = new(); // 保存玩家延迟文本引用，用于实时更新
+    private readonly HashSet<string> _displayedPlayerIds = new();  // 缓存已显示的玩家ID
+    private readonly Dictionary<string, TMP_Text> _playerPingTexts = new();  // 保存玩家延迟文本引用，用于实时更新
 
     // Steam相关字段
     private readonly List<SteamLobbyManager.LobbyInfo> _steamLobbyInfos = new();
-    private readonly HashSet<ulong> _displayedSteamLobbies = new(); // 缓存已显示的房间ID
+    private readonly HashSet<ulong> _displayedSteamLobbies = new();  // 缓存已显示的房间ID
     private string _steamLobbyName = string.Empty;
     private string _steamLobbyPassword = string.Empty;
     private bool _steamLobbyFriendsOnly;
     private int _steamLobbyMaxPlayers = 2;
     private string _steamJoinPassword = string.Empty;
+
 
     // 投票面板状态缓存
     private bool _lastVoteActive = false;
@@ -79,48 +80,54 @@ public class MModUI : MonoBehaviour
     private bool _lastLocalReady = false;
     private readonly HashSet<string> _lastVoteParticipants = new();
     private float _lastVoteUpdateTime = 0f;
-    private float _lastPlayerListUpdateTime = 0f; // 玩家列表最后更新时间（用于 Steam 模式定期刷新）
+    private float _lastPlayerListUpdateTime = 0f;  // 玩家列表最后更新时间（用于 Steam 模式定期刷新）
 
     // 现代化UI颜色方案 - 深色模式
     public static class ModernColors
     {
         // 🌈 主题主色（浅绿色主调）
-        public static readonly Color Primary = new Color(0.30f, 0.69f, 0.31f, 1f); // #4CAF50 (浅绿色)
+        public static readonly Color Primary = new Color(0.30f, 0.69f, 0.31f, 1f);      // #4CAF50 (浅绿色)
         public static readonly Color PrimaryHover = new Color(0.26f, 0.60f, 0.27f, 1f); // #439946
         public static readonly Color PrimaryActive = new Color(0.22f, 0.52f, 0.23f, 1f); // #38853B
 
         // ✨ 按钮文字色
-        public static readonly Color PrimaryText = new Color(1f, 1f, 1f, 0.95f); // 亮白文字 #FFFFFF
+        public static readonly Color PrimaryText = new Color(1f, 1f, 1f, 0.95f);        // 亮白文字 #FFFFFF
 
         // 🧱 背景层次（更柔和的深灰）
-        public static readonly Color BgDark = new Color(0.23f, 0.23f, 0.23f, 1f); // #3A3A3A
-        public static readonly Color BgMedium = new Color(0.27f, 0.27f, 0.27f, 1f); // #454545
-        public static readonly Color BgLight = new Color(0.32f, 0.32f, 0.32f, 1f); // #525252
+        public static readonly Color BgDark = new Color(0.23f, 0.23f, 0.23f, 1f);       // #3A3A3A
+        public static readonly Color BgMedium = new Color(0.27f, 0.27f, 0.27f, 1f);     // #454545
+        public static readonly Color BgLight = new Color(0.32f, 0.32f, 0.32f, 1f);      // #525252
 
         // ✍️ 文字色（白色层次）
-        public static readonly Color TextPrimary = new Color(1f, 1f, 1f, 0.95f); // 主文字
-        public static readonly Color TextSecondary = new Color(1f, 1f, 1f, 0.75f); // 次文字
-        public static readonly Color TextTertiary = new Color(1f, 1f, 1f, 0.55f); // 辅助文字
+        public static readonly Color TextPrimary = new Color(1f, 1f, 1f, 0.95f);        // 主文字
+        public static readonly Color TextSecondary = new Color(1f, 1f, 1f, 0.75f);      // 次文字
+        public static readonly Color TextTertiary = new Color(1f, 1f, 1f, 0.55f);       // 辅助文字
 
         // ⚡ 状态色（保留灰调）
-        public static readonly Color Success = new Color(0.45f, 0.75f, 0.50f, 1f); // #73BF80
-        public static readonly Color Warning = new Color(0.90f, 0.75f, 0.35f, 1f); // #E6BF59
-        public static readonly Color Error = new Color(0.85f, 0.45f, 0.40f, 1f); // #D86E66
-        public static readonly Color Info = new Color(0.55f, 0.65f, 0.80f, 1f); // #8CA6CC
+        public static readonly Color Success = new Color(0.45f, 0.75f, 0.50f, 1f);      // #73BF80
+        public static readonly Color Warning = new Color(0.90f, 0.75f, 0.35f, 1f);      // #E6BF59
+        public static readonly Color Error = new Color(0.85f, 0.45f, 0.40f, 1f);        // #D86E66
+        public static readonly Color Info = new Color(0.55f, 0.65f, 0.80f, 1f);         // #8CA6CC
 
         // 🔲 输入框
-        public static readonly Color InputBg = new Color(0.33f, 0.33f, 0.33f, 1f); // #555555
-        public static readonly Color InputBorder = new Color(0.42f, 0.42f, 0.42f, 1f); // #6B6B6B
+        public static readonly Color InputBg = new Color(0.33f, 0.33f, 0.33f, 1f);      // #555555
+        public static readonly Color InputBorder = new Color(0.42f, 0.42f, 0.42f, 1f);  // #6B6B6B
         public static readonly Color InputFocus = PrimaryHover;
 
         // ─ 分隔线
-        public static readonly Color Divider = new Color(0.40f, 0.40f, 0.40f, 1f); // #666666
+        public static readonly Color Divider = new Color(0.40f, 0.40f, 0.40f, 1f);      // #666666
 
         // 🌫️ 玻璃拟态
-        public static readonly Color GlassBg = new Color(0.30f, 0.30f, 0.30f, 0.55f); // 半透明炭灰
+        public static readonly Color GlassBg = new Color(0.30f, 0.30f, 0.30f, 0.55f);   // 半透明炭灰
 
         // 🕳️ 阴影（柔和不死黑）
-        public static readonly Color Shadow = new Color(0f, 0f, 0f, 0.25f); // 轻暗阴影
+        public static readonly Color Shadow = new Color(0f, 0f, 0f, 0.25f);             // 轻暗阴影
+
+
+
+
+
+
     }
 
     public static class GlassTheme
@@ -137,6 +144,11 @@ public class MModUI : MonoBehaviour
         public static readonly Color Divider = new Color(1f, 1f, 1f, 0.08f);
     }
 
+
+
+
+
+
     private NetManager netManager => Service?.netManager;
     private NetDataWriter writer => Service?.writer;
     private NetPeer connectedPeer => Service?.connectedPeer;
@@ -148,14 +160,12 @@ public class MModUI : MonoBehaviour
 
     private Dictionary<NetPeer, GameObject> remoteCharacters => Service?.remoteCharacters;
     private Dictionary<NetPeer, PlayerStatus> playerStatuses => Service?.playerStatuses;
-    private Dictionary<string, GameObject> clientRemoteCharacters =>
-        Service?.clientRemoteCharacters;
+    private Dictionary<string, GameObject> clientRemoteCharacters => Service?.clientRemoteCharacters;
     private Dictionary<string, PlayerStatus> clientPlayerStatuses => Service?.clientPlayerStatuses;
 
     // Steam相关属性
     private SteamLobbyManager LobbyManager => SteamLobbyManager.Instance;
-    internal NetworkTransportMode TransportMode =>
-        Service?.TransportMode ?? NetworkTransportMode.Direct;
+    internal NetworkTransportMode TransportMode => Service?.TransportMode ?? NetworkTransportMode.Direct;
 
     // 公开属性供布局构建器访问
     internal NetService Service => NetService.Instance;
@@ -168,8 +178,7 @@ public class MModUI : MonoBehaviour
         set
         {
             _manualIP = value;
-            if (Service != null)
-                Service.manualIP = value;
+            if (Service != null) Service.manualIP = value;
         }
     }
     internal string manualPort
@@ -178,8 +187,7 @@ public class MModUI : MonoBehaviour
         set
         {
             _manualPort = value;
-            if (Service != null)
-                Service.manualPort = value;
+            if (Service != null) Service.manualPort = value;
         }
     }
 
@@ -237,8 +245,7 @@ public class MModUI : MonoBehaviour
         if (show)
         {
             panel.SetActive(true);
-            var canvasGroup =
-                panel.GetComponent<CanvasGroup>() ?? panel.AddComponent<CanvasGroup>();
+            var canvasGroup = panel.GetComponent<CanvasGroup>() ?? panel.AddComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
 
             float time = 0;
@@ -252,8 +259,7 @@ public class MModUI : MonoBehaviour
         }
         else
         {
-            var canvasGroup =
-                panel.GetComponent<CanvasGroup>() ?? panel.AddComponent<CanvasGroup>();
+            var canvasGroup = panel.GetComponent<CanvasGroup>() ?? panel.AddComponent<CanvasGroup>();
 
             float time = 0;
             while (time < 0.15f)
@@ -284,8 +290,7 @@ public class MModUI : MonoBehaviour
             _hostList.Clear();
             _hostSet.Clear();
             _hostList.AddRange(svc.hostList);
-            foreach (var host in svc.hostSet)
-                _hostSet.Add(host);
+            foreach (var host in svc.hostSet) _hostSet.Add(host);
 
             // Steam相关初始化
             var options = svc.LobbyOptions;
@@ -392,11 +397,11 @@ public class MModUI : MonoBehaviour
         // 配置模糊参数
         var blurConfig = new ScalableBlurConfig
         {
-            Strength = 12f, // 模糊强度（半径）
-            Iteration = 4, // 迭代次数（质量）
+            Strength = 12f,      // 模糊强度（半径）
+            Iteration = 4        // 迭代次数（质量）
         };
         source.BlurConfig = blurConfig;
-        source.Downsample = 1; // 降采样等级（提升性能）
+        source.Downsample = 1;  // 降采样等级（提升性能）
     }
 
     private void CreateMainPanel()
@@ -410,12 +415,7 @@ public class MModUI : MonoBehaviour
 
     private void CreatePlayerStatusPanel()
     {
-        _components.PlayerStatusPanel = CreateModernPanel(
-            "PlayerStatusPanel",
-            _canvas.transform,
-            new Vector2(420, 600),
-            new Vector2(1680, 130)
-        );
+        _components.PlayerStatusPanel = CreateModernPanel("PlayerStatusPanel", _canvas.transform, new Vector2(420, 600), new Vector2(1680, 130));
         MakeDraggable(_components.PlayerStatusPanel);
         _components.PlayerStatusPanel.SetActive(false);
 
@@ -426,33 +426,18 @@ public class MModUI : MonoBehaviour
 
         // 标题栏
         var titleBar = CreateTitleBar(_components.PlayerStatusPanel.transform);
-        CreateText(
-            "Title",
-            titleBar.transform,
-            CoopLocalization.Get("ui.window.playerStatus"),
-            22,
-            ModernColors.TextPrimary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
+        CreateText("Title", titleBar.transform, CoopLocalization.Get("ui.window.playerStatus"), 22, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
 
         var spacer = new GameObject("Spacer");
         spacer.transform.SetParent(titleBar.transform, false);
         var spacerLayout = spacer.AddComponent<LayoutElement>();
         spacerLayout.flexibleWidth = 1;
 
-        CreateIconButton(
-            "CloseBtn",
-            titleBar.transform,
-            "x",
-            () =>
-            {
-                showPlayerStatusWindow = false;
-                StartCoroutine(AnimatePanel(_components.PlayerStatusPanel, false));
-            },
-            36,
-            ModernColors.Error
-        );
+        CreateIconButton("CloseBtn", titleBar.transform, "x", () =>
+        {
+            showPlayerStatusWindow = false;
+            StartCoroutine(AnimatePanel(_components.PlayerStatusPanel, false));
+        }, 36, ModernColors.Error);
 
         // 内容区域
         var contentArea = CreateContentArea(_components.PlayerStatusPanel.transform);
@@ -464,13 +449,7 @@ public class MModUI : MonoBehaviour
 
     private void CreateVotePanel()
     {
-        _components.VotePanel = CreateModernPanel(
-            "VotePanel",
-            _canvas.transform,
-            new Vector2(420, 320),
-            new Vector2(-1, 0),
-            TextAnchor.MiddleLeft
-        );
+        _components.VotePanel = CreateModernPanel("VotePanel", _canvas.transform, new Vector2(420, 320), new Vector2(-1, 0), TextAnchor.MiddleLeft);
         _components.VotePanel.SetActive(false);
 
         var layout = _components.VotePanel.AddComponent<VerticalLayoutGroup>();
@@ -485,27 +464,14 @@ public class MModUI : MonoBehaviour
 
     private void CreateSpectatorPanel()
     {
-        _components.SpectatorPanel = CreateModernPanel(
-            "SpectatorPanel",
-            _canvas.transform,
-            new Vector2(430, 40),
-            new Vector2(-1, -1),
-            TextAnchor.LowerCenter
-        );
+        _components.SpectatorPanel = CreateModernPanel("SpectatorPanel", _canvas.transform, new Vector2(430, 40), new Vector2(-1, -1), TextAnchor.LowerCenter);
         _components.SpectatorPanel.SetActive(false);
 
         var layout = _components.SpectatorPanel.AddComponent<VerticalLayoutGroup>();
         layout.padding = new RectOffset(25, 25, 20, 20);
 
-        var text = CreateText(
-            "SpectatorHint",
-            _components.SpectatorPanel.transform,
-            CoopLocalization.Get("ui.spectator.mode"),
-            18,
-            ModernColors.TextPrimary,
-            TextAlignmentOptions.Center,
-            FontStyles.Bold
-        );
+        var text = CreateText("SpectatorHint", _components.SpectatorPanel.transform,
+            CoopLocalization.Get("ui.spectator.mode"), 18, ModernColors.TextPrimary, TextAlignmentOptions.Center, FontStyles.Bold);
     }
 
     #endregion
@@ -526,19 +492,11 @@ public class MModUI : MonoBehaviour
             {
                 if (isSteamMode)
                 {
-                    modeText = isInSteamLobby
-                        ? (
-                            LobbyManager.IsHost
-                                ? CoopLocalization.Get("ui.mode.server")
-                                : CoopLocalization.Get("ui.mode.client")
-                        )
-                        : CoopLocalization.Get("ui.transport.mode.steam");
+                    modeText = isInSteamLobby ? (LobbyManager.IsHost ? CoopLocalization.Get("ui.mode.server") : CoopLocalization.Get("ui.mode.client")) : CoopLocalization.Get("ui.transport.mode.steam");
                 }
                 else
                 {
-                    modeText = IsServer
-                        ? CoopLocalization.Get("ui.mode.server")
-                        : CoopLocalization.Get("ui.mode.client");
+                    modeText = IsServer ? CoopLocalization.Get("ui.mode.server") : CoopLocalization.Get("ui.mode.client");
                 }
             }
             else if (isSteamMode)
@@ -548,8 +506,7 @@ public class MModUI : MonoBehaviour
             _components.ModeText.text = modeText;
 
             if (_components.ModeIndicator != null)
-                _components.ModeIndicator.color =
-                    (isActiveServer || isInSteamLobby) ? ModernColors.Success : ModernColors.Info;
+                _components.ModeIndicator.color = (isActiveServer || isInSteamLobby) ? ModernColors.Success : ModernColors.Info;
         }
 
         // 更新模式信息文本
@@ -561,41 +518,25 @@ public class MModUI : MonoBehaviour
                 {
                     if (LobbyManager.IsHost)
                     {
-                        var lobbyInfo = LobbyManager.TryGetLobbyInfo(
-                            LobbyManager.CurrentLobbyId,
-                            out var info
-                        )
-                            ? (SteamLobbyManager.LobbyInfo?)info
-                            : null;
+                        var lobbyInfo = LobbyManager.TryGetLobbyInfo(LobbyManager.CurrentLobbyId, out var info) ? (SteamLobbyManager.LobbyInfo?)info : null;
                         if (lobbyInfo != null)
                         {
-                            _components.ModeInfoText.text = CoopLocalization.Get(
-                                "ui.steam.currentLobby",
-                                lobbyInfo.Value.LobbyName,
-                                lobbyInfo.Value.MemberCount,
-                                lobbyInfo.Value.MaxMembers
-                            );
+                            _components.ModeInfoText.text = CoopLocalization.Get("ui.steam.currentLobby", lobbyInfo.Value.LobbyName, lobbyInfo.Value.MemberCount, lobbyInfo.Value.MaxMembers);
                         }
                         else
                         {
-                            _components.ModeInfoText.text = CoopLocalization.Get(
-                                "ui.steam.server.waiting"
-                            );
+                            _components.ModeInfoText.text = CoopLocalization.Get("ui.steam.server.waiting");
                         }
                     }
                     else
                     {
-                        _components.ModeInfoText.text = CoopLocalization.Get(
-                            "ui.steam.client.connected"
-                        );
+                        _components.ModeInfoText.text = CoopLocalization.Get("ui.steam.client.connected");
                     }
                     _components.ModeInfoText.color = ModernColors.Success;
                 }
                 else
                 {
-                    _components.ModeInfoText.text = CoopLocalization.Get(
-                        "ui.steam.hint.createOrJoin"
-                    );
+                    _components.ModeInfoText.text = CoopLocalization.Get("ui.steam.hint.createOrJoin");
                     _components.ModeInfoText.color = ModernColors.TextSecondary;
                 }
             }
@@ -604,16 +545,12 @@ public class MModUI : MonoBehaviour
                 if (isActiveServer)
                 {
                     int currentPort = NetService.Instance?.port ?? 9050;
-                    _components.ModeInfoText.text =
-                        CoopLocalization.Get("ui.server.listenPort") + " " + currentPort;
+                    _components.ModeInfoText.text = CoopLocalization.Get("ui.server.listenPort") + " " + currentPort;
                     _components.ModeInfoText.color = ModernColors.TextSecondary;
                 }
                 else
                 {
-                    _components.ModeInfoText.text = CoopLocalization.Get(
-                        "ui.server.hint.willUsePort",
-                        manualPort
-                    );
+                    _components.ModeInfoText.text = CoopLocalization.Get("ui.server.hint.willUsePort", manualPort);
                     _components.ModeInfoText.color = ModernColors.TextSecondary;
                 }
             }
@@ -630,31 +567,17 @@ public class MModUI : MonoBehaviour
             else
             {
                 _components.ModeToggleButton.gameObject.SetActive(true);
-                _components.ModeToggleButtonText.text = isActiveServer
-                    ? CoopLocalization.Get("ui.server.close")
-                    : CoopLocalization.Get("ui.server.create");
+                _components.ModeToggleButtonText.text = isActiveServer ? CoopLocalization.Get("ui.server.close") : CoopLocalization.Get("ui.server.create");
 
                 // 更新按钮颜色
                 var image = _components.ModeToggleButton.GetComponent<Image>();
                 if (image != null)
                 {
                     var colors = _components.ModeToggleButton.colors;
-                    var baseColor = isActiveServer
-                        ? new Color(0.85f, 0.45f, 0.40f, 0.95f)
-                        : new Color(0.45f, 0.75f, 0.50f, 0.95f);
+                    var baseColor = isActiveServer ? new Color(0.85f, 0.45f, 0.40f, 0.95f) : new Color(0.45f, 0.75f, 0.50f, 0.95f);
                     colors.normalColor = baseColor;
-                    colors.highlightedColor = new Color(
-                        baseColor.r + 0.05f,
-                        baseColor.g + 0.05f,
-                        baseColor.b + 0.05f,
-                        baseColor.a
-                    );
-                    colors.pressedColor = new Color(
-                        baseColor.r - 0.1f,
-                        baseColor.g - 0.1f,
-                        baseColor.b - 0.1f,
-                        baseColor.a
-                    );
+                    colors.highlightedColor = new Color(baseColor.r + 0.05f, baseColor.g + 0.05f, baseColor.b + 0.05f, baseColor.a);
+                    colors.pressedColor = new Color(baseColor.r - 0.1f, baseColor.g - 0.1f, baseColor.b - 0.1f, baseColor.a);
                     _components.ModeToggleButton.colors = colors;
                 }
             }
@@ -666,9 +589,7 @@ public class MModUI : MonoBehaviour
             if (isSteamMode)
             {
                 _components.ServerPortText.text = "Steam P2P";
-                _components.ServerPortText.color = isInSteamLobby
-                    ? ModernColors.Success
-                    : ModernColors.TextSecondary;
+                _components.ServerPortText.color = isInSteamLobby ? ModernColors.Success : ModernColors.TextSecondary;
             }
             else if (isActiveServer)
             {
@@ -687,23 +608,16 @@ public class MModUI : MonoBehaviour
         {
             if (isSteamMode && isInSteamLobby)
             {
-                var lobbyInfo = LobbyManager.TryGetLobbyInfo(
-                    LobbyManager.CurrentLobbyId,
-                    out var info
-                )
-                    ? (SteamLobbyManager.LobbyInfo?)info
-                    : null;
+                var lobbyInfo = LobbyManager.TryGetLobbyInfo(LobbyManager.CurrentLobbyId, out var info) ? (SteamLobbyManager.LobbyInfo?)info : null;
                 var count = lobbyInfo != null ? lobbyInfo.Value.MemberCount - 1 : 0; // 减1因为包含自己
                 _components.ConnectionCountText.text = $"{count}";
-                _components.ConnectionCountText.color =
-                    count > 0 ? ModernColors.Success : ModernColors.TextSecondary;
+                _components.ConnectionCountText.color = count > 0 ? ModernColors.Success : ModernColors.TextSecondary;
             }
             else if (isActiveServer)
             {
                 var count = netManager?.ConnectedPeerList.Count ?? 0;
                 _components.ConnectionCountText.text = $"{count}";
-                _components.ConnectionCountText.color =
-                    count > 0 ? ModernColors.Success : ModernColors.TextSecondary;
+                _components.ConnectionCountText.color = count > 0 ? ModernColors.Success : ModernColors.TextSecondary;
             }
             else
             {
@@ -713,11 +627,7 @@ public class MModUI : MonoBehaviour
         }
 
         // 更新 Steam 创建/离开按钮
-        if (
-            isSteamMode
-            && _components?.SteamCreateLeaveButton != null
-            && _components?.SteamCreateLeaveButtonText != null
-        )
+        if (isSteamMode && _components?.SteamCreateLeaveButton != null && _components?.SteamCreateLeaveButtonText != null)
         {
             bool lobbyActive = LobbyManager != null && LobbyManager.IsInLobby;
 
@@ -733,18 +643,8 @@ public class MModUI : MonoBehaviour
                 var colors = _components.SteamCreateLeaveButton.colors;
                 var baseColor = lobbyActive ? ModernColors.Error : ModernColors.Success;
                 colors.normalColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0.95f);
-                colors.highlightedColor = new Color(
-                    baseColor.r + 0.05f,
-                    baseColor.g + 0.05f,
-                    baseColor.b + 0.05f,
-                    0.97f
-                );
-                colors.pressedColor = new Color(
-                    baseColor.r - 0.1f,
-                    baseColor.g - 0.1f,
-                    baseColor.b - 0.1f,
-                    1f
-                );
+                colors.highlightedColor = new Color(baseColor.r + 0.05f, baseColor.g + 0.05f, baseColor.b + 0.05f, 0.97f);
+                colors.pressedColor = new Color(baseColor.r - 0.1f, baseColor.g - 0.1f, baseColor.b - 0.1f, 1f);
                 _components.SteamCreateLeaveButton.colors = colors;
             }
         }
@@ -769,10 +669,8 @@ public class MModUI : MonoBehaviour
 
     private void UpdateConnectionStatus()
     {
-        if (Service == null)
-            return;
-        if (_components?.StatusText == null && _components?.SteamStatusText == null)
-            return;
+        if (Service == null) return;
+        if (_components?.StatusText == null && _components?.SteamStatusText == null) return;
 
         var currentStatus = Service.status;
 
@@ -795,11 +693,7 @@ public class MModUI : MonoBehaviour
                 statusColor = ModernColors.Info;
                 statusIcon = "[*]";
             }
-            else if (
-                currentStatus.Contains("断开")
-                || currentStatus.Contains("失败")
-                || currentStatus.Contains("错误")
-            )
+            else if (currentStatus.Contains("断开") || currentStatus.Contains("失败") || currentStatus.Contains("错误"))
             {
                 statusColor = ModernColors.Error;
                 statusIcon = "[!]";
@@ -848,10 +742,7 @@ public class MModUI : MonoBehaviour
                     {
                         LoggerHelper.LogWarning("服务端不在关卡内，断开连接");
 
-                        SetStatusText(
-                            "[!] " + CoopLocalization.Get("ui.error.serverNotInGame"),
-                            ModernColors.Warning
-                        );
+                        SetStatusText("[!] " + CoopLocalization.Get("ui.error.serverNotInGame"), ModernColors.Warning);
 
                         // 断开连接
                         if (connectedPeer != null)
@@ -868,8 +759,7 @@ public class MModUI : MonoBehaviour
 
     private void UpdateHostList()
     {
-        if (_components?.HostListContent == null || IsServer)
-            return;
+        if (_components?.HostListContent == null || IsServer) return;
 
         // 清理不存在的主机
         var toRemove = _hostEntries.Keys.Where(h => !hostSet.Contains(h)).ToList();
@@ -892,14 +782,7 @@ public class MModUI : MonoBehaviour
         // 显示空列表提示
         if (hostList.Count == 0 && _components.HostListContent.childCount == 0)
         {
-            var emptyHint = CreateText(
-                "EmptyHint",
-                _components.HostListContent,
-                CoopLocalization.Get("ui.hostList.empty"),
-                14,
-                ModernColors.TextTertiary,
-                TextAlignmentOptions.Center
-            );
+            var emptyHint = CreateText("EmptyHint", _components.HostListContent, CoopLocalization.Get("ui.hostList.empty"), 14, ModernColors.TextTertiary, TextAlignmentOptions.Center);
         }
     }
 
@@ -910,11 +793,11 @@ public class MModUI : MonoBehaviour
         entry.transform.SetParent(_components.HostListContent, false);
 
         var entryLayout = entry.AddComponent<HorizontalLayoutGroup>();
-        entryLayout.padding = new RectOffset(20, 20, 15, 15); // 增加上下内边距：12 -> 15
+        entryLayout.padding = new RectOffset(20, 20, 15, 15);  // 增加上下内边距：12 -> 15
         entryLayout.spacing = 15;
         entryLayout.childForceExpandWidth = false;
         entryLayout.childControlWidth = true;
-        entryLayout.childAlignment = TextAnchor.MiddleLeft; // 垂直居中对齐
+        entryLayout.childAlignment = TextAnchor.MiddleLeft;  // 垂直居中对齐
 
         var bg = entry.AddComponent<Image>();
         bg.color = GlassTheme.CardBg;
@@ -922,7 +805,7 @@ public class MModUI : MonoBehaviour
         bg.type = Image.Type.Tiled;
 
         var entryLayoutElement = entry.AddComponent<LayoutElement>();
-        entryLayoutElement.preferredHeight = 75; // 增加高度：60 -> 75
+        entryLayoutElement.preferredHeight = 75;  // 增加高度：60 -> 75
         entryLayoutElement.minHeight = 75;
         entryLayoutElement.flexibleWidth = 1;
 
@@ -953,30 +836,15 @@ public class MModUI : MonoBehaviour
         var infoArea = new GameObject("InfoArea");
         infoArea.transform.SetParent(entry.transform, false);
         var infoLayout = infoArea.AddComponent<VerticalLayoutGroup>();
-        infoLayout.spacing = 6; // 增加文字行间距：4 -> 6
+        infoLayout.spacing = 6;  // 增加文字行间距：4 -> 6
         infoLayout.childForceExpandHeight = false;
         infoLayout.childControlHeight = false;
-        infoLayout.childAlignment = TextAnchor.MiddleLeft; // 垂直居中对齐
+        infoLayout.childAlignment = TextAnchor.MiddleLeft;  // 垂直居中对齐
         var infoLayoutElement = infoArea.AddComponent<LayoutElement>();
         infoLayoutElement.preferredWidth = 500;
 
-        CreateText(
-            "ServerName",
-            infoArea.transform,
-            CoopLocalization.Get("ui.hostList.lanServer", ip),
-            16,
-            ModernColors.TextPrimary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
-        CreateText(
-            "ServerDetails",
-            infoArea.transform,
-            CoopLocalization.Get("ui.hostList.serverDetails", portStr),
-            13,
-            ModernColors.TextSecondary,
-            TextAlignmentOptions.Left
-        );
+        CreateText("ServerName", infoArea.transform, CoopLocalization.Get("ui.hostList.lanServer", ip), 16, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
+        CreateText("ServerDetails", infoArea.transform, CoopLocalization.Get("ui.hostList.serverDetails", portStr), 13, ModernColors.TextSecondary, TextAlignmentOptions.Left);
 
         // 中间空白
         var spacer = new GameObject("Spacer");
@@ -985,44 +853,30 @@ public class MModUI : MonoBehaviour
         spacerLayout.flexibleWidth = 1;
 
         // 状态标签
-        var statusBadge = CreateBadge(
-            entry.transform,
-            CoopLocalization.Get("ui.status.online"),
-            ModernColors.Success
-        );
+        var statusBadge = CreateBadge(entry.transform, CoopLocalization.Get("ui.status.online"), ModernColors.Success);
         statusBadge.GetComponent<LayoutElement>().preferredWidth = 70;
 
         // 连接按钮
-        CreateModernButton(
-            "ConnectBtn",
-            entry.transform,
-            CoopLocalization.Get("ui.hostList.connect"),
-            () =>
-            {
-                // 检查是否在关卡内
-                if (!CheckCanConnect())
-                    return;
+        CreateModernButton("ConnectBtn", entry.transform, CoopLocalization.Get("ui.hostList.connect"), () =>
+        {
+            // 检查是否在关卡内
+            if (!CheckCanConnect())
+                return;
 
-                if (parts.Length == 2 && int.TryParse(parts[1], out var p))
-                {
-                    if (netManager == null || !netManager.IsRunning || IsServer || !networkStarted)
-                        NetService.Instance.StartNetwork(false);
-                    NetService.Instance.ConnectToHost(parts[0], p);
-                }
-            },
-            120,
-            ModernColors.Primary,
-            45,
-            16
-        );
+            if (parts.Length == 2 && int.TryParse(parts[1], out var p))
+            {
+                if (netManager == null || !netManager.IsRunning || IsServer || !networkStarted)
+                    NetService.Instance.StartNetwork(false);
+                NetService.Instance.ConnectToHost(parts[0], p);
+            }
+        }, 120, ModernColors.Primary, 45, 16);
 
         return entry;
     }
 
     private void UpdatePlayerList()
     {
-        if (_components?.PlayerListContent == null)
-            return;
+        if (_components?.PlayerListContent == null) return;
 
         bool isSteamMode = TransportMode == NetworkTransportMode.SteamP2P;
 
@@ -1034,7 +888,7 @@ public class MModUI : MonoBehaviour
         {
             // Steam模式：使用SteamID作为唯一标识，避免重复显示
             var displayedSteamIds = new HashSet<ulong>();
-            var displayedEndPoints = new HashSet<string>(); // 用于无法获取SteamID的玩家
+            var displayedEndPoints = new HashSet<string>();  // 用于无法获取SteamID的玩家
 
             // 添加本地玩家
             if (localPlayerStatus != null)
@@ -1096,14 +950,9 @@ public class MModUI : MonoBehaviour
 
                         // 🛡️ 限制日志频率：每300次只输出1次，避免刷屏
                         _noSteamIdWarningCount++;
-                        if (
-                            _noSteamIdWarningCount == 1
-                            || _noSteamIdWarningCount % NO_STEAMID_WARNING_INTERVAL == 0
-                        )
+                        if (_noSteamIdWarningCount == 1 || _noSteamIdWarningCount % NO_STEAMID_WARNING_INTERVAL == 0)
                         {
-                            LoggerHelper.LogWarning(
-                                $"[MModUI] 添加无SteamID的玩家: {status.EndPoint} (已发生 {_noSteamIdWarningCount} 次)"
-                            );
+                            LoggerHelper.LogWarning($"[MModUI] 添加无SteamID的玩家: {status.EndPoint} (已发生 {_noSteamIdWarningCount} 次)");
                         }
                     }
                 }
@@ -1131,10 +980,7 @@ public class MModUI : MonoBehaviour
 
                 for (int i = 0; i < memberCount; i++)
                 {
-                    CSteamID memberId = SteamMatchmaking.GetLobbyMemberByIndex(
-                        LobbyManager.CurrentLobbyId,
-                        i
-                    );
+                    CSteamID memberId = SteamMatchmaking.GetLobbyMemberByIndex(LobbyManager.CurrentLobbyId, i);
 
                     // 如果这个成员还没有被添加到显示列表
                     if (!displayedSteamIds.Contains(memberId.m_SteamID))
@@ -1163,8 +1009,8 @@ public class MModUI : MonoBehaviour
                             {
                                 PlayerName = memberName,
                                 EndPoint = $"Steam:{memberId.m_SteamID}",
-                                IsInGame = false, // 未知状态
-                                Latency = 0, // 未知延迟
+                                IsInGame = false,  // 未知状态
+                                Latency = 0  // 未知延迟
                             };
 
                             displayedSteamIds.Add(memberId.m_SteamID);
@@ -1208,15 +1054,13 @@ public class MModUI : MonoBehaviour
         {
             // 玩家列表变化了
             needsRebuild = true;
-            LoggerHelper.Log(
-                $"[MModUI] 玩家列表已更新，重建UI (当前: {currentPlayerIds.Count}, 之前: {_displayedPlayerIds.Count})"
-            );
+            LoggerHelper.Log($"[MModUI] 玩家列表已更新，重建UI (当前: {currentPlayerIds.Count}, 之前: {_displayedPlayerIds.Count})");
         }
         else if (isSteamMode)
         {
             // Steam模式下，即使玩家列表没变，也需要定期更新（因为状态可能从虚拟变为实际）
             // 使用时间限制，避免过于频繁的更新
-            if (Time.time - _lastPlayerListUpdateTime > 2.0f) // 每2秒最多更新一次
+            if (Time.time - _lastPlayerListUpdateTime > 2.0f)  // 每2秒最多更新一次
             {
                 needsRebuild = true;
                 _lastPlayerListUpdateTime = Time.time;
@@ -1230,7 +1074,7 @@ public class MModUI : MonoBehaviour
         foreach (Transform child in _components.PlayerListContent)
             Destroy(child.gameObject);
         _playerEntries.Clear();
-        _playerPingTexts.Clear(); // 清空延迟文本引用
+        _playerPingTexts.Clear();  // 清空延迟文本引用
 
         // 更新缓存
         _displayedPlayerIds.Clear();
@@ -1258,7 +1102,7 @@ public class MModUI : MonoBehaviour
         // 如果是 "Steam:xxx" 格式（从Lobby直接获取的），直接解析SteamID
         if (status.EndPoint.StartsWith("Steam:"))
         {
-            var steamIdStr = status.EndPoint.Substring(6); // 去掉 "Steam:" 前缀
+            var steamIdStr = status.EndPoint.Substring(6);  // 去掉 "Steam:" 前缀
             if (ulong.TryParse(steamIdStr, out ulong steamId))
             {
                 return steamId;
@@ -1274,17 +1118,11 @@ public class MModUI : MonoBehaviour
 
         // 尝试从虚拟IP EndPoint获取
         var parts = status.EndPoint.Split(':');
-        if (
-            parts.Length == 2
-            && System.Net.IPAddress.TryParse(parts[0], out var ipAddr)
-            && int.TryParse(parts[1], out var port)
-        )
+        if (parts.Length == 2 && System.Net.IPAddress.TryParse(parts[0], out var ipAddr) && int.TryParse(parts[1], out var port))
         {
             var ipEndPoint = new System.Net.IPEndPoint(ipAddr, port);
-            if (
-                SteamEndPointMapper.Instance != null
-                && SteamEndPointMapper.Instance.TryGetSteamID(ipEndPoint, out CSteamID cSteamId)
-            )
+            if (SteamEndPointMapper.Instance != null &&
+                SteamEndPointMapper.Instance.TryGetSteamID(ipEndPoint, out CSteamID cSteamId))
             {
                 return cSteamId.m_SteamID;
             }
@@ -1328,14 +1166,35 @@ public class MModUI : MonoBehaviour
 
         if (isSteamMode)
         {
-            // Steam模式：使用缓存获取Steam用户名和SteamID
-            string steamUsername = "Unknown";
-            ulong steamId = 0;
-            bool isHost = false;
-
-            try
+            // ✅ 优先从投票数据中获取 Steam 信息
+            bool foundInVoteData = false;
+            if (SceneNet.Instance?.cachedVoteData?.playerList?.items != null)
             {
-                if (SteamManager.Initialized)
+                foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+                {
+                    if (player.playerId == status.EndPoint && !string.IsNullOrEmpty(player.steamName))
+                    {
+                        bool isHostFromVote = player.playerId.StartsWith("Host:");
+                        string prefix = isHostFromVote ? "HOST" : "CLIENT";
+                        displayName = $"{prefix}_{player.steamName}";
+                        displayId = player.steamId;
+                        foundInVoteData = true;
+                        break;
+                    }
+                }
+            }
+
+            // 如果投票数据中没有找到，使用原来的逻辑
+            if (!foundInVoteData)
+            {
+                // Steam模式：使用缓存获取Steam用户名和SteamID
+                string steamUsername = "Unknown";
+                ulong steamId = 0;
+                bool isHost = false;
+
+                try
+                {
+                    if (SteamManager.Initialized)
                 {
                     if (isLocal)
                     {
@@ -1346,9 +1205,7 @@ public class MModUI : MonoBehaviour
                         // 判断是否是主机（需要IsInLobby）
                         if (LobbyManager != null && LobbyManager.IsInLobby)
                         {
-                            var lobbyOwner = SteamMatchmaking.GetLobbyOwner(
-                                LobbyManager.CurrentLobbyId
-                            );
+                            var lobbyOwner = SteamMatchmaking.GetLobbyOwner(LobbyManager.CurrentLobbyId);
                             isHost = (steamId == lobbyOwner.m_SteamID);
                         }
                         else
@@ -1363,28 +1220,28 @@ public class MModUI : MonoBehaviour
                         steamId = GetSteamIdFromStatus(status);
 
                         // 判断是否是主机
-                        var lobbyOwner = SteamMatchmaking.GetLobbyOwner(
-                            LobbyManager.CurrentLobbyId
-                        );
+                        var lobbyOwner = SteamMatchmaking.GetLobbyOwner(LobbyManager.CurrentLobbyId);
                         isHost = (steamId > 0 && steamId == lobbyOwner.m_SteamID);
 
-                        // 从缓存获取用户名
+                        // ✅ 优先从 ClientStatusMessage 缓存获取用户名
                         if (steamId > 0)
                         {
-                            var cSteamId = new CSteamID(steamId);
-                            steamUsername = LobbyManager.GetCachedMemberName(cSteamId);
-
+                            steamUsername = Net.ClientStatusMessage.GetSteamNameFromSteamId(steamId.ToString());
+                            
                             if (string.IsNullOrEmpty(steamUsername))
                             {
-                                // 缓存未命中，回退到Steam API
-                                steamUsername = SteamFriends.GetFriendPersonaName(cSteamId);
-                                if (
-                                    string.IsNullOrEmpty(steamUsername)
-                                    || steamUsername == "[unknown]"
-                                )
+                                // ClientStatusMessage 缓存未命中，尝试 LobbyManager 缓存
+                                var cSteamId = new CSteamID(steamId);
+                                steamUsername = LobbyManager.GetCachedMemberName(cSteamId);
+
+                                if (string.IsNullOrEmpty(steamUsername))
                                 {
-                                    steamUsername =
-                                        $"Player_{steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4))}";
+                                    // 缓存未命中，回退到Steam API
+                                    steamUsername = SteamFriends.GetFriendPersonaName(cSteamId);
+                                    if (string.IsNullOrEmpty(steamUsername) || steamUsername == "[unknown]")
+                                    {
+                                        steamUsername = $"Player_{steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4))}";
+                                    }
                                 }
                             }
                         }
@@ -1394,69 +1251,38 @@ public class MModUI : MonoBehaviour
             catch (System.Exception e)
             {
                 LoggerHelper.LogError($"[MModUI] 获取Steam用户名失败: {e.Message}\n{e.StackTrace}");
-                steamUsername =
-                    $"Player_{(steamId > 0 ? steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4)) : "????")}";
+                steamUsername = $"Player_{(steamId > 0 ? steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4)) : "????")}";
             }
 
-            // 添加前缀（基于房间所有者判断，而不是本地IsServer状态）
-            string prefix = isHost ? "HOST" : "CLIENT";
-            displayName = $"{prefix}_{steamUsername}";
+                // 添加前缀（基于房间所有者判断，而不是本地IsServer状态）
+                string prefix = isHost ? "HOST" : "CLIENT";
+                displayName = $"{prefix}_{steamUsername}";
 
-            // Steam模式：显示完整SteamID
-            displayId = steamId > 0 ? steamId.ToString() : status.EndPoint;
+                // Steam模式：显示完整SteamID
+                displayId = steamId > 0 ? steamId.ToString() : status.EndPoint;
+            }
         }
 
-        var nameText = CreateText(
-            "Name",
-            headerRow.transform,
-            displayName,
-            16,
-            ModernColors.TextPrimary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
+        var nameText = CreateText("Name", headerRow.transform, displayName, 16, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
         if (isLocal)
         {
-            var localBadge = CreateBadge(
-                headerRow.transform,
-                CoopLocalization.Get("ui.playerStatus.local"),
-                ModernColors.Primary
-            );
+            var localBadge = CreateBadge(headerRow.transform, CoopLocalization.Get("ui.playerStatus.local"), ModernColors.Primary);
         }
 
         CreateDivider(entry.transform);
 
         var infoRow = CreateHorizontalGroup(entry.transform, "Info");
-        CreateText(
-            "ID",
-            infoRow.transform,
-            CoopLocalization.Get("ui.playerStatus.id") + ": " + displayId,
-            13,
-            ModernColors.TextSecondary
-        );
+        CreateText("ID", infoRow.transform, CoopLocalization.Get("ui.playerStatus.id") + ": " + displayId, 13, ModernColors.TextSecondary);
 
-        var pingText = CreateText(
-            "Ping",
-            infoRow.transform,
-            $"{status.Latency}ms",
-            13,
-            status.Latency < 50 ? ModernColors.Success
-                : status.Latency < 100 ? ModernColors.Warning
-                : ModernColors.Error
-        );
+        var pingText = CreateText("Ping", infoRow.transform, $"{status.Latency}ms", 13,
+            status.Latency < 50 ? ModernColors.Success :
+            status.Latency < 100 ? ModernColors.Warning : ModernColors.Error);
 
         // 保存延迟文本引用，使用 EndPoint 作为键（这是唯一标识符）
         _playerPingTexts[status.EndPoint] = pingText;
 
-        var stateText = CreateText(
-            "State",
-            infoRow.transform,
-            status.IsInGame
-                ? CoopLocalization.Get("ui.playerStatus.inGameStatus")
-                : CoopLocalization.Get("ui.playerStatus.idle"),
-            13,
-            status.IsInGame ? ModernColors.Success : ModernColors.TextSecondary
-        );
+        var stateText = CreateText("State", infoRow.transform, status.IsInGame ? CoopLocalization.Get("ui.playerStatus.inGameStatus") : CoopLocalization.Get("ui.playerStatus.idle"), 13,
+            status.IsInGame ? ModernColors.Success : ModernColors.TextSecondary);
 
         // 🔨 踢人按钮（只有主机且不是本地玩家时显示）
         if (IsServer && !isLocal && isSteamMode && SteamManager.Initialized)
@@ -1471,19 +1297,12 @@ public class MModUI : MonoBehaviour
             if (targetSteamId > 0)
             {
                 // 添加踢人按钮
-                var kickButton = CreateIconButton(
-                    "KickBtn",
-                    infoRow.transform,
-                    "踢",
-                    () =>
-                    {
-                        // 确认踢人
-                        LoggerHelper.Log($"[MModUI] 主机踢出玩家: SteamID={targetSteamId}");
-                        KickMessage.Server_KickPlayer(targetSteamId, "被主机踢出");
-                    },
-                    50,
-                    ModernColors.Error
-                );
+                var kickButton = CreateIconButton("KickBtn", infoRow.transform, "踢", () =>
+                {
+                    // 确认踢人
+                    LoggerHelper.Log($"[MModUI] 主机踢出玩家: SteamID={targetSteamId}");
+                    KickMessage.Server_KickPlayer(targetSteamId, "被主机踢出");
+                }, 50, ModernColors.Error);
             }
         }
     }
@@ -1512,15 +1331,7 @@ public class MModUI : MonoBehaviour
             _lastVoteActive = active;
         }
 
-        if (!active)
-            return;
-
-        // 🆕 必须有缓存的投票数据才能渲染
-        if (SceneNet.Instance.cachedVoteData == null)
-        {
-            LoggerHelper.LogWarning("[MModUI] 投票激活但没有缓存数据，等待主机广播");
-            return;
-        }
+        if (!active) return;
 
         // 检查是否需要重建UI（只有状态改变时才重建）
         bool needsRebuild = false;
@@ -1548,8 +1359,7 @@ public class MModUI : MonoBehaviour
             if (!_lastVoteParticipants.SetEquals(currentParticipants))
             {
                 needsRebuild = true;
-                rebuildReason =
-                    $"participants changed ({_lastVoteParticipants.Count} -> {currentParticipants.Count})";
+                rebuildReason = $"participants changed ({_lastVoteParticipants.Count} -> {currentParticipants.Count})";
             }
         }
 
@@ -1564,8 +1374,7 @@ public class MModUI : MonoBehaviour
             }
         }
 
-        if (!needsRebuild)
-            return;
+        if (!needsRebuild) return;
 
         //LoggerHelper.Log($"[MModUI] 重建投票面板: {rebuildReason}");
 
@@ -1584,35 +1393,16 @@ public class MModUI : MonoBehaviour
             DestroyImmediate(_components.VotePanel.transform.GetChild(i).gameObject);
         }
 
-        // 🆕 从缓存的投票数据中读取（主机和客户端统一）
-        var voteData = SceneNet.Instance.cachedVoteData;
-
-        // 🌏 使用主机传来的场景显示名称
-        var sceneName = voteData.targetSceneDisplayName ?? voteData.targetSceneId;
+        // 🌏 使用中文场景名称
+        var sceneName = Utils.SceneNameMapper.GetDisplayName(SceneNet.Instance.sceneTargetId);
 
         // 标题
-        var titleText = CreateText(
-            "VoteTitle",
-            _components.VotePanel.transform,
-            CoopLocalization.Get("ui.vote.title"),
-            22,
-            ModernColors.TextPrimary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
+        var titleText = CreateText("VoteTitle", _components.VotePanel.transform, CoopLocalization.Get("ui.vote.title"), 22, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
         var titleLayout = titleText.gameObject.GetComponent<LayoutElement>();
         titleLayout.flexibleWidth = 0;
         titleLayout.preferredWidth = -1;
 
-        var sceneText = CreateText(
-            "SceneName",
-            _components.VotePanel.transform,
-            sceneName,
-            18,
-            ModernColors.Primary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
+        var sceneText = CreateText("SceneName", _components.VotePanel.transform, sceneName, 18, ModernColors.Primary, TextAlignmentOptions.Left, FontStyles.Bold);
         var sceneLayout = sceneText.gameObject.GetComponent<LayoutElement>();
         sceneLayout.flexibleWidth = 0;
         sceneLayout.preferredWidth = -1;
@@ -1628,99 +1418,187 @@ public class MModUI : MonoBehaviour
             readyLayout.minWidth = -1;
         }
 
-        var readyText = CreateText(
-            "ReadyStatus",
-            readySection.transform,
-            SceneNet.Instance.localReady
-                ? "[OK] " + CoopLocalization.Get("ui.vote.ready")
-                : "[  ] " + CoopLocalization.Get("ui.vote.notReady"),
-            16,
-            SceneNet.Instance.localReady ? ModernColors.Success : ModernColors.Warning
-        );
-        CreateText(
-            "ReadyHint",
-            readySection.transform,
-            CoopLocalization.Get("ui.vote.pressKey", readyKey, ""),
-            13,
-            ModernColors.TextTertiary
-        );
+        var readyText = CreateText("ReadyStatus", readySection.transform,
+            SceneNet.Instance.localReady ? "[OK] " + CoopLocalization.Get("ui.vote.ready") : "[  ] " + CoopLocalization.Get("ui.vote.notReady"), 16,
+            SceneNet.Instance.localReady ? ModernColors.Success : ModernColors.Warning);
+        CreateText("ReadyHint", readySection.transform, CoopLocalization.Get("ui.vote.pressKey", readyKey, ""), 13, ModernColors.TextTertiary);
 
         // 取消投票按钮（只有房主才能看到）
         if (IsServer)
         {
             CreateDivider(_components.VotePanel.transform);
-            var cancelButton = CreateModernButton(
-                "CancelVote",
-                _components.VotePanel.transform,
+            var cancelButton = CreateModernButton("CancelVote", _components.VotePanel.transform,
                 CoopLocalization.Get("ui.vote.cancel", "取消投票"),
-                OnCancelVote,
-                -1,
-                ModernColors.Error,
-                40,
-                14
-            );
+                OnCancelVote, -1, ModernColors.Error, 40, 14);
         }
 
-        // 🆕 显示投票进度
-        var progressText = CreateText(
-            "VoteProgress",
-            _components.VotePanel.transform,
-            $"{CoopLocalization.Get("ui.vote.playerReadyStatus")}: {voteData.readyPlayers}/{voteData.totalPlayers}",
-            16,
-            ModernColors.TextSecondary
-        );
-        var progressLayout = progressText.gameObject.GetComponent<LayoutElement>();
-        progressLayout.flexibleWidth = 0;
-        progressLayout.preferredWidth = -1;
+        // 玩家列表标题
+        var listTitle = CreateText("PlayerListTitle", _components.VotePanel.transform, CoopLocalization.Get("ui.vote.playerReadyStatus"), 16, ModernColors.TextSecondary);
+        var listTitleLayout = listTitle.gameObject.GetComponent<LayoutElement>();
+        listTitleLayout.flexibleWidth = 0;
+        listTitleLayout.preferredWidth = -1;
 
-        // 🆕 玩家列表：严格按照主机传来的 playerList 渲染
-        if (voteData.playerList != null && voteData.playerList.items != null)
+        // 玩家列表
+        foreach (var pid in SceneNet.Instance.sceneParticipantIds)
         {
-            foreach (var player in voteData.playerList.items)
+            SceneNet.Instance.sceneReady.TryGetValue(pid, out var ready);
+            var playerRow = CreateModernListItem(_components.VotePanel.transform, $"Player_{pid}");
+
+            var statusIcon = CreateText("Status", playerRow.transform, ready ? CoopLocalization.Get("ui.vote.readyIcon") : CoopLocalization.Get("ui.vote.notReadyIcon"), 16,
+                ready ? ModernColors.Success : ModernColors.TextTertiary);
+            var statusLayout = statusIcon.gameObject.GetComponent<LayoutElement>();
+            statusLayout.flexibleWidth = 0;
+            statusLayout.preferredWidth = 60;
+
+            // 获取玩家显示名称和ID
+            string displayName = pid;
+            string displayId = pid;
+
+            // ✅ 优先从投票数据中获取 Steam 名字
+            if (SceneNet.Instance.cachedVoteData?.playerList?.items != null)
             {
-                if (player == null || string.IsNullOrEmpty(player.playerId))
-                    continue;
-
-                var playerRow = CreateModernListItem(
-                    _components.VotePanel.transform,
-                    $"Player_{player.playerId}"
-                );
-
-                // 状态图标
-                var statusIcon = CreateText(
-                    "Status",
-                    playerRow.transform,
-                    player.ready
-                        ? CoopLocalization.Get("ui.vote.readyIcon")
-                        : CoopLocalization.Get("ui.vote.notReadyIcon"),
-                    16,
-                    player.ready ? ModernColors.Success : ModernColors.TextTertiary
-                );
-                var statusLayout = statusIcon.gameObject.GetComponent<LayoutElement>();
-                statusLayout.flexibleWidth = 0;
-                statusLayout.preferredWidth = 60;
-
-                // 🆕 使用主机传来的数据（优先使用 Steam 用户名）
-                string displayName = player.steamName ?? player.playerName ?? player.playerId;
-                string displayId = player.steamId ?? player.playerId;
-
-                // 🆕 显示名称和ID（直接使用主机传来的数据，不再本地计算）
-                var nameText = CreateText(
-                    "Name",
-                    playerRow.transform,
-                    displayName,
-                    14,
-                    ModernColors.TextPrimary
-                );
-                var nameLayout = nameText.gameObject.GetComponent<LayoutElement>();
-                nameLayout.flexibleWidth = 1;
-
-                CreateText("ID", playerRow.transform, displayId, 12, ModernColors.TextSecondary);
+                int playerCount = SceneNet.Instance.cachedVoteData.playerList.items.Count();
+                LoggerHelper.Log($"[MModUI] 尝试从投票数据获取玩家名字: pid={pid}, 投票数据玩家数={playerCount}");
+                foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+                {
+                    LoggerHelper.Log($"[MModUI] 检查玩家: playerId={player.playerId}, steamName={player.steamName}");
+                    if (player.playerId == pid && !string.IsNullOrEmpty(player.steamName))
+                    {
+                        // 判断是否是主机
+                        bool isHost = player.playerId.StartsWith("Host:");
+                        string prefix = isHost ? "HOST" : "CLIENT";
+                        displayName = $"{prefix}_{player.steamName}";
+                        displayId = player.steamId;
+                        LoggerHelper.Log($"[MModUI] ✅ 从投票数据获取到名字: {displayName}");
+                        break;
+                    }
+                }
             }
-        }
-        else
-        {
-            LoggerHelper.LogWarning("[MModUI] 投票数据中没有玩家列表");
+            else
+            {
+                LoggerHelper.Log($"[MModUI] ⚠️ 投票数据为空，无法获取 Steam 名字");
+            }
+
+            // 如果投票数据中没有找到，回退到原来的逻辑
+            if (displayName == pid && TransportMode == NetworkTransportMode.SteamP2P && SteamManager.Initialized && LobbyManager != null && LobbyManager.IsInLobby)
+            {
+                try
+                {
+                    // Steam模式：pid 可能是 EndPoint 格式（Host:9050, Client:xxx）或 SteamID
+                    ulong steamIdValue = 0;
+
+                    // 先尝试直接解析为 SteamID
+                    if (ulong.TryParse(pid, out steamIdValue) && steamIdValue > 0)
+                    {
+                        // pid 是 SteamID
+                    }
+                    else
+                    {
+                        // pid 是 EndPoint 格式，需要转换为 SteamID
+                        if (pid.StartsWith("Host:"))
+                        {
+                            // 主机的 EndPoint
+                            // 先检查是否是本地玩家
+                            if (localPlayerStatus != null && localPlayerStatus.EndPoint == pid)
+                            {
+                                steamIdValue = SteamUser.GetSteamID().m_SteamID;
+                            }
+                            else
+                            {
+                                // 远程主机，获取 Lobby 所有者的 SteamID
+                                var lobbyOwner = SteamMatchmaking.GetLobbyOwner(LobbyManager.CurrentLobbyId);
+                                steamIdValue = lobbyOwner.m_SteamID;
+                            }
+                        }
+                        else if (pid.StartsWith("Client:"))
+                        {
+                            // 客户端的 EndPoint，尝试从 PlayerStatus 查找
+                            // 先检查本地玩家
+                            if (localPlayerStatus != null && localPlayerStatus.EndPoint == pid)
+                            {
+                                steamIdValue = SteamUser.GetSteamID().m_SteamID;
+                            }
+                            else
+                            {
+                                // 遍历所有玩家状态，找到匹配的 EndPoint
+                                IEnumerable<PlayerStatus> allStatuses = IsServer
+                                    ? playerStatuses?.Values
+                                    : clientPlayerStatuses?.Values;
+                                if (allStatuses != null)
+                                {
+                                    foreach (var status in allStatuses)
+                                    {
+                                        if (status.EndPoint == pid)
+                                        {
+                                            steamIdValue = GetSteamIdFromStatus(status);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // 尝试解析虚拟 IP 格式（10.255.0.x:port）
+                            var parts = pid.Split(':');
+                            if (parts.Length == 2 && System.Net.IPAddress.TryParse(parts[0], out var ipAddr) && int.TryParse(parts[1], out var port))
+                            {
+                                var ipEndPoint = new System.Net.IPEndPoint(ipAddr, port);
+                                if (SteamEndPointMapper.Instance != null &&
+                                    SteamEndPointMapper.Instance.TryGetSteamID(ipEndPoint, out CSteamID cSteamId))
+                                {
+                                    steamIdValue = cSteamId.m_SteamID;
+                                }
+                            }
+                        }
+                    }
+
+                    // 如果成功获取到 SteamID，显示用户名
+                    if (steamIdValue > 0)
+                    {
+                        var cSteamId = new CSteamID(steamIdValue);
+                        string cachedName = LobbyManager.GetCachedMemberName(cSteamId);
+
+                        if (!string.IsNullOrEmpty(cachedName))
+                        {
+                            // 判断是否是主机
+                            var lobbyOwner = SteamMatchmaking.GetLobbyOwner(LobbyManager.CurrentLobbyId);
+                            string prefix = (steamIdValue == lobbyOwner.m_SteamID) ? "HOST" : "CLIENT";
+                            displayName = $"{prefix}_{cachedName}";
+                        }
+                        else
+                        {
+                            // 缓存未命中，回退到Steam API
+                            string steamUsername = SteamFriends.GetFriendPersonaName(cSteamId);
+                            if (!string.IsNullOrEmpty(steamUsername) && steamUsername != "[unknown]")
+                            {
+                                var lobbyOwner = SteamMatchmaking.GetLobbyOwner(LobbyManager.CurrentLobbyId);
+                                string prefix = (steamIdValue == lobbyOwner.m_SteamID) ? "HOST" : "CLIENT";
+                                displayName = $"{prefix}_{steamUsername}";
+                            }
+                            else
+                            {
+                                displayName = $"Player_{steamIdValue.ToString().Substring(Math.Max(0, steamIdValue.ToString().Length - 4))}";
+                            }
+                        }
+
+                        displayId = steamIdValue.ToString();
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    LoggerHelper.LogWarning($"[MModUI] Steam API 调用失败（可能在直连模式下错误调用）: {ex.Message}");
+                    // 使用默认的 EndPoint 显示
+                }
+            }
+
+            // 显示名称和ID
+            LoggerHelper.Log($"[MModUI] 最终显示名称: pid={pid}, displayName={displayName}, displayId={displayId}");
+            var nameText = CreateText("Name", playerRow.transform, displayName, 14, ModernColors.TextPrimary);
+            var nameLayout = nameText.gameObject.GetComponent<LayoutElement>();
+            nameLayout.flexibleWidth = 1;
+
+            CreateText("ID", playerRow.transform, displayId, 12, ModernColors.TextSecondary);
         }
     }
 
@@ -1768,8 +1646,7 @@ public class MModUI : MonoBehaviour
     /// </summary>
     private void UpdatePlayerPingDisplays()
     {
-        if (_playerPingTexts.Count == 0)
-            return;
+        if (_playerPingTexts.Count == 0) return;
 
         // 计时器控制更新频率
         _pingUpdateTimer += Time.deltaTime;
@@ -1820,13 +1697,7 @@ public class MModUI : MonoBehaviour
 
     #region 现代化UI Helper方法
 
-    internal GameObject CreateModernPanel(
-        string name,
-        Transform parent,
-        Vector2 size,
-        Vector2 anchorPos,
-        TextAnchor pivot = TextAnchor.UpperLeft
-    )
+    internal GameObject CreateModernPanel(string name, Transform parent, Vector2 size, Vector2 anchorPos, TextAnchor pivot = TextAnchor.UpperLeft)
     {
         var panel = new GameObject(name);
         panel.transform.SetParent(parent, false);
@@ -1903,9 +1774,9 @@ public class MModUI : MonoBehaviour
         {
             try
             {
-                translucentImage.vibrancy = 0.3f; // 降低色彩饱和度
-                translucentImage.brightness = 0.9f; // 略微变暗
-                translucentImage.flatten = 0.5f; // 扁平化，减少背景干扰
+                translucentImage.vibrancy = 0.3f;      // 降低色彩饱和度
+                translucentImage.brightness = 0.9f;    // 略微变暗
+                translucentImage.flatten = 0.5f;       // 扁平化，减少背景干扰
             }
             catch (System.Exception e)
             {
@@ -1913,7 +1784,6 @@ public class MModUI : MonoBehaviour
             }
         }
     }
-
     private static Sprite CreateEmbeddedNoiseSprite()
     {
         int size = 128;
@@ -1926,6 +1796,7 @@ public class MModUI : MonoBehaviour
             {
                 float g = 0.5f + (float)(rand.NextDouble() - 0.5) * 0.12f; // 灰度轻微扰动
                 tex.SetPixel(x, y, new Color(g, g, g, 0.83f)); // 几乎不透明
+
             }
         }
 
@@ -1945,8 +1816,8 @@ public class MModUI : MonoBehaviour
 
         // --- 背景改成毛玻璃风格 ---
         var bg = titleBar.AddComponent<Image>();
-        bg.color = GlassTheme.CardBg; // 半透明灰
-        bg.sprite = CreateEmbeddedNoiseSprite(); // 噪声纹理
+        bg.color = GlassTheme.CardBg;                // 半透明灰
+        bg.sprite = CreateEmbeddedNoiseSprite();     // 噪声纹理
         bg.type = Image.Type.Tiled;
 
         // 轻描边 + 柔光阴影
@@ -1962,10 +1833,11 @@ public class MModUI : MonoBehaviour
         layoutElement.flexibleWidth = 1;
         layoutElement.preferredHeight = 60;
         layoutElement.minHeight = 60;
-        layoutElement.flexibleHeight = 0; // 不占据额外垂直空间
+        layoutElement.flexibleHeight = 0;  // 不占据额外垂直空间
 
         return titleBar;
     }
+
 
     private GameObject CreateContentArea(Transform parent)
     {
@@ -1997,6 +1869,7 @@ public class MModUI : MonoBehaviour
         return content;
     }
 
+
     internal GameObject CreateModernCard(Transform parent, string name)
     {
         var card = new GameObject(name);
@@ -2027,6 +1900,7 @@ public class MModUI : MonoBehaviour
         return card;
     }
 
+
     private GameObject CreateModernListItem(Transform parent, string name)
     {
         var item = new GameObject(name);
@@ -2049,17 +1923,10 @@ public class MModUI : MonoBehaviour
         return item;
     }
 
+
     internal void CreateSectionHeader(Transform parent, string text)
     {
-        var header = CreateText(
-            "SectionHeader",
-            parent,
-            text,
-            15,
-            GlassTheme.TextSecondary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
+        var header = CreateText("SectionHeader", parent, text, 15, GlassTheme.TextSecondary, TextAlignmentOptions.Left, FontStyles.Bold);
         var layoutElement = header.gameObject.GetComponent<LayoutElement>();
         layoutElement.preferredHeight = 26;
         layoutElement.minHeight = 26;
@@ -2076,6 +1943,7 @@ public class MModUI : MonoBehaviour
         rect.sizeDelta = new Vector2(0, 1);
     }
 
+
     internal TMP_Text CreateInfoRow(Transform parent, string label, string value)
     {
         var row = CreateHorizontalGroup(parent, $"InfoRow_{label}");
@@ -2088,18 +1956,11 @@ public class MModUI : MonoBehaviour
         labelLayout.preferredWidth = 70;
         labelLayout.flexibleWidth = 0;
 
-        var valueText = CreateText(
-            "Value",
-            row.transform,
-            value,
-            14,
-            GlassTheme.Text,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
+        var valueText = CreateText("Value", row.transform, value, 14, GlassTheme.Text, TextAlignmentOptions.Left, FontStyles.Bold);
 
         return valueText;
     }
+
 
     internal GameObject CreateStatusBar(Transform parent)
     {
@@ -2128,10 +1989,11 @@ public class MModUI : MonoBehaviour
         layoutElement.flexibleWidth = 1;
         layoutElement.preferredHeight = 42;
         layoutElement.minHeight = 42;
-        layoutElement.flexibleHeight = 0; // 不占据额外垂直空间
+        layoutElement.flexibleHeight = 0;  // 不占据额外垂直空间
 
         return bar;
     }
+
 
     private GameObject CreateActionBar(Transform parent)
     {
@@ -2162,6 +2024,7 @@ public class MModUI : MonoBehaviour
         return bar;
     }
 
+
     private GameObject CreateHintBar(Transform parent)
     {
         var bar = new GameObject("HintBar");
@@ -2188,6 +2051,7 @@ public class MModUI : MonoBehaviour
         return bar;
     }
 
+
     private GameObject CreateBadge(Transform parent, string text, Color color)
     {
         var badge = new GameObject("Badge");
@@ -2200,15 +2064,7 @@ public class MModUI : MonoBehaviour
         var bg = badge.AddComponent<Image>();
         bg.color = new Color(color.r, color.g, color.b, 0.2f);
 
-        var badgeText = CreateText(
-            "Text",
-            badge.transform,
-            text,
-            11,
-            color,
-            TextAlignmentOptions.Center,
-            FontStyles.Bold
-        );
+        var badgeText = CreateText("Text", badge.transform, text, 11, color, TextAlignmentOptions.Center, FontStyles.Bold);
 
         return badge;
     }
@@ -2270,15 +2126,7 @@ public class MModUI : MonoBehaviour
         return group;
     }
 
-    internal TMP_Text CreateText(
-        string name,
-        Transform parent,
-        string text,
-        int fontSize = 16,
-        Color? color = null,
-        TextAlignmentOptions alignment = TextAlignmentOptions.Left,
-        FontStyles style = FontStyles.Normal
-    )
+    internal TMP_Text CreateText(string name, Transform parent, string text, int fontSize = 16, Color? color = null, TextAlignmentOptions alignment = TextAlignmentOptions.Left, FontStyles style = FontStyles.Normal)
     {
         var textObj = new GameObject(name);
         textObj.transform.SetParent(parent, false);
@@ -2301,16 +2149,7 @@ public class MModUI : MonoBehaviour
         return tmpText;
     }
 
-    internal Button CreateModernButton(
-        string name,
-        Transform parent,
-        string text,
-        UnityEngine.Events.UnityAction onClick,
-        float width = -1,
-        Color? color = null,
-        float height = 40,
-        int fontSize = 15
-    )
+    internal Button CreateModernButton(string name, Transform parent, string text, UnityEngine.Events.UnityAction onClick, float width = -1, Color? color = null, float height = 40, int fontSize = 15)
     {
         var btnObj = new GameObject(name);
         btnObj.transform.SetParent(parent, false);
@@ -2318,10 +2157,8 @@ public class MModUI : MonoBehaviour
         var layout = btnObj.AddComponent<LayoutElement>();
         layout.preferredHeight = height;
         layout.minHeight = height;
-        if (width > 0)
-            layout.preferredWidth = width;
-        else
-            layout.flexibleWidth = 1;
+        if (width > 0) layout.preferredWidth = width;
+        else layout.flexibleWidth = 1;
 
         var baseColor = GlassTheme.ButtonBg;
         var image = btnObj.AddComponent<Image>();
@@ -2358,14 +2195,8 @@ public class MModUI : MonoBehaviour
         return button;
     }
 
-    internal Button CreateIconButton(
-        string name,
-        Transform parent,
-        string icon,
-        UnityEngine.Events.UnityAction onClick,
-        float size = 32,
-        Color? color = null
-    )
+
+    internal Button CreateIconButton(string name, Transform parent, string icon, UnityEngine.Events.UnityAction onClick, float size = 32, Color? color = null)
     {
         var btnObj = new GameObject(name);
         btnObj.transform.SetParent(parent, false);
@@ -2407,12 +2238,7 @@ public class MModUI : MonoBehaviour
         return button;
     }
 
-    internal TMP_InputField CreateModernInputField(
-        string name,
-        Transform parent,
-        string placeholder,
-        string defaultValue
-    )
+    internal TMP_InputField CreateModernInputField(string name, Transform parent, string placeholder, string defaultValue)
     {
         var inputObj = new GameObject(name);
         inputObj.transform.SetParent(parent, false);
@@ -2460,6 +2286,7 @@ public class MModUI : MonoBehaviour
         return input;
     }
 
+
     internal GameObject CreateModernScrollView(string name, Transform parent, float height)
     {
         var scrollObj = new GameObject(name);
@@ -2473,8 +2300,8 @@ public class MModUI : MonoBehaviour
 
         // === 背景：伪毛玻璃 ===
         var scrollImage = scrollObj.AddComponent<Image>();
-        scrollImage.color = GlassTheme.CardBg; // 半透明深灰
-        scrollImage.sprite = CreateEmbeddedNoiseSprite(); // 噪声散射
+        scrollImage.color = GlassTheme.CardBg;              // 半透明深灰
+        scrollImage.sprite = CreateEmbeddedNoiseSprite();   // 噪声散射
         scrollImage.type = Image.Type.Tiled;
 
         // 柔光边缘
@@ -2547,12 +2374,11 @@ public class MModUI : MonoBehaviour
         scrollbar.targetGraphic = scrollbarImage;
 
         scroll.verticalScrollbar = scrollbar;
-        scroll.verticalScrollbarVisibility = ScrollRect
-            .ScrollbarVisibility
-            .AutoHideAndExpandViewport;
+        scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
 
         return scrollObj;
     }
+
 
     internal void MakeDraggable(GameObject panel)
     {
@@ -2572,15 +2398,7 @@ public class MModUI : MonoBehaviour
         var steamHeaderGroup = CreateHorizontalGroup(steamHeader.transform, "HeaderGroup");
         steamHeaderGroup.GetComponent<HorizontalLayoutGroup>().padding = new RectOffset(0, 0, 0, 0);
 
-        CreateText(
-            "ListTitle",
-            steamHeaderGroup.transform,
-            CoopLocalization.Get("ui.steam.lobbyList"),
-            20,
-            ModernColors.TextPrimary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
+        CreateText("ListTitle", steamHeaderGroup.transform, CoopLocalization.Get("ui.steam.lobbyList"), 20, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
 
         var headerSpacer = new GameObject("Spacer");
         headerSpacer.transform.SetParent(steamHeaderGroup.transform, false);
@@ -2588,20 +2406,10 @@ public class MModUI : MonoBehaviour
         headerSpacerLayout.flexibleWidth = 1;
 
         // 刷新按钮
-        CreateModernButton(
-            "RefreshBtn",
-            steamHeaderGroup.transform,
-            CoopLocalization.Get("ui.steam.refresh"),
-            () =>
-            {
-                if (LobbyManager != null)
-                    LobbyManager.RequestLobbyList();
-            },
-            120,
-            ModernColors.Primary,
-            38,
-            15
-        );
+        CreateModernButton("RefreshBtn", steamHeaderGroup.transform, CoopLocalization.Get("ui.steam.refresh"), () =>
+        {
+            if (LobbyManager != null) LobbyManager.RequestLobbyList();
+        }, 120, ModernColors.Primary, 38, 15);
 
         // Steam房间列表滚动视图
         var lobbyScroll = CreateModernScrollView("SteamLobbyScroll", parent, 445);
@@ -2616,47 +2424,21 @@ public class MModUI : MonoBehaviour
         passCardLayout.minHeight = 80;
 
         var passRow = CreateHorizontalGroup(passCard.transform, "JoinPassRow");
-        CreateText(
-            "JoinPassLabel",
-            passRow.transform,
-            CoopLocalization.Get("ui.steam.joinPassword"),
-            14,
-            GlassTheme.TextSecondary
-        )
-            .gameObject.GetComponent<LayoutElement>()
-            .preferredWidth = 80;
-        var joinPassInput = CreateModernInputField(
-            "JoinPass",
-            passRow.transform,
-            CoopLocalization.Get("ui.steam.joinPasswordPlaceholder"),
-            _steamJoinPassword
-        );
+        CreateText("JoinPassLabel", passRow.transform, CoopLocalization.Get("ui.steam.joinPassword"), 14, GlassTheme.TextSecondary).gameObject.GetComponent<LayoutElement>().preferredWidth = 80;
+        var joinPassInput = CreateModernInputField("JoinPass", passRow.transform, CoopLocalization.Get("ui.steam.joinPasswordPlaceholder"), _steamJoinPassword);
         joinPassInput.contentType = TMP_InputField.ContentType.Password;
         joinPassInput.onValueChanged.AddListener(value => _steamJoinPassword = value);
 
         // Steam模式状态栏
         var steamStatusBar = CreateStatusBar(parent);
-        _components.SteamStatusText = CreateText(
-            "SteamStatus",
-            steamStatusBar.transform,
-            $"[*] {status}",
-            14,
-            ModernColors.TextSecondary
-        );
+        _components.SteamStatusText = CreateText("SteamStatus", steamStatusBar.transform, $"[*] {status}", 14, ModernColors.TextSecondary);
 
         var steamStatusSpacer = new GameObject("Spacer");
         steamStatusSpacer.transform.SetParent(steamStatusBar.transform, false);
         var steamStatusSpacerLayout = steamStatusSpacer.AddComponent<LayoutElement>();
         steamStatusSpacerLayout.flexibleWidth = 1;
 
-        CreateText(
-            "Hint",
-            steamStatusBar.transform,
-            CoopLocalization.Get("ui.hint.toggleUI", "="),
-            12,
-            ModernColors.TextTertiary,
-            TextAlignmentOptions.Right
-        );
+        CreateText("Hint", steamStatusBar.transform, CoopLocalization.Get("ui.hint.toggleUI", "="), 12, ModernColors.TextTertiary, TextAlignmentOptions.Right);
     }
 
     // 创建Steam控制面板（右侧）
@@ -2670,21 +2452,8 @@ public class MModUI : MonoBehaviour
 
         // 房间名称
         var nameRow = CreateHorizontalGroup(controlCard.transform, "NameRow");
-        CreateText(
-            "NameLabel",
-            nameRow.transform,
-            CoopLocalization.Get("ui.steam.lobbyName"),
-            14,
-            GlassTheme.TextSecondary
-        )
-            .gameObject.GetComponent<LayoutElement>()
-            .preferredWidth = 70;
-        var nameInput = CreateModernInputField(
-            "LobbyName",
-            nameRow.transform,
-            CoopLocalization.Get("ui.steam.lobbyNamePlaceholder"),
-            _steamLobbyName
-        );
+        CreateText("NameLabel", nameRow.transform, CoopLocalization.Get("ui.steam.lobbyName"), 14, GlassTheme.TextSecondary).gameObject.GetComponent<LayoutElement>().preferredWidth = 70;
+        var nameInput = CreateModernInputField("LobbyName", nameRow.transform, CoopLocalization.Get("ui.steam.lobbyNamePlaceholder"), _steamLobbyName);
         nameInput.onValueChanged.AddListener(value =>
         {
             _steamLobbyName = value;
@@ -2693,21 +2462,8 @@ public class MModUI : MonoBehaviour
 
         // 房间密码
         var passRow = CreateHorizontalGroup(controlCard.transform, "PassRow");
-        CreateText(
-            "PassLabel",
-            passRow.transform,
-            CoopLocalization.Get("ui.steam.lobbyPassword"),
-            14,
-            GlassTheme.TextSecondary
-        )
-            .gameObject.GetComponent<LayoutElement>()
-            .preferredWidth = 70;
-        var passInput = CreateModernInputField(
-            "LobbyPass",
-            passRow.transform,
-            CoopLocalization.Get("ui.steam.lobbyPasswordPlaceholder"),
-            _steamLobbyPassword
-        );
+        CreateText("PassLabel", passRow.transform, CoopLocalization.Get("ui.steam.lobbyPassword"), 14, GlassTheme.TextSecondary).gameObject.GetComponent<LayoutElement>().preferredWidth = 70;
+        var passInput = CreateModernInputField("LobbyPass", passRow.transform, CoopLocalization.Get("ui.steam.lobbyPasswordPlaceholder"), _steamLobbyPassword);
         passInput.contentType = TMP_InputField.ContentType.Password;
         passInput.onValueChanged.AddListener(value =>
         {
@@ -2717,127 +2473,59 @@ public class MModUI : MonoBehaviour
 
         // 可见性
         var visRow = CreateHorizontalGroup(controlCard.transform, "VisRow");
-        CreateText(
-            "VisLabel",
-            visRow.transform,
-            CoopLocalization.Get("ui.steam.visibility"),
-            14,
-            GlassTheme.TextSecondary
-        )
-            .gameObject.GetComponent<LayoutElement>()
-            .preferredWidth = 70;
+        CreateText("VisLabel", visRow.transform, CoopLocalization.Get("ui.steam.visibility"), 14, GlassTheme.TextSecondary).gameObject.GetComponent<LayoutElement>().preferredWidth = 70;
 
         var visButtons = CreateHorizontalGroup(visRow.transform, "VisButtons");
         visButtons.GetComponent<HorizontalLayoutGroup>().spacing = 5;
-        CreateModernButton(
-            "Public",
-            visButtons.transform,
-            CoopLocalization.Get("ui.steam.visibility.public"),
-            () =>
-            {
-                _steamLobbyFriendsOnly = false;
-                UpdateLobbyOptionsFromUI();
-            },
-            90,
-            _steamLobbyFriendsOnly ? GlassTheme.ButtonBg : ModernColors.Primary,
-            35,
-            13
-        );
+        CreateModernButton("Public", visButtons.transform, CoopLocalization.Get("ui.steam.visibility.public"), () =>
+        {
+            _steamLobbyFriendsOnly = false;
+            UpdateLobbyOptionsFromUI();
+        }, 90, _steamLobbyFriendsOnly ? GlassTheme.ButtonBg : ModernColors.Primary, 35, 13);
 
-        CreateModernButton(
-            "Friends",
-            visButtons.transform,
-            CoopLocalization.Get("ui.steam.visibility.friends"),
-            () =>
-            {
-                _steamLobbyFriendsOnly = true;
-                UpdateLobbyOptionsFromUI();
-            },
-            90,
-            _steamLobbyFriendsOnly ? ModernColors.Primary : GlassTheme.ButtonBg,
-            35,
-            13
-        );
+        CreateModernButton("Friends", visButtons.transform, CoopLocalization.Get("ui.steam.visibility.friends"), () =>
+        {
+            _steamLobbyFriendsOnly = true;
+            UpdateLobbyOptionsFromUI();
+        }, 90, _steamLobbyFriendsOnly ? ModernColors.Primary : GlassTheme.ButtonBg, 35, 13);
 
         // 最大玩家数
         var maxRow = CreateHorizontalGroup(controlCard.transform, "MaxRow");
-        CreateText(
-            "MaxLabel",
-            maxRow.transform,
-            CoopLocalization.Get("ui.steam.maxPlayers.label"),
-            14,
-            GlassTheme.TextSecondary
-        )
-            .gameObject.GetComponent<LayoutElement>()
-            .preferredWidth = 70;
+        CreateText("MaxLabel", maxRow.transform, CoopLocalization.Get("ui.steam.maxPlayers.label"), 14, GlassTheme.TextSecondary).gameObject.GetComponent<LayoutElement>().preferredWidth = 70;
 
         var maxButtons = CreateHorizontalGroup(maxRow.transform, "MaxButtons");
         maxButtons.GetComponent<HorizontalLayoutGroup>().spacing = 5;
-        CreateModernButton(
-            "Minus",
-            maxButtons.transform,
-            "-",
-            () =>
-            {
-                _steamLobbyMaxPlayers = Mathf.Max(2, _steamLobbyMaxPlayers - 1);
-                if (_components.SteamMaxPlayersText != null)
-                    _components.SteamMaxPlayersText.text = _steamLobbyMaxPlayers.ToString();
-                UpdateLobbyOptionsFromUI();
-            },
-            35,
-            GlassTheme.ButtonBg,
-            35,
-            13
-        );
+        CreateModernButton("Minus", maxButtons.transform, "-", () =>
+        {
+            _steamLobbyMaxPlayers = Mathf.Max(2, _steamLobbyMaxPlayers - 1);
+            if (_components.SteamMaxPlayersText != null)
+                _components.SteamMaxPlayersText.text = _steamLobbyMaxPlayers.ToString();
+            UpdateLobbyOptionsFromUI();
+        }, 35, GlassTheme.ButtonBg, 35, 13);
 
-        _components.SteamMaxPlayersText = CreateText(
-            "MaxValue",
-            maxButtons.transform,
-            _steamLobbyMaxPlayers.ToString(),
-            14,
-            ModernColors.TextPrimary
-        );
-        _components.SteamMaxPlayersText.gameObject.GetComponent<LayoutElement>().preferredWidth =
-            40;
+        _components.SteamMaxPlayersText = CreateText("MaxValue", maxButtons.transform, _steamLobbyMaxPlayers.ToString(), 14, ModernColors.TextPrimary);
+        _components.SteamMaxPlayersText.gameObject.GetComponent<LayoutElement>().preferredWidth = 40;
 
-        CreateModernButton(
-            "Plus",
-            maxButtons.transform,
-            "+",
-            () =>
-            {
-                _steamLobbyMaxPlayers = Mathf.Min(16, _steamLobbyMaxPlayers + 1);
-                if (_components.SteamMaxPlayersText != null)
-                    _components.SteamMaxPlayersText.text = _steamLobbyMaxPlayers.ToString();
-                UpdateLobbyOptionsFromUI();
-            },
-            35,
-            GlassTheme.ButtonBg,
-            35,
-            13
-        );
+        CreateModernButton("Plus", maxButtons.transform, "+", () =>
+        {
+            _steamLobbyMaxPlayers = Mathf.Min(16, _steamLobbyMaxPlayers + 1);
+            if (_components.SteamMaxPlayersText != null)
+                _components.SteamMaxPlayersText.text = _steamLobbyMaxPlayers.ToString();
+            UpdateLobbyOptionsFromUI();
+        }, 35, GlassTheme.ButtonBg, 35, 13);
 
         CreateDivider(controlCard.transform);
 
         // 创建/离开按钮 - 保存引用以便动态更新
         var isInLobby = LobbyManager != null && LobbyManager.IsInLobby;
-        _components.SteamCreateLeaveButton = CreateModernButton(
-            "CreateLobby",
-            controlCard.transform,
-            isInLobby
-                ? CoopLocalization.Get("ui.steam.leaveLobby")
-                : CoopLocalization.Get("ui.steam.createHost"),
-            OnSteamCreateOrLeave,
-            -1,
-            isInLobby ? ModernColors.Error : ModernColors.Success,
-            45,
-            16
-        );
+        _components.SteamCreateLeaveButton = CreateModernButton("CreateLobby", controlCard.transform,
+            isInLobby ? CoopLocalization.Get("ui.steam.leaveLobby") : CoopLocalization.Get("ui.steam.createHost"),
+            OnSteamCreateOrLeave, -1, isInLobby ? ModernColors.Error : ModernColors.Success, 45, 16);
 
         // 保存按钮文本引用
-        _components.SteamCreateLeaveButtonText =
-            _components.SteamCreateLeaveButton.GetComponentInChildren<TextMeshProUGUI>();
+        _components.SteamCreateLeaveButtonText = _components.SteamCreateLeaveButton.GetComponentInChildren<TextMeshProUGUI>();
     }
+
 
     private void UpdateTransportModePanels()
     {
@@ -2851,19 +2539,15 @@ public class MModUI : MonoBehaviour
         // 更新左侧列表区域
         if (_components?.DirectServerListArea != null && _components?.SteamServerListArea != null)
         {
-            _components.DirectServerListArea.SetActive(
-                TransportMode == NetworkTransportMode.Direct
-            );
-            _components.SteamServerListArea.SetActive(
-                TransportMode == NetworkTransportMode.SteamP2P
-            );
+            _components.DirectServerListArea.SetActive(TransportMode == NetworkTransportMode.Direct);
+            _components.SteamServerListArea.SetActive(TransportMode == NetworkTransportMode.SteamP2P);
         }
     }
 
+
     private void UpdateLobbyOptionsFromUI()
     {
-        if (Service == null)
-            return;
+        if (Service == null) return;
 
         var maxPlayers = Mathf.Clamp(_steamLobbyMaxPlayers, 2, 16);
         _steamLobbyMaxPlayers = maxPlayers;
@@ -2872,10 +2556,8 @@ public class MModUI : MonoBehaviour
         {
             LobbyName = _steamLobbyName,
             Password = _steamLobbyPassword,
-            Visibility = _steamLobbyFriendsOnly
-                ? SteamLobbyVisibility.FriendsOnly
-                : SteamLobbyVisibility.Public,
-            MaxPlayers = maxPlayers,
+            Visibility = _steamLobbyFriendsOnly ? SteamLobbyVisibility.FriendsOnly : SteamLobbyVisibility.Public,
+            MaxPlayers = maxPlayers
         };
 
         Service.ConfigureLobbyOptions(options);
@@ -2908,23 +2590,14 @@ public class MModUI : MonoBehaviour
                 NetService.Instance.port = serverPort;
                 NetService.Instance.StartNetwork(true);
 
-                SetStatusText(
-                    "[OK] " + CoopLocalization.Get("ui.server.created", serverPort),
-                    ModernColors.Success
-                );
+                SetStatusText("[OK] " + CoopLocalization.Get("ui.server.created", serverPort), ModernColors.Success);
 
                 LoggerHelper.Log($"主机创建成功，使用端口: {serverPort}");
             }
             else
             {
                 // 端口格式错误
-                SetStatusText(
-                    "["
-                        + CoopLocalization.Get("ui.error")
-                        + "] "
-                        + CoopLocalization.Get("ui.manualConnect.portError"),
-                    ModernColors.Error
-                );
+                SetStatusText("[" + CoopLocalization.Get("ui.error") + "] " + CoopLocalization.Get("ui.manualConnect.portError"), ModernColors.Error);
 
                 LoggerHelper.LogError($"端口格式错误: {manualPort}");
                 return;
@@ -2947,20 +2620,14 @@ public class MModUI : MonoBehaviour
         // 检查客户端是否在关卡内
         if (LocalPlayerManager.Instance == null)
         {
-            SetStatusText(
-                "[!] " + CoopLocalization.Get("ui.error.gameNotInitialized"),
-                ModernColors.Error
-            );
+            SetStatusText("[!] " + CoopLocalization.Get("ui.error.gameNotInitialized"), ModernColors.Error);
             return false;
         }
 
         var isInGame = LocalPlayerManager.Instance.ComputeIsInGame(out var sceneId);
         if (!isInGame)
         {
-            SetStatusText(
-                "[!] " + CoopLocalization.Get("ui.error.mustInLevel"),
-                ModernColors.Warning
-            );
+            SetStatusText("[!] " + CoopLocalization.Get("ui.error.mustInLevel"), ModernColors.Warning);
             LoggerHelper.LogWarning("无法连接：客户端未在游戏关卡中");
             return false;
         }
@@ -2971,18 +2638,13 @@ public class MModUI : MonoBehaviour
 
     internal void OnManualConnect()
     {
-        if (_components?.IpInputField != null)
-            manualIP = _components.IpInputField.text;
-        if (_components?.PortInputField != null)
-            manualPort = _components.PortInputField.text;
+        if (_components?.IpInputField != null) manualIP = _components.IpInputField.text;
+        if (_components?.PortInputField != null) manualPort = _components.PortInputField.text;
 
         if (!int.TryParse(manualPort, out var p))
         {
             // 端口格式错误需要立即显示
-            SetStatusText(
-                "[!] " + CoopLocalization.Get("ui.manualConnect.portError"),
-                ModernColors.Error
-            );
+            SetStatusText("[!] " + CoopLocalization.Get("ui.manualConnect.portError"), ModernColors.Error);
             return;
         }
 
@@ -3000,13 +2662,8 @@ public class MModUI : MonoBehaviour
     {
         if (LevelManager.LootBoxInventories == null)
         {
-            LoggerHelper.LogWarning(
-                "LootBoxInventories is null. Make sure you are in a game level."
-            );
-            SetStatusText(
-                "[!] " + CoopLocalization.Get("ui.error.mustInLevel"),
-                ModernColors.Warning
-            );
+            LoggerHelper.LogWarning("LootBoxInventories is null. Make sure you are in a game level.");
+            SetStatusText("[!] " + CoopLocalization.Get("ui.error.mustInLevel"), ModernColors.Warning);
             return;
         }
 
@@ -3015,9 +2672,7 @@ public class MModUI : MonoBehaviour
         {
             try
             {
-                LoggerHelper.Log(
-                    $"Name {i.Value.name} DisplayNameKey {i.Value.DisplayNameKey} Key {i.Key}"
-                );
+                LoggerHelper.Log($"Name {i.Value.name} DisplayNameKey {i.Value.DisplayNameKey} Key {i.Key}");
                 count++;
             }
             catch (Exception ex)
@@ -3027,10 +2682,7 @@ public class MModUI : MonoBehaviour
         }
 
         LoggerHelper.Log($"Total LootBoxes: {count}");
-        SetStatusText(
-            $"[OK] " + CoopLocalization.Get("ui.debug.lootBoxCount", count),
-            ModernColors.Success
-        );
+        SetStatusText($"[OK] " + CoopLocalization.Get("ui.debug.lootBoxCount", count), ModernColors.Success);
     }
 
     internal void DebugPrintRemoteCharacters()
@@ -3052,13 +2704,13 @@ public class MModUI : MonoBehaviour
 
         var debugData = new Dictionary<string, object>
         {
-            ["DebugVersion"] = "v2.0", // 🔧 版本信息：v2.0 - 添加SetId功能支持
+            ["DebugVersion"] = "v2.0",  // 🔧 版本信息：v2.0 - 添加SetId功能支持
             ["Timestamp"] = timestamp,
             ["Role"] = isServer ? "Server" : "Client",
             ["NetworkStarted"] = Service.networkStarted,
             ["Port"] = Service.port,
             ["Status"] = Service.status,
-            ["TransportMode"] = Service.TransportMode.ToString(),
+            ["TransportMode"] = Service.TransportMode.ToString()
         };
 
         // === 本地玩家信息 ===
@@ -3073,15 +2725,12 @@ public class MModUI : MonoBehaviour
             localPlayerData["Position"] = lps.Position.ToString();
             localPlayerData["Rotation"] = lps.Rotation.eulerAngles.ToString();
             localPlayerData["Latency"] = lps.Latency;
-            localPlayerData["CustomFaceJson"] = string.IsNullOrEmpty(lps.CustomFaceJson)
-                ? "null"
-                : $"[{lps.CustomFaceJson.Length} chars]";
-
+            localPlayerData["CustomFaceJson"] = string.IsNullOrEmpty(lps.CustomFaceJson) ? "null" : $"[{lps.CustomFaceJson.Length} chars]";
+            
             // 🔍 新增：本地玩家的网络ID信息
             if (!isServer && Service.connectedPeer != null)
             {
-                localPlayerData["ConnectedPeerEndPoint"] =
-                    Service.connectedPeer.EndPoint?.ToString() ?? "null";
+                localPlayerData["ConnectedPeerEndPoint"] = Service.connectedPeer.EndPoint?.ToString() ?? "null";
                 localPlayerData["ConnectedPeerId"] = Service.connectedPeer.Id;
             }
         }
@@ -3090,7 +2739,7 @@ public class MModUI : MonoBehaviour
             localPlayerData["Status"] = "null";
         }
         debugData["LocalPlayer"] = localPlayerData;
-
+        
         // 🔍 新增：本地玩家GameObject信息
         var localCharacterData = new Dictionary<string, object>();
         if (CharacterMainControl.Main != null)
@@ -3102,7 +2751,7 @@ public class MModUI : MonoBehaviour
             localCharacterData["ActiveInHierarchy"] = localGO.activeInHierarchy;
             localCharacterData["Position"] = localGO.transform.position.ToString();
             localCharacterData["Rotation"] = localGO.transform.rotation.eulerAngles.ToString();
-
+            
             // 场景路径
             var path = "";
             var t = localGO.transform;
@@ -3112,24 +2761,22 @@ public class MModUI : MonoBehaviour
                 t = t.parent;
             }
             localCharacterData["ScenePath"] = path;
-
+            
             // 检查是否有RemoteReplicaTag（不应该有）
-            localCharacterData["HasRemoteReplicaTag"] =
-                localGO.GetComponent<RemoteReplicaTag>() != null;
-
+            localCharacterData["HasRemoteReplicaTag"] = localGO.GetComponent<RemoteReplicaTag>() != null;
+            
             // 渲染器状态
             var renderers = localGO.GetComponentsInChildren<Renderer>();
             var enabledRenderers = renderers.Count(r => r.enabled);
             localCharacterData["TotalRenderers"] = renderers.Length;
             localCharacterData["EnabledRenderers"] = enabledRenderers;
-
+            
             // 组件列表
             var components = localGO.GetComponents<Component>();
             var componentNames = new List<string>();
             foreach (var comp in components)
             {
-                if (comp != null)
-                    componentNames.Add(comp.GetType().Name);
+                if (comp != null) componentNames.Add(comp.GetType().Name);
             }
             localCharacterData["AllComponents"] = string.Join(", ", componentNames);
             localCharacterData["ComponentCount"] = componentNames.Count;
@@ -3139,7 +2786,7 @@ public class MModUI : MonoBehaviour
             localCharacterData["Status"] = "null";
         }
         debugData["LocalCharacter"] = localCharacterData;
-
+        
         // 🔍 新增：场景中所有CharacterMainControl对象
         var allCharactersData = new List<object>();
         var allCharacters = UnityEngine.Object.FindObjectsOfType<CharacterMainControl>();
@@ -3155,9 +2802,9 @@ public class MModUI : MonoBehaviour
                 ["Position"] = charGO.transform.position.ToString(),
                 ["HasRemoteReplicaTag"] = charGO.GetComponent<RemoteReplicaTag>() != null,
                 ["HasNetInterpolator"] = charGO.GetComponent<NetInterpolator>() != null,
-                ["HasAnimInterpolator"] = charGO.GetComponent<AnimParamInterpolator>() != null,
+                ["HasAnimInterpolator"] = charGO.GetComponent<AnimParamInterpolator>() != null
             };
-
+            
             // 检查是否在remoteCharacters或clientRemoteCharacters中
             if (isServer && Service.remoteCharacters != null)
             {
@@ -3165,21 +2812,18 @@ public class MModUI : MonoBehaviour
             }
             else if (!isServer && Service.clientRemoteCharacters != null)
             {
-                charInfo["InClientRemoteCharacters"] =
-                    Service.clientRemoteCharacters.Values.Contains(charGO);
+                charInfo["InClientRemoteCharacters"] = Service.clientRemoteCharacters.Values.Contains(charGO);
                 // 查找对应的PlayerId
-                var playerId = Service
-                    .clientRemoteCharacters.FirstOrDefault(kv => kv.Value == charGO)
-                    .Key;
+                var playerId = Service.clientRemoteCharacters.FirstOrDefault(kv => kv.Value == charGO).Key;
                 charInfo["PlayerId"] = playerId ?? "null";
             }
-
+            
             allCharactersData.Add(charInfo);
         }
         debugData["AllCharactersInScene"] = new Dictionary<string, object>
         {
             ["Count"] = allCharacters.Length,
-            ["Data"] = allCharactersData,
+            ["Data"] = allCharactersData
         };
 
         // === 主机端数据 ===
@@ -3206,8 +2850,7 @@ public class MModUI : MonoBehaviour
                         ["Position"] = go?.transform.position.ToString() ?? "null",
                         ["Rotation"] = go?.transform.rotation.eulerAngles.ToString() ?? "null",
                         ["LocalPosition"] = go?.transform.localPosition.ToString() ?? "null",
-                        ["LocalRotation"] =
-                            go?.transform.localRotation.eulerAngles.ToString() ?? "null",
+                        ["LocalRotation"] = go?.transform.localRotation.eulerAngles.ToString() ?? "null"
                     };
 
                     if (go != null)
@@ -3262,12 +2905,9 @@ public class MModUI : MonoBehaviour
                         }
 
                         // 标记组件
-                        charData["HasRemoteReplicaTag"] =
-                            go.GetComponent<RemoteReplicaTag>() != null;
-                        charData["HasAutoRequestHealthBar"] =
-                            go.GetComponent<AutoRequestHealthBar>() != null;
-                        charData["HasHostForceHealthBar"] =
-                            go.GetComponent<HostForceHealthBar>() != null;
+                        charData["HasRemoteReplicaTag"] = go.GetComponent<RemoteReplicaTag>() != null;
+                        charData["HasAutoRequestHealthBar"] = go.GetComponent<AutoRequestHealthBar>() != null;
+                        charData["HasHostForceHealthBar"] = go.GetComponent<HostForceHealthBar>() != null;
 
                         // 物理组件状态
                         var rb = go.GetComponent<Rigidbody>();
@@ -3296,13 +2936,13 @@ public class MModUI : MonoBehaviour
                         }
                         charData["AllComponents"] = string.Join(", ", componentNames);
                         charData["ComponentCount"] = componentNames.Count;
-
+                        
                         // 🔍 新增：渲染器状态
                         var renderers = go.GetComponentsInChildren<Renderer>();
                         var enabledRenderers = renderers.Count(r => r.enabled);
                         charData["TotalRenderers"] = renderers.Length;
                         charData["EnabledRenderers"] = enabledRenderers;
-
+                        
                         // 🔍 新增：父对象信息
                         charData["ParentName"] = go.transform.parent?.name ?? "null";
                         charData["SiblingIndex"] = go.transform.GetSiblingIndex();
@@ -3314,7 +2954,7 @@ public class MModUI : MonoBehaviour
             debugData["RemoteCharacters"] = new Dictionary<string, object>
             {
                 ["Count"] = Service.remoteCharacters?.Count ?? 0,
-                ["Data"] = remoteCharsData,
+                ["Data"] = remoteCharsData
             };
 
             // playerStatuses
@@ -3325,26 +2965,24 @@ public class MModUI : MonoBehaviour
                 {
                     var peer = kv.Key;
                     var status = kv.Value;
-                    playerStatusesData.Add(
-                        new Dictionary<string, object>
-                        {
-                            ["PeerEndPoint"] = peer?.EndPoint?.ToString() ?? "null",
-                            ["PeerId"] = peer?.Id ?? -1,
-                            ["PlayerName"] = status.PlayerName ?? "null",
-                            ["IsInGame"] = status.IsInGame,
-                            ["SceneId"] = status.SceneId ?? "null",
-                            ["Latency"] = status.Latency,
-                            ["Position"] = status.Position.ToString(),
-                            ["EquipmentCount"] = status.EquipmentList?.Count ?? 0,
-                            ["WeaponCount"] = status.WeaponList?.Count ?? 0,
-                        }
-                    );
+                    playerStatusesData.Add(new Dictionary<string, object>
+                    {
+                        ["PeerEndPoint"] = peer?.EndPoint?.ToString() ?? "null",
+                        ["PeerId"] = peer?.Id ?? -1,
+                        ["PlayerName"] = status.PlayerName ?? "null",
+                        ["IsInGame"] = status.IsInGame,
+                        ["SceneId"] = status.SceneId ?? "null",
+                        ["Latency"] = status.Latency,
+                        ["Position"] = status.Position.ToString(),
+                        ["EquipmentCount"] = status.EquipmentList?.Count ?? 0,
+                        ["WeaponCount"] = status.WeaponList?.Count ?? 0
+                    });
                 }
             }
             debugData["PlayerStatuses"] = new Dictionary<string, object>
             {
                 ["Count"] = Service.playerStatuses?.Count ?? 0,
-                ["Data"] = playerStatusesData,
+                ["Data"] = playerStatusesData
             };
 
             // 连接的 Peer 列表
@@ -3353,21 +2991,19 @@ public class MModUI : MonoBehaviour
             {
                 foreach (var peer in Service.netManager.ConnectedPeerList)
                 {
-                    connectedPeers.Add(
-                        new Dictionary<string, object>
-                        {
-                            ["EndPoint"] = peer?.EndPoint?.ToString() ?? "null",
-                            ["Id"] = peer?.Id ?? -1,
-                            ["Ping"] = peer?.Ping ?? -1,
-                            ["ConnectionState"] = peer?.ConnectionState.ToString() ?? "null",
-                        }
-                    );
+                    connectedPeers.Add(new Dictionary<string, object>
+                    {
+                        ["EndPoint"] = peer?.EndPoint?.ToString() ?? "null",
+                        ["Id"] = peer?.Id ?? -1,
+                        ["Ping"] = peer?.Ping ?? -1,
+                        ["ConnectionState"] = peer?.ConnectionState.ToString() ?? "null"
+                    });
                 }
             }
             debugData["ConnectedPeers"] = new Dictionary<string, object>
             {
                 ["Count"] = connectedPeers.Count,
-                ["Data"] = connectedPeers,
+                ["Data"] = connectedPeers
             };
         }
         // === 客户端数据 ===
@@ -3393,8 +3029,7 @@ public class MModUI : MonoBehaviour
                         ["Position"] = go?.transform.position.ToString() ?? "null",
                         ["Rotation"] = go?.transform.rotation.eulerAngles.ToString() ?? "null",
                         ["LocalPosition"] = go?.transform.localPosition.ToString() ?? "null",
-                        ["LocalRotation"] =
-                            go?.transform.localRotation.eulerAngles.ToString() ?? "null",
+                        ["LocalRotation"] = go?.transform.localRotation.eulerAngles.ToString() ?? "null"
                     };
 
                     if (go != null)
@@ -3449,10 +3084,8 @@ public class MModUI : MonoBehaviour
                         }
 
                         // 标记组件
-                        charData["HasRemoteReplicaTag"] =
-                            go.GetComponent<RemoteReplicaTag>() != null;
-                        charData["HasAutoRequestHealthBar"] =
-                            go.GetComponent<AutoRequestHealthBar>() != null;
+                        charData["HasRemoteReplicaTag"] = go.GetComponent<RemoteReplicaTag>() != null;
+                        charData["HasAutoRequestHealthBar"] = go.GetComponent<AutoRequestHealthBar>() != null;
 
                         // 物理组件状态
                         var rb = go.GetComponent<Rigidbody>();
@@ -3481,17 +3114,17 @@ public class MModUI : MonoBehaviour
                         }
                         charData["AllComponents"] = string.Join(", ", componentNames);
                         charData["ComponentCount"] = componentNames.Count;
-
+                        
                         // 🔍 新增：渲染器状态
                         var renderers = go.GetComponentsInChildren<Renderer>();
                         var enabledRenderers = renderers.Count(r => r.enabled);
                         charData["TotalRenderers"] = renderers.Length;
                         charData["EnabledRenderers"] = enabledRenderers;
-
+                        
                         // 🔍 新增：父对象信息
                         charData["ParentName"] = go.transform.parent?.name ?? "null";
                         charData["SiblingIndex"] = go.transform.GetSiblingIndex();
-
+                        
                         // 🔍 新增：检查是否是本地玩家的副本
                         var isLocalPlayerDuplicate = false;
                         if (Service.connectedPeer != null)
@@ -3500,7 +3133,7 @@ public class MModUI : MonoBehaviour
                             isLocalPlayerDuplicate = playerId == myNetworkId;
                         }
                         charData["IsLocalPlayerDuplicate"] = isLocalPlayerDuplicate;
-
+                        
                         // 🔍 新增：IsSelfId检查结果
                         charData["IsSelfId_Check"] = Service.IsSelfId(playerId);
                     }
@@ -3511,7 +3144,7 @@ public class MModUI : MonoBehaviour
             debugData["ClientRemoteCharacters"] = new Dictionary<string, object>
             {
                 ["Count"] = Service.clientRemoteCharacters?.Count ?? 0,
-                ["Data"] = clientRemoteCharsData,
+                ["Data"] = clientRemoteCharsData
             };
 
             // clientPlayerStatuses
@@ -3522,37 +3155,33 @@ public class MModUI : MonoBehaviour
                 {
                     var playerId = kv.Key;
                     var status = kv.Value;
-                    clientPlayerStatusesData.Add(
-                        new Dictionary<string, object>
-                        {
-                            ["PlayerId"] = playerId ?? "null",
-                            ["PlayerName"] = status.PlayerName ?? "null",
-                            ["IsInGame"] = status.IsInGame,
-                            ["SceneId"] = status.SceneId ?? "null",
-                            ["Latency"] = status.Latency,
-                            ["Position"] = status.Position.ToString(),
-                            ["EquipmentCount"] = status.EquipmentList?.Count ?? 0,
-                            ["WeaponCount"] = status.WeaponList?.Count ?? 0,
-                        }
-                    );
+                    clientPlayerStatusesData.Add(new Dictionary<string, object>
+                    {
+                        ["PlayerId"] = playerId ?? "null",
+                        ["PlayerName"] = status.PlayerName ?? "null",
+                        ["IsInGame"] = status.IsInGame,
+                        ["SceneId"] = status.SceneId ?? "null",
+                        ["Latency"] = status.Latency,
+                        ["Position"] = status.Position.ToString(),
+                        ["EquipmentCount"] = status.EquipmentList?.Count ?? 0,
+                        ["WeaponCount"] = status.WeaponList?.Count ?? 0
+                    });
                 }
             }
             debugData["ClientPlayerStatuses"] = new Dictionary<string, object>
             {
                 ["Count"] = Service.clientPlayerStatuses?.Count ?? 0,
-                ["Data"] = clientPlayerStatusesData,
+                ["Data"] = clientPlayerStatusesData
             };
 
             // 连接的 Peer
             var connectedPeerData = new Dictionary<string, object>();
             if (Service.connectedPeer != null)
             {
-                connectedPeerData["EndPoint"] =
-                    Service.connectedPeer.EndPoint?.ToString() ?? "null";
+                connectedPeerData["EndPoint"] = Service.connectedPeer.EndPoint?.ToString() ?? "null";
                 connectedPeerData["Id"] = Service.connectedPeer.Id;
                 connectedPeerData["Ping"] = Service.connectedPeer.Ping;
-                connectedPeerData["ConnectionState"] =
-                    Service.connectedPeer.ConnectionState.ToString();
+                connectedPeerData["ConnectionState"] = Service.connectedPeer.ConnectionState.ToString();
             }
             else
             {
@@ -3576,12 +3205,12 @@ public class MModUI : MonoBehaviour
             localPlayerManagerData["Status"] = "null";
         }
         debugData["LocalPlayerManager"] = localPlayerManagerData;
-
+        
         // 🔍 新增：CreateRemoteCharacter相关信息（客户端）
         if (!isServer)
         {
             var createRemoteData = new Dictionary<string, object>();
-
+            
             // 检查clientRemoteCharacters中是否有自己的副本
             if (Service.clientRemoteCharacters != null && Service.connectedPeer != null)
             {
@@ -3590,7 +3219,7 @@ public class MModUI : MonoBehaviour
                 createRemoteData["HasSelfDuplicate"] = hasSelfDuplicate;
                 createRemoteData["MyNetworkId"] = myNetworkId ?? "null";
                 createRemoteData["MyLocalPlayerId"] = Service.localPlayerStatus?.EndPoint ?? "null";
-
+                
                 // 列出所有clientRemoteCharacters的PlayerId
                 var allPlayerIds = new List<string>();
                 foreach (var kv in Service.clientRemoteCharacters)
@@ -3599,7 +3228,7 @@ public class MModUI : MonoBehaviour
                 }
                 createRemoteData["AllRemotePlayerIds"] = string.Join(", ", allPlayerIds);
             }
-
+            
             debugData["CreateRemoteInfo"] = createRemoteData;
         }
 
@@ -3613,14 +3242,13 @@ public class MModUI : MonoBehaviour
                 ["SceneTargetId"] = SceneNet.Instance.sceneTargetId ?? "null",
                 ["LocalReady"] = SceneNet.Instance.localReady,
                 ["ParticipantCount"] = SceneNet.Instance.sceneParticipantIds?.Count ?? 0,
-                ["ReadyCount"] = SceneNet.Instance.sceneReady?.Count ?? 0,
+                ["ReadyCount"] = SceneNet.Instance.sceneReady?.Count ?? 0
             };
 
             if (isServer)
             {
                 sceneNetData["SrvSceneGateOpen"] = SceneNet.Instance._srvSceneGateOpen;
-                sceneNetData["SrvGateReadyPidsCount"] =
-                    SceneNet.Instance._srvGateReadyPids?.Count ?? 0;
+                sceneNetData["SrvGateReadyPidsCount"] = SceneNet.Instance._srvGateReadyPids?.Count ?? 0;
             }
             else
             {
@@ -3634,36 +3262,25 @@ public class MModUI : MonoBehaviour
         LoggerHelper.Log($"--- Summary ---");
         LoggerHelper.Log($"  Role: {debugData["Role"]}");
         LoggerHelper.Log($"  NetworkStarted: {debugData["NetworkStarted"]}");
-        LoggerHelper.Log(
-            $"  LocalPlayer: {(Service.localPlayerStatus != null ? Service.localPlayerStatus.EndPoint : "null")}"
-        );
-
+        LoggerHelper.Log($"  LocalPlayer: {(Service.localPlayerStatus != null ? Service.localPlayerStatus.EndPoint : "null")}");
+        
         if (isServer)
         {
             LoggerHelper.Log($"  RemoteCharacters: {Service.remoteCharacters?.Count ?? 0}");
             LoggerHelper.Log($"  PlayerStatuses: {Service.playerStatuses?.Count ?? 0}");
-            LoggerHelper.Log(
-                $"  ConnectedPeers: {Service.netManager?.ConnectedPeerList?.Count ?? 0}"
-            );
+            LoggerHelper.Log($"  ConnectedPeers: {Service.netManager?.ConnectedPeerList?.Count ?? 0}");
         }
         else
         {
-            LoggerHelper.Log(
-                $"  ClientRemoteCharacters: {Service.clientRemoteCharacters?.Count ?? 0}"
-            );
+            LoggerHelper.Log($"  ClientRemoteCharacters: {Service.clientRemoteCharacters?.Count ?? 0}");
             LoggerHelper.Log($"  ClientPlayerStatuses: {Service.clientPlayerStatuses?.Count ?? 0}");
-            LoggerHelper.Log(
-                $"  ConnectedPeer: {(Service.connectedPeer != null ? "Connected" : "null")}"
-            );
+            LoggerHelper.Log($"  ConnectedPeer: {(Service.connectedPeer != null ? "Connected" : "null")}");
         }
 
         // === 输出完整 JSON ===
         try
         {
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(
-                debugData,
-                Newtonsoft.Json.Formatting.None
-            );
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(debugData, Newtonsoft.Json.Formatting.None);
             LoggerHelper.Log($"========== Complete Network State JSON ==========");
             LoggerHelper.Log(json);
             LoggerHelper.Log($"=================================================");
@@ -3674,16 +3291,15 @@ public class MModUI : MonoBehaviour
             LoggerHelper.LogError($"[Debug] 堆栈: {ex.StackTrace}");
         }
 
-        var summary = isServer
-            ? $"主机: {Service.remoteCharacters?.Count ?? 0} 个远程玩家"
+        var summary = isServer 
+            ? $"主机: {Service.remoteCharacters?.Count ?? 0} 个远程玩家" 
             : $"客户端: {Service.clientRemoteCharacters?.Count ?? 0} 个远程玩家";
         SetStatusText($"[OK] 已输出网络状态 ({summary})", ModernColors.Success);
     }
 
     internal void OnTransportModeChanged(NetworkTransportMode newMode)
     {
-        if (Service == null)
-            return;
+        if (Service == null) return;
 
         Service.SetTransportMode(newMode);
         UpdateTransportModePanels();
@@ -3701,10 +3317,7 @@ public class MModUI : MonoBehaviour
         var manager = LobbyManager;
         if (manager == null)
         {
-            SetStatusText(
-                "[!] " + CoopLocalization.Get("ui.steam.error.notInitialized"),
-                ModernColors.Error
-            );
+            SetStatusText("[!] " + CoopLocalization.Get("ui.steam.error.notInitialized"), ModernColors.Error);
             return;
         }
 
@@ -3712,7 +3325,7 @@ public class MModUI : MonoBehaviour
         {
             // 离开房间 - 先停止网络再离开Lobby
             NetService.Instance?.StopNetwork();
-            manager.LeaveLobby(); // 显式离开/销毁Steam房间
+            manager.LeaveLobby();  // 显式离开/销毁Steam房间
 
             SetStatusText("[OK] " + CoopLocalization.Get("ui.steam.lobby.left"), ModernColors.Info);
         }
@@ -3721,19 +3334,13 @@ public class MModUI : MonoBehaviour
             // 创建房间
             UpdateLobbyOptionsFromUI();
             NetService.Instance?.StartNetwork(true);
-            SetStatusText(
-                "[*] " + CoopLocalization.Get("ui.steam.lobby.creating"),
-                ModernColors.Info
-            );
+            SetStatusText("[*] " + CoopLocalization.Get("ui.steam.lobby.creating"), ModernColors.Info);
         }
     }
 
     private void UpdateSteamLobbyList()
     {
-        if (
-            _components?.SteamLobbyListContent == null
-            || TransportMode != NetworkTransportMode.SteamP2P
-        )
+        if (_components?.SteamLobbyListContent == null || TransportMode != NetworkTransportMode.SteamP2P)
             return;
 
         // 检查列表是否改变
@@ -3744,9 +3351,7 @@ public class MModUI : MonoBehaviour
             return;
 
         // 列表改变了，需要重建UI
-        LoggerHelper.Log(
-            $"[MModUI] Steam房间列表已更新，重建UI (当前: {currentLobbies.Count}, 之前: {_displayedSteamLobbies.Count})"
-        );
+        LoggerHelper.Log($"[MModUI] Steam房间列表已更新，重建UI (当前: {currentLobbies.Count}, 之前: {_displayedSteamLobbies.Count})");
 
         // 清空现有列表
         foreach (Transform child in _components.SteamLobbyListContent)
@@ -3759,14 +3364,7 @@ public class MModUI : MonoBehaviour
 
         if (_steamLobbyInfos.Count == 0)
         {
-            CreateText(
-                "EmptyHint",
-                _components.SteamLobbyListContent,
-                CoopLocalization.Get("ui.steam.lobbiesEmpty"),
-                14,
-                ModernColors.TextTertiary,
-                TextAlignmentOptions.Center
-            );
+            CreateText("EmptyHint", _components.SteamLobbyListContent, CoopLocalization.Get("ui.steam.lobbiesEmpty"), 14, ModernColors.TextTertiary, TextAlignmentOptions.Center);
             return;
         }
 
@@ -3781,7 +3379,7 @@ public class MModUI : MonoBehaviour
     {
         var entry = CreateModernCard(_components.SteamLobbyListContent, $"Lobby_{lobby.LobbyId}");
         var entryLayout = entry.GetComponent<LayoutElement>();
-        entryLayout.preferredHeight = 120; // 增加高度：90 -> 120
+        entryLayout.preferredHeight = 120;  // 增加高度：90 -> 120
         entryLayout.minHeight = 120;
 
         // 禁用卡片背景的射线检测，让点击事件能传递到按钮
@@ -3795,25 +3393,17 @@ public class MModUI : MonoBehaviour
         var cardLayout = entry.GetComponent<VerticalLayoutGroup>();
         if (cardLayout != null)
         {
-            cardLayout.spacing = 10; // 增加子元素间距
-            cardLayout.padding = new RectOffset(15, 15, 15, 15); // 增加内边距
+            cardLayout.spacing = 10;  // 增加子元素间距
+            cardLayout.padding = new RectOffset(15, 15, 15, 15);  // 增加内边距
         }
 
         // 房间名
         var nameRow = CreateHorizontalGroup(entry.transform, "NameRow");
         var nameRowLayout = nameRow.GetComponent<HorizontalLayoutGroup>();
-        nameRowLayout.spacing = 12; // 增加房间名和密码图标的间距
+        nameRowLayout.spacing = 12;  // 增加房间名和密码图标的间距
 
-        var lobbyNameText = CreateText(
-            "LobbyName",
-            nameRow.transform,
-            lobby.LobbyName,
-            16,
-            ModernColors.TextPrimary,
-            TextAlignmentOptions.Left,
-            FontStyles.Bold
-        );
-        lobbyNameText.raycastTarget = false; // 禁用文本射线检测
+        var lobbyNameText = CreateText("LobbyName", nameRow.transform, lobby.LobbyName, 16, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
+        lobbyNameText.raycastTarget = false;  // 禁用文本射线检测
 
         if (lobby.RequiresPassword)
         {
@@ -3822,41 +3412,24 @@ public class MModUI : MonoBehaviour
 
         // 房间信息
         var infoRow = CreateHorizontalGroup(entry.transform, "InfoRow");
-        var playerCountText = CreateText(
-            "PlayerCount",
-            infoRow.transform,
-            CoopLocalization.Get("ui.steam.playerCount", lobby.MemberCount, lobby.MaxMembers),
-            13,
-            ModernColors.TextSecondary
-        );
-        playerCountText.raycastTarget = false; // 禁用文本射线检测
+        var playerCountText = CreateText("PlayerCount", infoRow.transform, CoopLocalization.Get("ui.steam.playerCount", lobby.MemberCount, lobby.MaxMembers), 13, ModernColors.TextSecondary);
+        playerCountText.raycastTarget = false;  // 禁用文本射线检测
 
         CreateDivider(entry.transform);
 
         // 加入按钮
-        var joinButton = CreateModernButton(
-            "JoinBtn",
-            entry.transform,
-            CoopLocalization.Get("ui.steam.joinButton"),
-            () =>
-            {
-                LoggerHelper.Log($"[MModUI] 加入按钮被点击！房间: {lobby.LobbyName}");
-                AttemptSteamLobbyJoin(lobby);
-            },
-            -1,
-            ModernColors.Primary,
-            40,
-            15
-        );
+        var joinButton = CreateModernButton("JoinBtn", entry.transform, CoopLocalization.Get("ui.steam.joinButton"), () =>
+        {
+            LoggerHelper.Log($"[MModUI] 加入按钮被点击！房间: {lobby.LobbyName}");
+            AttemptSteamLobbyJoin(lobby);
+        }, -1, ModernColors.Primary, 40, 15);
 
         // 确保按钮的 targetGraphic 正确设置
         var joinButtonImage = joinButton.GetComponent<Image>();
         if (joinButtonImage != null)
         {
-            joinButtonImage.raycastTarget = true; // 确保按钮背景可以接收射线
-            LoggerHelper.Log(
-                $"[MModUI] 创建加入按钮: {lobby.LobbyName}, raycastTarget={joinButtonImage.raycastTarget}"
-            );
+            joinButtonImage.raycastTarget = true;  // 确保按钮背景可以接收射线
+            LoggerHelper.Log($"[MModUI] 创建加入按钮: {lobby.LobbyName}, raycastTarget={joinButtonImage.raycastTarget}");
         }
     }
 
@@ -3868,10 +3441,7 @@ public class MModUI : MonoBehaviour
         if (manager == null)
         {
             LoggerHelper.LogError("[MModUI] Steam Lobby Manager 未初始化");
-            SetStatusText(
-                "[!] " + CoopLocalization.Get("ui.steam.error.notInitialized"),
-                ModernColors.Error
-            );
+            SetStatusText("[!] " + CoopLocalization.Get("ui.steam.error.notInitialized"), ModernColors.Error);
             return;
         }
 
@@ -3892,9 +3462,7 @@ public class MModUI : MonoBehaviour
         }
 
         var password = lobby.RequiresPassword ? _steamJoinPassword : string.Empty;
-        LoggerHelper.Log(
-            $"[MModUI] 调用 TryJoinLobbyWithPassword, 需要密码: {lobby.RequiresPassword}"
-        );
+        LoggerHelper.Log($"[MModUI] 调用 TryJoinLobbyWithPassword, 需要密码: {lobby.RequiresPassword}");
 
         if (manager.TryJoinLobbyWithPassword(lobby.LobbyId, password, out var error))
         {
@@ -3907,13 +3475,10 @@ public class MModUI : MonoBehaviour
         LoggerHelper.LogError($"[MModUI] 加入房间失败: {error}");
         string errorMsg = error switch
         {
-            SteamLobbyManager.LobbyJoinError.SteamNotInitialized => "[!] "
-                + CoopLocalization.Get("ui.steam.error.notInitialized"),
-            SteamLobbyManager.LobbyJoinError.LobbyMetadataUnavailable => "[!] "
-                + CoopLocalization.Get("ui.steam.error.metadata"),
-            SteamLobbyManager.LobbyJoinError.IncorrectPassword => "[!] "
-                + CoopLocalization.Get("ui.steam.error.password"),
-            _ => "[!] " + CoopLocalization.Get("ui.steam.error.generic"),
+            SteamLobbyManager.LobbyJoinError.SteamNotInitialized => "[!] " + CoopLocalization.Get("ui.steam.error.notInitialized"),
+            SteamLobbyManager.LobbyJoinError.LobbyMetadataUnavailable => "[!] " + CoopLocalization.Get("ui.steam.error.metadata"),
+            SteamLobbyManager.LobbyJoinError.IncorrectPassword => "[!] " + CoopLocalization.Get("ui.steam.error.password"),
+            _ => "[!] " + CoopLocalization.Get("ui.steam.error.generic")
         };
 
         SetStatusText(errorMsg, ModernColors.Error);
@@ -3941,32 +3506,23 @@ public class UIDragger : MonoBehaviour, IDragHandler, IBeginDragHandler
             _rectTransform.parent as RectTransform,
             eventData.position,
             eventData.pressEventCamera,
-            out var localPoint
-        );
+            out var localPoint);
         _dragOffset = _rectTransform.anchoredPosition - localPoint;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 _rectTransform.parent as RectTransform,
                 eventData.position,
                 eventData.pressEventCamera,
-                out var localPoint
-            )
-        )
+                out var localPoint))
             _rectTransform.anchoredPosition = localPoint + _dragOffset;
     }
 }
 
 // 按钮悬停动画组件 - 带弹性缓动效果
-public class ButtonHoverAnimator
-    : MonoBehaviour,
-        IPointerEnterHandler,
-        IPointerExitHandler,
-        IPointerDownHandler,
-        IPointerUpHandler
+public class ButtonHoverAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private RectTransform _rectTransform;
     private Vector3 _originalScale;
@@ -3983,47 +3539,33 @@ public class ButtonHoverAnimator
     {
         if (!_isPressed)
         {
-            if (_scaleCoroutine != null)
-                StopCoroutine(_scaleCoroutine);
-            _scaleCoroutine = StartCoroutine(
-                ScaleToWithEasing(Vector3.one * 1.05f, 0.2f, EaseOutBack)
-            );
+            if (_scaleCoroutine != null) StopCoroutine(_scaleCoroutine);
+            _scaleCoroutine = StartCoroutine(ScaleToWithEasing(Vector3.one * 1.05f, 0.2f, EaseOutBack));
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         _isPressed = false;
-        if (_scaleCoroutine != null)
-            StopCoroutine(_scaleCoroutine);
+        if (_scaleCoroutine != null) StopCoroutine(_scaleCoroutine);
         _scaleCoroutine = StartCoroutine(ScaleToWithEasing(_originalScale, 0.2f, EaseOutCubic));
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         _isPressed = true;
-        if (_scaleCoroutine != null)
-            StopCoroutine(_scaleCoroutine);
-        _scaleCoroutine = StartCoroutine(
-            ScaleToWithEasing(Vector3.one * 0.95f, 0.1f, EaseOutCubic)
-        );
+        if (_scaleCoroutine != null) StopCoroutine(_scaleCoroutine);
+        _scaleCoroutine = StartCoroutine(ScaleToWithEasing(Vector3.one * 0.95f, 0.1f, EaseOutCubic));
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         _isPressed = false;
-        if (_scaleCoroutine != null)
-            StopCoroutine(_scaleCoroutine);
-        _scaleCoroutine = StartCoroutine(
-            ScaleToWithEasing(Vector3.one * 1.05f, 0.15f, EaseOutBack)
-        );
+        if (_scaleCoroutine != null) StopCoroutine(_scaleCoroutine);
+        _scaleCoroutine = StartCoroutine(ScaleToWithEasing(Vector3.one * 1.05f, 0.15f, EaseOutBack));
     }
 
-    private IEnumerator ScaleToWithEasing(
-        Vector3 targetScale,
-        float duration,
-        System.Func<float, float> easingFunction
-    )
+    private IEnumerator ScaleToWithEasing(Vector3 targetScale, float duration, System.Func<float, float> easingFunction)
     {
         Vector3 startScale = _rectTransform.localScale;
         float time = 0;
@@ -4055,6 +3597,8 @@ public class ButtonHoverAnimator
     }
 
     // 生成嵌入式的噪声纹理（128x128）
+
+
 }
 
 // 输入框聚焦处理组件
@@ -4093,6 +3637,7 @@ public class InputFieldFocusHandler : MonoBehaviour
         }
     }
 }
+
 
 
 #endregion
