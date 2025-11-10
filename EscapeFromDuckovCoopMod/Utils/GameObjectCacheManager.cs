@@ -498,7 +498,7 @@ public class EnvironmentObjectCache
         _cachedDoors = Object.FindObjectsOfType<global::Door>(true).ToList();
         _cachedSceneLoaders = Object.FindObjectsOfType<SceneLoaderProxy>(true).ToList();
         _lastRefreshTime = Time.time;
-        Debug.Log($"[EnvironmentCache] 刷新缓存：{_cachedLoaders.Count} 个 LootBoxLoader, {_cachedDoors.Count} 个 Door, {_cachedSceneLoaders.Count} 个 SceneLoaderProxy");
+        // Debug.Log($"[EnvironmentCache] 刷新缓存：{_cachedLoaders.Count} 个 LootBoxLoader, {_cachedDoors.Count} 个 Door, {_cachedSceneLoaders.Count} 个 SceneLoaderProxy");
     }
 
     /// <summary>

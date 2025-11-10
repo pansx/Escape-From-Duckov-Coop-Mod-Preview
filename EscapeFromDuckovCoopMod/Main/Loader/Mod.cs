@@ -175,6 +175,9 @@ public class ModBehaviourF : MonoBehaviour
 
         // 初始化玩家信息数据库
         InitializePlayerDatabase();
+        
+        // 🆕 初始化本地 Steam 信息（用于 ClientStatusMessage）
+        Net.ClientStatusMessage.InitializeLocalSteamInfo();
     }
 
     /// <summary>

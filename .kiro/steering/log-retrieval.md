@@ -28,3 +28,4 @@ inclusion: always
 -   `logs_client.json` - 客户端日志（JSON 格式，原始数据）
 
 直接读取log文件,不要使用指令筛选,禁止不执行bat就直接看老log文件
+记得从后往前读,因为一般问题出现后开发者会马上终止游戏

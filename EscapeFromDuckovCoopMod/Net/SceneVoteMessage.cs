@@ -581,6 +581,41 @@ public static class SceneVoteMessage
             if (sceneNet == null)
                 return;
 
+            // 🆕 特殊处理：voteId=0 表示这是玩家信息更新消息（不是真正的投票），不受过期检查限制
+            if (data.voteId == 0 && !data.active && data.playerList != null && data.playerList.items != null)
+            {
+                LoggerHelper.Log($"[SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI");
+                
+                // 🔧 更新缓存的投票数据（供 UI 使用），但不激活投票
+                sceneNet.cachedVoteData = data;
+                
+                // 🆕 将玩家信息同步到数据库
+                foreach (var player in data.playerList.items)
+                {
+                    if (string.IsNullOrEmpty(player.steamId) || string.IsNullOrEmpty(player.steamName))
+                        continue;
+                    
+                    var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+                    bool isLocal = service.IsSelfId(player.playerId);
+                    
+                    playerDb.AddOrUpdatePlayer(
+                        steamId: player.steamId,
+                        playerName: player.steamName,
+                        avatarUrl: "",
+                        isLocal: isLocal,
+                        endPoint: player.playerId,
+                        lastUpdate: System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
+                    );
+                    
+                    LoggerHelper.Log(
+                        $"[SceneVote] ✓ 已同步玩家到数据库: {player.steamName} ({player.steamId}), IsLocal={isLocal}"
+                    );
+                }
+                
+                LoggerHelper.Log($"[SceneVote] ✓ 已更新玩家信息缓存，共 {data.playerList.items.Length} 名玩家");
+                return;
+            }
+
             // 🆕 检查投票ID是否过期
             if (data.voteId <= sceneNet.expiredVoteId)
             {
@@ -591,17 +626,6 @@ public static class SceneVoteMessage
             // 如果投票已取消
             if (!data.active)
             {
-                // 🆕 特殊处理：voteId=0 表示这是玩家信息更新消息（不是真正的投票）
-                if (data.voteId == 0 && data.playerList != null && data.playerList.items != null)
-                {
-                    LoggerHelper.Log($"[SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI");
-                    
-                    // 🔧 更新缓存的投票数据（供 UI 使用），但不激活投票
-                    sceneNet.cachedVoteData = data;
-                    
-                    LoggerHelper.Log($"[SceneVote] ✓ 已更新玩家信息缓存，共 {data.playerList.items.Length} 名玩家");
-                    return;
-                }
                 
                 // 🆕 更新过期ID，避免后续收到旧的投票包
                 sceneNet.expiredVoteId = data.voteId;
@@ -664,6 +688,26 @@ public static class SceneVoteMessage
                     LoggerHelper.Log(
                         $"[SceneVote] 解析玩家: name='{player.playerName}', id='{player.playerId}', steamId='{player.steamId}', ready={player.ready}"
                     );
+
+                    // 🆕 将玩家信息同步到数据库（如果有 SteamID）
+                    if (!string.IsNullOrEmpty(player.steamId) && !string.IsNullOrEmpty(player.steamName))
+                    {
+                        var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+                        bool isLocal = service.IsSelfId(player.playerId);
+                        
+                        playerDb.AddOrUpdatePlayer(
+                            steamId: player.steamId,
+                            playerName: player.steamName,
+                            avatarUrl: "", // 头像URL在这里没有，后续可以通过 ClientStatusMessage 更新
+                            isLocal: isLocal,
+                            endPoint: player.playerId,
+                            lastUpdate: System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
+                        );
+                        
+                        LoggerHelper.Log(
+                            $"[SceneVote] ✓ 已同步玩家到数据库: {player.steamName} ({player.steamId}), IsLocal={isLocal}"
+                        );
+                    }
 
                     // 添加到参与者列表
                     if (!sceneNet.sceneParticipantIds.Contains(player.playerId))
