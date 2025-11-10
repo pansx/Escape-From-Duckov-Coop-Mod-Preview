@@ -1166,14 +1166,35 @@ public class MModUI : MonoBehaviour
 
         if (isSteamMode)
         {
-            // Steam模式：使用缓存获取Steam用户名和SteamID
-            string steamUsername = "Unknown";
-            ulong steamId = 0;
-            bool isHost = false;
-
-            try
+            // ✅ 优先从投票数据中获取 Steam 信息
+            bool foundInVoteData = false;
+            if (SceneNet.Instance?.cachedVoteData?.playerList?.items != null)
             {
-                if (SteamManager.Initialized)
+                foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+                {
+                    if (player.playerId == status.EndPoint && !string.IsNullOrEmpty(player.steamName))
+                    {
+                        bool isHostFromVote = player.playerId.StartsWith("Host:");
+                        string prefix = isHostFromVote ? "HOST" : "CLIENT";
+                        displayName = $"{prefix}_{player.steamName}";
+                        displayId = player.steamId;
+                        foundInVoteData = true;
+                        break;
+                    }
+                }
+            }
+
+            // 如果投票数据中没有找到，使用原来的逻辑
+            if (!foundInVoteData)
+            {
+                // Steam模式：使用缓存获取Steam用户名和SteamID
+                string steamUsername = "Unknown";
+                ulong steamId = 0;
+                bool isHost = false;
+
+                try
+                {
+                    if (SteamManager.Initialized)
                 {
                     if (isLocal)
                     {
@@ -1202,19 +1223,25 @@ public class MModUI : MonoBehaviour
                         var lobbyOwner = SteamMatchmaking.GetLobbyOwner(LobbyManager.CurrentLobbyId);
                         isHost = (steamId > 0 && steamId == lobbyOwner.m_SteamID);
 
-                        // 从缓存获取用户名
+                        // ✅ 优先从 ClientStatusMessage 缓存获取用户名
                         if (steamId > 0)
                         {
-                            var cSteamId = new CSteamID(steamId);
-                            steamUsername = LobbyManager.GetCachedMemberName(cSteamId);
-
+                            steamUsername = Net.ClientStatusMessage.GetSteamNameFromSteamId(steamId.ToString());
+                            
                             if (string.IsNullOrEmpty(steamUsername))
                             {
-                                // 缓存未命中，回退到Steam API
-                                steamUsername = SteamFriends.GetFriendPersonaName(cSteamId);
-                                if (string.IsNullOrEmpty(steamUsername) || steamUsername == "[unknown]")
+                                // ClientStatusMessage 缓存未命中，尝试 LobbyManager 缓存
+                                var cSteamId = new CSteamID(steamId);
+                                steamUsername = LobbyManager.GetCachedMemberName(cSteamId);
+
+                                if (string.IsNullOrEmpty(steamUsername))
                                 {
-                                    steamUsername = $"Player_{steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4))}";
+                                    // 缓存未命中，回退到Steam API
+                                    steamUsername = SteamFriends.GetFriendPersonaName(cSteamId);
+                                    if (string.IsNullOrEmpty(steamUsername) || steamUsername == "[unknown]")
+                                    {
+                                        steamUsername = $"Player_{steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4))}";
+                                    }
                                 }
                             }
                         }
@@ -1227,12 +1254,13 @@ public class MModUI : MonoBehaviour
                 steamUsername = $"Player_{(steamId > 0 ? steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4)) : "????")}";
             }
 
-            // 添加前缀（基于房间所有者判断，而不是本地IsServer状态）
-            string prefix = isHost ? "HOST" : "CLIENT";
-            displayName = $"{prefix}_{steamUsername}";
+                // 添加前缀（基于房间所有者判断，而不是本地IsServer状态）
+                string prefix = isHost ? "HOST" : "CLIENT";
+                displayName = $"{prefix}_{steamUsername}";
 
-            // Steam模式：显示完整SteamID
-            displayId = steamId > 0 ? steamId.ToString() : status.EndPoint;
+                // Steam模式：显示完整SteamID
+                displayId = steamId > 0 ? steamId.ToString() : status.EndPoint;
+            }
         }
 
         var nameText = CreateText("Name", headerRow.transform, displayName, 16, ModernColors.TextPrimary, TextAlignmentOptions.Left, FontStyles.Bold);
@@ -1426,7 +1454,33 @@ public class MModUI : MonoBehaviour
             string displayName = pid;
             string displayId = pid;
 
-            if (TransportMode == NetworkTransportMode.SteamP2P && SteamManager.Initialized && LobbyManager != null && LobbyManager.IsInLobby)
+            // ✅ 优先从投票数据中获取 Steam 名字
+            if (SceneNet.Instance.cachedVoteData?.playerList?.items != null)
+            {
+                int playerCount = SceneNet.Instance.cachedVoteData.playerList.items.Count();
+                LoggerHelper.Log($"[MModUI] 尝试从投票数据获取玩家名字: pid={pid}, 投票数据玩家数={playerCount}");
+                foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+                {
+                    LoggerHelper.Log($"[MModUI] 检查玩家: playerId={player.playerId}, steamName={player.steamName}");
+                    if (player.playerId == pid && !string.IsNullOrEmpty(player.steamName))
+                    {
+                        // 判断是否是主机
+                        bool isHost = player.playerId.StartsWith("Host:");
+                        string prefix = isHost ? "HOST" : "CLIENT";
+                        displayName = $"{prefix}_{player.steamName}";
+                        displayId = player.steamId;
+                        LoggerHelper.Log($"[MModUI] ✅ 从投票数据获取到名字: {displayName}");
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                LoggerHelper.Log($"[MModUI] ⚠️ 投票数据为空，无法获取 Steam 名字");
+            }
+
+            // 如果投票数据中没有找到，回退到原来的逻辑
+            if (displayName == pid && TransportMode == NetworkTransportMode.SteamP2P && SteamManager.Initialized && LobbyManager != null && LobbyManager.IsInLobby)
             {
                 try
                 {
@@ -1539,6 +1593,7 @@ public class MModUI : MonoBehaviour
             }
 
             // 显示名称和ID
+            LoggerHelper.Log($"[MModUI] 最终显示名称: pid={pid}, displayName={displayName}, displayId={displayId}");
             var nameText = CreateText("Name", playerRow.transform, displayName, 14, ModernColors.TextPrimary);
             var nameLayout = nameText.gameObject.GetComponent<LayoutElement>();
             nameLayout.flexibleWidth = 1;

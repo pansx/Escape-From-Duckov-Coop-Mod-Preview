@@ -131,6 +131,9 @@ public class NetService : MonoBehaviour, INetEventListener
             status = CoopLocalization.Get("net.connectedTo", peer.EndPoint.ToString());
             isConnecting = false;
             Send_ClientStatus.Instance.SendClientStatusUpdate();
+            
+            // ✅ 发送包含 Steam 信息的 JSON 状态更新
+            Net.ClientStatusMessage.Client_SendStatusUpdate();
 
             // ✅ 场景切换重连功能：仅在手动连接成功时缓存IP和端口
             if (isManualConnection && peer.EndPoint is IPEndPoint ipEndPoint)

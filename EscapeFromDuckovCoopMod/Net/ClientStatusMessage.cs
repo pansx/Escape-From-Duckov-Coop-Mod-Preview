@@ -120,6 +120,52 @@ public static class ClientStatusMessage
         JsonMessage.SendToHost(data, DeliveryMethod.ReliableOrdered);
     }
 
+    // 🆕 添加 EndPoint -> SteamInfo 的映射缓存
+    private static System.Collections.Generic.Dictionary<string, (string steamId, string steamName)> _endPointToSteamInfoMap = 
+        new System.Collections.Generic.Dictionary<string, (string steamId, string steamName)>();
+    
+    // 🆕 本地玩家的 Steam 信息缓存（在 Mod 启动时初始化）
+    private static string _localSteamId = "";
+    private static string _localSteamName = "";
+
+    /// <summary>
+    /// 🆕 初始化本地 Steam 信息（在 Mod 启动时调用）
+    /// </summary>
+    public static void InitializeLocalSteamInfo()
+    {
+        if (!SteamManager.Initialized)
+        {
+            return;
+        }
+
+        try
+        {
+            var mySteamId = Steamworks.SteamUser.GetSteamID();
+            _localSteamId = mySteamId.ToString();
+            _localSteamName = Steamworks.SteamFriends.GetPersonaName();
+            
+            if (!string.IsNullOrEmpty(_localSteamId) && !string.IsNullOrEmpty(_localSteamName))
+            {
+                _steamIdToNameMap[_localSteamId] = _localSteamName;
+                LoggerHelper.Log(
+                    $"[ClientStatus] ✓ 已初始化本地 Steam 信息: ID={_localSteamId}, Name={_localSteamName}"
+                );
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LoggerHelper.LogWarning($"[ClientStatus] 初始化本地 Steam 信息失败: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 🆕 获取本地 Steam 信息
+    /// </summary>
+    public static (string steamId, string steamName) GetLocalSteamInfo()
+    {
+        return (_localSteamId, _localSteamName);
+    }
+
     /// <summary>
     /// 🆕 获取缓存的 Steam 名字（供 SceneVoteMessage 调用）
     /// </summary>
@@ -133,6 +179,21 @@ public static class ClientStatusMessage
             return steamName;
         }
         return "";
+    }
+
+    /// <summary>
+    /// 🆕 从 EndPoint 获取 Steam 信息（供 MModUI 调用）
+    /// </summary>
+    public static (string steamId, string steamName) GetSteamInfoFromEndPoint(string endPoint)
+    {
+        if (string.IsNullOrEmpty(endPoint))
+            return ("", "");
+
+        if (_endPointToSteamInfoMap.TryGetValue(endPoint, out var info))
+        {
+            return info;
+        }
+        return ("", "");
     }
 
     /// <summary>
@@ -167,6 +228,18 @@ public static class ClientStatusMessage
                     $"[ClientStatus] ✓ 已缓存 Steam 名字映射: {data.steamId} -> {data.steamName}"
                 );
             }
+
+            // 🆕 缓存 EndPoint -> SteamInfo 映射
+            if (!string.IsNullOrEmpty(data.endPoint) && !string.IsNullOrEmpty(data.steamId) && !string.IsNullOrEmpty(data.steamName))
+            {
+                _endPointToSteamInfoMap[data.endPoint] = (data.steamId, data.steamName);
+                LoggerHelper.Log(
+                    $"[ClientStatus] ✓ 已缓存 EndPoint -> SteamInfo 映射: {data.endPoint} -> ({data.steamId}, {data.steamName})"
+                );
+            }
+
+            // 🆕 更新投票系统中的玩家信息（根据 Steam ID 匹配）
+            UpdateVotePlayerInfo(data.endPoint, data.steamId, data.steamName);
 
             // 🔧 建立 SteamID 和 EndPoint 的映射
             if (
@@ -252,10 +325,85 @@ public static class ClientStatusMessage
                     );
                 }
             }
+
+            // 🆕 发送一个 active=false 的投票 JSON 来更新客户端的玩家名字显示
+            SendPlayerInfoUpdateToClients();
         }
         catch (System.Exception ex)
         {
             LoggerHelper.LogError($"[ClientStatus] 处理客户端状态失败: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 🆕 主机：发送玩家信息更新给所有客户端（通过 active=false 的投票 JSON）
+    /// </summary>
+    private static void SendPlayerInfoUpdateToClients()
+    {
+        var service = NetService.Instance;
+        if (service == null || !service.IsServer)
+        {
+            return;
+        }
+
+        try
+        {
+            // 构建玩家列表
+            var playerList = new System.Collections.Generic.List<SceneVoteMessage.PlayerInfo>();
+
+            // 添加主机自己
+            var (hostSteamId, hostSteamName) = GetLocalSteamInfo();
+            if (!string.IsNullOrEmpty(hostSteamId) && !string.IsNullOrEmpty(hostSteamName))
+            {
+                playerList.Add(new SceneVoteMessage.PlayerInfo
+                {
+                    playerId = $"Host:{service.port}",
+                    playerName = "Host",
+                    steamId = hostSteamId,
+                    steamName = hostSteamName,
+                    ready = false
+                });
+            }
+
+            // 添加所有客户端
+            foreach (var kvp in service.playerStatuses)
+            {
+                var status = kvp.Value;
+                var (clientSteamId, clientSteamName) = GetSteamInfoFromEndPoint(status.EndPoint);
+                
+                playerList.Add(new SceneVoteMessage.PlayerInfo
+                {
+                    playerId = status.EndPoint,
+                    playerName = status.PlayerName,
+                    steamId = clientSteamId ?? "",
+                    steamName = clientSteamName ?? "",
+                    ready = false
+                });
+            }
+
+            // 构建投票数据（active=false，仅用于更新玩家信息）
+            var voteData = new SceneVoteMessage.VoteStateData
+            {
+                type = "sceneVote",
+                voteId = 0,  // 特殊ID，表示这不是真正的投票
+                active = false,  // 不激活投票UI
+                targetSceneId = "",
+                targetSceneDisplayName = "",
+                playerList = new SceneVoteMessage.PlayerList { items = playerList.ToArray() },
+                totalPlayers = playerList.Count,
+                readyPlayers = 0,
+                timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
+            };
+
+            // 发送给所有客户端
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(voteData);
+            JsonMessage.BroadcastToAllClients(json, LiteNetLib.DeliveryMethod.ReliableOrdered);
+            
+            LoggerHelper.Log($"[ClientStatus] ✓ 已发送玩家信息更新给所有客户端 (共 {playerList.Count} 名玩家)");
+        }
+        catch (System.Exception ex)
+        {
+            LoggerHelper.LogError($"[ClientStatus] 发送玩家信息更新失败: {ex.Message}");
         }
     }
 
@@ -268,6 +416,106 @@ public static class ClientStatusMessage
         // 从 64 位 SteamID 提取账户 ID
         ulong accountId = steamId.m_SteamID & 0xFFFFFFFF;
         return accountId.ToString();
+    }
+
+    /// <summary>
+    /// 🆕 更新投票系统中的玩家信息（根据 Steam ID 匹配）
+    /// </summary>
+    private static void UpdateVotePlayerInfo(string endPoint, string steamId, string steamName)
+    {
+        var service = NetService.Instance;
+        if (service == null || !service.IsServer)
+            return;
+
+        // 检查是否有活跃的投票
+        if (!SceneVoteMessage.HasActiveVote())
+            return;
+
+        try
+        {
+            // 🔧 通过反射访问 _hostVoteState（因为它是私有的）
+            var sceneVoteType = typeof(SceneVoteMessage);
+            var hostVoteStateField = sceneVoteType.GetField(
+                "_hostVoteState",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static
+            );
+
+            if (hostVoteStateField == null)
+            {
+                LoggerHelper.LogWarning("[ClientStatus] 无法访问 _hostVoteState 字段");
+                return;
+            }
+
+            var hostVoteState = hostVoteStateField.GetValue(null) as SceneVoteMessage.VoteStateData;
+            if (hostVoteState == null || hostVoteState.playerList == null || hostVoteState.playerList.items == null)
+                return;
+
+            // 🔧 根据 Steam ID 或 EndPoint 查找并更新玩家信息
+            bool updated = false;
+            foreach (var player in hostVoteState.playerList.items)
+            {
+                // 优先匹配 Steam ID（更可靠）
+                if (!string.IsNullOrEmpty(steamId) && player.steamId == steamId)
+                {
+                    // 更新 Steam 名字
+                    if (!string.IsNullOrEmpty(steamName) && player.steamName != steamName)
+                    {
+                        LoggerHelper.Log(
+                            $"[ClientStatus] 🔄 更新投票玩家 Steam 名字: {player.playerName} -> {steamName} (SteamID={steamId})"
+                        );
+                        player.steamName = steamName;
+                        updated = true;
+                    }
+
+                    // 更新 EndPoint（如果变化）
+                    if (player.playerId != endPoint)
+                    {
+                        LoggerHelper.Log(
+                            $"[ClientStatus] 🔄 更新投票玩家 EndPoint: {player.playerId} -> {endPoint} (SteamID={steamId})"
+                        );
+                        player.playerId = endPoint;
+                        updated = true;
+                    }
+                    break;
+                }
+                // 备用：匹配 EndPoint
+                else if (player.playerId == endPoint)
+                {
+                    // 更新 Steam ID 和名字
+                    if (!string.IsNullOrEmpty(steamId) && player.steamId != steamId)
+                    {
+                        LoggerHelper.Log(
+                            $"[ClientStatus] 🔄 更新投票玩家 SteamID: {player.playerName} -> {steamId}"
+                        );
+                        player.steamId = steamId;
+                        updated = true;
+                    }
+
+                    if (!string.IsNullOrEmpty(steamName) && player.steamName != steamName)
+                    {
+                        LoggerHelper.Log(
+                            $"[ClientStatus] 🔄 更新投票玩家 Steam 名字: {player.playerName} -> {steamName}"
+                        );
+                        player.steamName = steamName;
+                        updated = true;
+                    }
+                    break;
+                }
+            }
+
+            // 如果有更新，立即广播新的投票状态
+            if (updated)
+            {
+                LoggerHelper.Log("[ClientStatus] ✓ 投票玩家信息已更新，广播新状态");
+                SceneVoteMessage.Host_BroadcastVoteState();
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LoggerHelper.LogError(
+                $"[ClientStatus] 更新投票玩家信息失败: {ex.Message}\n{ex.StackTrace}"
+            );
+        }
     }
 
     /// <summary>

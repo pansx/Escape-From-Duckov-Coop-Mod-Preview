@@ -39,7 +39,8 @@ public static class JsonMessageRouter
     /// 根据type字段路由到对应的处理器
     /// </summary>
     /// <param name="reader">网络数据读取器</param>
-    public static void HandleJsonMessage(NetPacketReader reader)
+    /// <param name="fromPeer">发送消息的对等端（仅主机端有效）</param>
+    public static void HandleJsonMessage(NetPacketReader reader, NetPeer fromPeer = null)
     {
         if (reader == null)
         {
@@ -96,6 +97,11 @@ public static class JsonMessageRouter
                 case "forceSceneLoad":
                     // 强制场景切换（投票成功后）
                     SceneVoteMessage.Client_HandleForceSceneLoad(json);
+                    break;
+
+                case "updateClientStatus":
+                    // 客户端状态上报
+                    HandleClientStatusMessage(reader, json);
                     break;
 
                 case "kick":
@@ -165,6 +171,11 @@ public static class JsonMessageRouter
 
             // 检查是否有自己的远程副本需要清理
             CleanupSelfDuplicate(oldId, newId);
+
+            // 🆕 SetId 处理完成后，发送客户端状态（包含 SteamID 和 EndPoint）
+            // 此时 EndPoint 已经被更新为主机分配的真实网络ID
+            ClientStatusMessage.Client_SendStatusUpdate();
+            Debug.Log("[SetId] ✓ 已发送客户端状态更新（包含 SteamID）");
         }
         catch (System.Exception ex)
         {
@@ -210,6 +221,59 @@ public static class JsonMessageRouter
         if (toRemove.Count > 0)
         {
             Debug.Log($"[SetId] ✓ 清理完成，共删除 {toRemove.Count} 个自己的远程副本");
+        }
+    }
+
+    /// <summary>
+    /// 处理客户端状态上报消息
+    /// </summary>
+    private static void HandleClientStatusMessage(NetPacketReader reader, string json)
+    {
+        var service = NetService.Instance;
+        if (service == null || !service.IsServer)
+        {
+            Debug.LogWarning("[JsonRouter] 只有主机可以接收客户端状态消息");
+            return;
+        }
+
+        // 从reader获取发送者的peer（主机端才有）
+        // 注意：这里需要从Mod.cs传递fromPeer参数
+        // 暂时使用json中的endPoint来查找对应的peer
+        try
+        {
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ClientStatusMessage.ClientStatusData>(json);
+            if (data == null)
+            {
+                Debug.LogWarning("[JsonRouter] 客户端状态消息解析失败");
+                return;
+            }
+
+            // 查找对应的peer
+            NetPeer fromPeer = null;
+            if (service.playerStatuses != null)
+            {
+                foreach (var kv in service.playerStatuses)
+                {
+                    if (kv.Value != null && kv.Value.EndPoint == data.endPoint)
+                    {
+                        fromPeer = kv.Key;
+                        break;
+                    }
+                }
+            }
+
+            if (fromPeer != null)
+            {
+                ClientStatusMessage.Host_HandleClientStatus(fromPeer, json);
+            }
+            else
+            {
+                Debug.LogWarning($"[JsonRouter] 找不到对应的peer: {data.endPoint}");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[JsonRouter] 处理客户端状态消息失败: {ex.Message}");
         }
     }
 
