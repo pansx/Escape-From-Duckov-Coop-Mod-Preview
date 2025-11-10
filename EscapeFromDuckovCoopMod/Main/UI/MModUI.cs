@@ -1223,19 +1223,25 @@ public class MModUI : MonoBehaviour
                         var lobbyOwner = SteamMatchmaking.GetLobbyOwner(LobbyManager.CurrentLobbyId);
                         isHost = (steamId > 0 && steamId == lobbyOwner.m_SteamID);
 
-                        // 从缓存获取用户名
+                        // ✅ 优先从 ClientStatusMessage 缓存获取用户名
                         if (steamId > 0)
                         {
-                            var cSteamId = new CSteamID(steamId);
-                            steamUsername = LobbyManager.GetCachedMemberName(cSteamId);
-
+                            steamUsername = Net.ClientStatusMessage.GetSteamNameFromSteamId(steamId.ToString());
+                            
                             if (string.IsNullOrEmpty(steamUsername))
                             {
-                                // 缓存未命中，回退到Steam API
-                                steamUsername = SteamFriends.GetFriendPersonaName(cSteamId);
-                                if (string.IsNullOrEmpty(steamUsername) || steamUsername == "[unknown]")
+                                // ClientStatusMessage 缓存未命中，尝试 LobbyManager 缓存
+                                var cSteamId = new CSteamID(steamId);
+                                steamUsername = LobbyManager.GetCachedMemberName(cSteamId);
+
+                                if (string.IsNullOrEmpty(steamUsername))
                                 {
-                                    steamUsername = $"Player_{steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4))}";
+                                    // 缓存未命中，回退到Steam API
+                                    steamUsername = SteamFriends.GetFriendPersonaName(cSteamId);
+                                    if (string.IsNullOrEmpty(steamUsername) || steamUsername == "[unknown]")
+                                    {
+                                        steamUsername = $"Player_{steamId.ToString().Substring(Math.Max(0, steamId.ToString().Length - 4))}";
+                                    }
                                 }
                             }
                         }
