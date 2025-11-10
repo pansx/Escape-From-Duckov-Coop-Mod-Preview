@@ -1,0 +1,200 @@
+[22:13:58] [INFO] [Death-Monitor] [22:13:58.605] SaveFile 完成，耗时: 24ms
+[22:13:58] [INFO] [Death-Monitor] [22:13:58.580] SaveFile 开始 (writeSaveTime=True)
+[22:13:53] [INFO] [Death-Monitor] [22:13:53.420] SaveFile 完成，耗时: 51ms
+[22:13:53] [INFO] [Death-Monitor] [22:13:53.368] SaveFile 开始 (writeSaveTime=True)
+[22:13:49] [Info] [SYNC_UI] ✅ 已恢复角色HP为最大值: 156
+[22:13:49] [Info] [SYNC_UI] ✅ 已恢复角色无敌状态为: False
+[22:13:49] [Info] [SYNC_UI] 🛡️ 无敌计时器结束（持续 30 秒），解除无敌状态
+[22:13:48] [INFO] [Death-Monitor] [22:13:48.264] SaveFile 完成，耗时: 21ms
+[22:13:48] [INFO] [Death-Monitor] [22:13:48.242] SaveFile 开始 (writeSaveTime=True)
+[22:13:45] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[22:13:43] [INFO] [Death-Monitor] [22:13:43.101] SaveFile 完成，耗时: 21ms
+[22:13:43] [INFO] [Death-Monitor] [22:13:43.080] SaveFile 开始 (writeSaveTime=True)
+[22:13:37] [INFO] [Death-Monitor] [22:13:37.966] SaveFile 完成，耗时: 26ms
+[22:13:37] [INFO] [Death-Monitor] [22:13:37.940] SaveFile 开始 (writeSaveTime=True)
+[22:13:32] [INFO] [Death-Monitor] [22:13:32.768] SaveFile 完成，耗时: 22ms
+[22:13:32] [INFO] [Death-Monitor] [22:13:32.746] SaveFile 开始 (writeSaveTime=True)
+[22:13:31] [Info] [ClientStatus] ✓ 已注册映射: 192.168.137.30:54191 <-> 76561198135351010
+[22:13:31] [Info] [ClientStatus] ✓ 已缓存 Steam 名字映射: 76561198135351010 -> ransx
+[22:13:31] [Info] [ClientStatus] 收到客户端状态: EndPoint=192.168.137.30:54191, SteamID=76561198135351010, SteamName=ransx, Name=Client
+[22:13:31] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+}
+    "randomValue": 905
+    "timestamp": "2025-11-10 22:13:20",
+    "message": "Hello from Client",
+[22:13:31] [Warning] [JsonRouter] JSON消息缺少type字段: {
+[22:13:31] [Warning] [JsonRouter] 找不到对应的peer: Client:c35746f7
+[22:13:31] [Info] [JsonRouter] 收到JSON消息，type=updateClientStatus
+[22:13:31] [Info] [JOIN_TIMEOUT] 玩家 192.168.137.30:54191 成功加入游戏，耗时: 0.03秒
+[22:13:31] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[22:13:31] [WARNING] Setting angular velocity of a kinematic body is not supported.
+[22:13:31] [WARNING] Setting linear velocity of a kinematic body is not supported.
+[22:13:31] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 1)
+[22:13:31] [Info] [JSON] 发送到 192.168.137.30:54191
+[22:13:31] [Info] [JOIN_TIMEOUT] 玩家 192.168.137.30:54191 开始加入，超时时限: 10秒
+[22:13:31] [Info] [SetId] 发送SetId给客户端: 192.168.137.30:54191
+[22:13:31] [Info] [JSON] 发送到 192.168.137.30:54191
+[22:13:31] [Info] 连接成功: 192.168.137.30:54191
+[22:13:29] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[22:13:27] [INFO] [Death-Monitor] [22:13:27.646] SaveFile 完成，耗时: 23ms
+[22:13:27] [INFO] [Death-Monitor] [22:13:27.622] SaveFile 开始 (writeSaveTime=True)
+[22:13:22] [INFO] [Death-Monitor] [22:13:22.482] SaveFile 完成，耗时: 25ms
+[22:13:22] [INFO] [Death-Monitor] [22:13:22.456] SaveFile 开始 (writeSaveTime=True)
+[22:13:19] [Info] [SYNC_UI] 淡出完成，隐藏同步等待界面
+[22:13:19] [Info] [SYNC_UI] 开始淡出隐藏同步等待界面
+[22:13:18] [Info] [SYNC_UI] ✅ 所有任务完成，1秒后隐藏
+[22:13:17] [Info] [SYNC_UI] 任务状态更新: AI装备同步 - 完成 已发送 6 个AI
+[22:13:17] [Info] [AI-LOADOUT] 所有批次发送完成，共 6 个AI
+[22:13:17] [Info] [AI-LOADOUT] 已发送批次 3：2 个AI
+[22:13:17] [Info] [AI-SEND] ver=5 aiId=460317387 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:13:17] [Info] [AI-SEND] ver=5 aiId=477095006 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:13:17] [Info] [AI-LOADOUT] 已发送批次 2：2 个AI
+[22:13:17] [Info] [AI-SEND] ver=5 aiId=493872625 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:13:17] [Info] [AI-SEND] ver=5 aiId=510650244 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:13:17] [Info] [SYNC_UI] 任务状态更新: AI装备同步 - 进行中 发送中...
+[22:13:17] [Info] [AI-LOADOUT] 已发送批次 1：2 个AI
+[22:13:17] [Info] [AI-SEND] ver=5 aiId=527427863 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:13:17] [Info] [AI-SEND] ver=5 aiId=544205482 model='CharacterModel_Dummy_1' icon=0 showName=False
+[22:13:17] [Info] [AI-LOADOUT] 开始分批发送 6 个AI的装备，每批 2 个
+[22:13:17] [Info] [SYNC_UI] 角色已处于无敌状态
+[22:13:17] [Info] [SYNC_UI] 启用自动进度增长，当前进度: 75%
+[22:13:17] [Info] [SYNC_UI] 任务状态更新: AI名称初始化 - 完成 完成
+[22:13:17] [INFO] [Death-Monitor] [22:13:17.287] SaveFile 完成，耗时: 171ms
+[22:13:17] [INFO] [Death-Monitor] [22:13:17.117] SaveFile 开始 (writeSaveTime=True)
+[22:13:16] [Info] [SYNC_UI] 任务状态更新: AI种子同步 - 完成 已发送 30 条
+[22:13:16] [Info] [AI-SEED] 所有批次发送完成，共 30 条
+[22:13:16] [Info] [AI-SEED] 已发送批次 6：5 条数据
+[22:13:16] [Info] [AI-SEED] 已发送批次 5：5 条数据
+[22:13:16] [Info] [AI-SEED] 已发送批次 4：5 条数据
+[22:13:16] [Info] [AI-SEED] 已发送批次 3：5 条数据
+[22:13:16] [Info] [AI-SEED] 已发送批次 2：5 条数据
+[22:13:16] [Info] [AI-SEED] 已发送批次 1：5 条数据
+[22:13:16] [Info] [AI-SEED] 种子计算完成，开始分批发送 30 条映射，每批 5 条
+[22:13:16] [Info] [SYNC_UI] 任务状态更新: AI种子同步 - 进行中 计算中...
+[22:13:16] [Info] [AI-SEED] 找到 15 个 AI Root，准备在后台线程计算种子...
+[22:13:16] [Info] [AICache] 刷新 CharacterSpawnerRoot 缓存，找到 15 个
+[22:13:16] [Info] [SYNC_UI] 任务状态更新: 可破坏物扫描 - 完成 发现 0 个已破坏物体
+[22:13:16] [Info] [Destructible] 扫描完成，共处理 3 个物体，用时 0 帧，发现 0 个已破坏物体
+[22:13:16] [Info] [Destructible] 开始扫描 3 个可破坏物，每帧处理 20 个
+[22:13:15] [Info] [SYNC_UI] 任务状态更新: 可破坏物扫描 - 完成 发现 0 个已破坏物体
+[22:13:15] [Info] [Destructible] 扫描完成，共处理 3 个物体，用时 0 帧，发现 0 个已破坏物体
+[22:13:15] [Info] [Destructible] 开始扫描 3 个可破坏物，每帧处理 20 个
+[22:13:15] [INFO] [MakeTimeQuacker] ✅ 床 2 互動點設置完成
+[22:13:15] [INFO] [MakeTimeQuacker] ✅ 克隆完成後，床 2 的名稱: 睡觉(度过时间)
+[22:13:15] [INFO]   - _overrideInteractNameKey: UI_Sleep
+[22:13:15] [INFO]   - defaultInteractNameKey: UI_Interact
+[22:13:15] [INFO]   - overrideInteractName: True
+[22:13:15] [INFO] [MakeTimeQuacker] 📥 床 1 欄位值:
+If you absolutely need to use negative scaling you can use the convex MeshCollider. Scene hierarchy path "Buildings/SuperSaleMachine/Visual/Prfb_Locker_01_4/SM_Locker_01_3_1/Col_Locker_01_3_1"
+The effective box size has been forced positive and is likely to give unexpected collision geometry.
+[22:13:15] [WARNING] BoxCollider does not support negative scale or size.
+
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+MakeTimeQuacker.<SetupBed2Interactable>d__35:MoveNext()
+UnityEngine.GameObject:AddComponent()
+MakeTimeQuacker.Bed2Interactable.Awake () (at <b48be00e1bed42dab98c5a95286e6038>:0)
+[22:13:15] InteractableBase.Awake () (at <7c82da41edbe4051b5c92d726719f58b>:0)
+[22:13:15] [ERROR] NullReferenceException: Object reference not set to an instance of an object
+[22:13:15] [INFO] [MakeTimeQuacker] ✅ 設定 Layer: Interactable (8)
+[22:13:14] [Info] [IsSelfId] ✓ 匹配本地ID: Host:9050
+[22:13:14] [Info] [GATE] 放行完成，共放行 0 个客户端
+[22:13:14] [Warning] [GATE] playerStatuses 为空或数量为 0！
+[22:13:14] [Info] [GATE] playerStatuses 数量: 0
+[22:13:14] [Info] [GATE] _srvGateReadyPids: []
+[22:13:14] [Info] [GATE] 主机场景加载完成，开始放行客户端。已举手: 0 人
+[22:13:14] [INFO] [Level Initialization] Done!
+[22:13:14] [INFO] [LightLootBox] 已为 1 个容器初始化描边（更新协程启动）
+[22:13:14] [INFO] [LightLootBox] 扫描完成，收集到 1 个可描边对象
+[22:13:14] [INFO] [LightLootBox] 玩家对象已找到（Instance）
+[22:13:14] [INFO] Load bool:StormZone_GetHardDrive  value:False
+[22:13:14] [INFO] [Level Initialization] Setting character position...
+[22:13:14] [INFO] [Level Initialization] Creating map element...
+[22:13:14] [INFO] [Level Initialization] Spawing exits...
+[22:13:14] [INFO] [Level Initialization] Healing...
+[22:13:14] [Info] [SYNC_UI] 注册任务: AI名称初始化
+[22:13:14] [Info] [SYNC_UI] 注册任务: 可破坏物扫描
+[22:13:14] [Info] [SYNC_UI] 注册任务: AI装备同步
+[22:13:14] [Info] [SYNC_UI] 注册任务: AI种子同步
+[22:13:14] [Info] [MOD] 注册同步任务
+[22:13:14] [Info] [LootManager] 缓存已清理
+[22:13:14] [Info] [CacheManager] 所有缓存已刷新（Destructibles 跳过，Loot 异步刷新）
+[22:13:14] [Info] [LootCache] 协程刷新缓存完成，找到 8 个战利品箱，映射 8 个 Inventory，跳过 0 个未初始化箱子
+[22:13:14] [Info] [LootCache] 开始协程刷新缓存，共 8 个战利品箱
+[22:13:14] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[22:13:14] [Info] [SYNC_UI] 更新玩家列表完成，共 1 名玩家
+[22:13:14] [Info] [SYNC_UI] 直连模式，使用默认头像
+[22:13:14] [Info] [SYNC_UI] 显示同步等待界面完成
+[22:13:14] [Info] [SYNC_UI] ✅ 已启用角色无敌
+[22:13:14] [Info] [SYNC_UI] 保存原始无敌状态: False
+[22:13:14] [Info] [SYNC_UI] 超时保护已启动，最大显示时间: 90 秒
+[22:13:14] [Info] [SYNC_UI] Panel已激活
+[22:13:14] [Info] [SYNC_UI] Canvas已启用，sortingOrder=9999
+[22:13:14] [Info] [SYNC_UI] Show() 被调用，_panel=存在, _canvas=存在
+[22:13:14] [Info] [MOD] 找到同步UI实例，开始显示
+[22:13:14] [Info] [MOD] LevelManager_OnLevelInitialized 开始，准备显示同步UI
+[22:13:14] [Info] [MOD] OnLevelInitialized_IndexDestructibles: 跳过重复的 BuildDestructibleIndex 调用
+[22:13:14] [INFO] [Level Initialization] Invoking initialized event...
+[22:13:14] [INFO] [Level Initialization] Handling raid initialization...
+[22:13:14] [INFO] [Level Initialization] Waiting for other initialization...
+[22:13:14] [INFO] [Level Initialization] Setting character items...
+[22:13:14] [INFO] [LightLootBox] 扫描完成，收集到 1 个可描边对象
+[22:13:14] [INFO] [LightLootBox] 玩家对象已找到（Instance）
+[22:13:14] [INFO] [Level Initialization] Setting up pet...
+[22:13:14] [INFO] [Level Initialization] Setting up character status...
+[22:13:14] [Info] [COOP] 阻止生成墓碑，防止物品被转移
+[22:13:14] [INFO] [Level Initialization] Spawning bodies
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Reach location task caching
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Reach location task caching
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Reach location task caching
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning prefabs for task
+[22:13:14] [INFO] [Level Initialization] Spawning item for task
+[22:13:14] [INFO] [Level Initialization] Hearing Buses
+[22:13:14] [INFO] [Level Initialization] Hearing Ambient
+[22:13:14] [INFO] [Level Initialization] Opening ears
+[22:13:14] [Info] [LootManager] 刷新缓存完成，找到 8 个战利品箱
+[22:13:14] [Info] [LootCache] 刷新缓存，找到 8 个战利品箱，映射 4 个 Inventory，跳过 4 个未初始化箱子
+[22:13:14] [Info] [LootCache] 委托初始化成功（Expression Tree 编译）
+[22:13:14] [Info] [Destructible] 索引构建完成，共注册 3 个可破坏物
+[22:13:14] [Info] [DestructibleCache] 刷新缓存，找到 3 个可破坏物（总共 3 个 HealthSimpleBase）
+[22:13:14] [Info] [Destructible] 使用 DestructibleCache 构建索引
