@@ -41,6 +41,9 @@ public class MModUI : MonoBehaviour
 
     private GameObject _hostEntryPrefab;
     private GameObject _playerEntryPrefab;
+    
+    // 🆕 光标指示器（红色圆点）
+    private GameObject _cursorIndicator;
 
     public bool showUI = true;
     public bool showPlayerStatusWindow;
@@ -195,6 +198,29 @@ public class MModUI : MonoBehaviour
     {
         // 语言变更检测及自动重载
         CoopLocalization.CheckLanguageChange();
+
+        // 🆕 UI 打开时：隐藏系统光标，显示红点
+        if (showUI)
+        {
+            Cursor.visible = false;  // 🔧 隐藏系统光标
+            Cursor.lockState = CursorLockMode.None;  // 解锁光标（允许移动）
+            
+            // 更新红点位置
+            if (_cursorIndicator != null)
+            {
+                _cursorIndicator.SetActive(true);
+                _cursorIndicator.transform.position = Input.mousePosition;
+            }
+        }
+        else
+        {
+            // UI 关闭时：隐藏红点，锁定光标
+            if (_cursorIndicator != null)
+            {
+                _cursorIndicator.SetActive(false);
+            }
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
         // 切换主界面显示
         if (Input.GetKeyDown(toggleUIKey))
@@ -374,6 +400,64 @@ public class MModUI : MonoBehaviour
 
         // 创建观战面板
         CreateSpectatorPanel();
+        
+        // 🆕 创建光标指示器（红色圆点）
+        CreateCursorIndicator();
+    }
+    
+    /// <summary>
+    /// 🆕 创建光标指示器（红色圆点）
+    /// </summary>
+    private void CreateCursorIndicator()
+    {
+        _cursorIndicator = new GameObject("CursorIndicator");
+        _cursorIndicator.transform.SetParent(_canvas.transform, false);
+        
+        // 创建圆形纹理
+        int size = 32;
+        Texture2D texture = new Texture2D(size, size);
+        Color[] pixels = new Color[size * size];
+        
+        Vector2 center = new Vector2(size / 2f, size / 2f);
+        float radius = size / 2f;
+        
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float distance = Vector2.Distance(new Vector2(x, y), center);
+                if (distance <= radius)
+                {
+                    // 红色圆点，边缘有抗锯齿
+                    float alpha = distance < radius - 1 ? 1f : (radius - distance);
+                    pixels[y * size + x] = new Color(1f, 0f, 0f, alpha);
+                }
+                else
+                {
+                    pixels[y * size + x] = Color.clear;
+                }
+            }
+        }
+        
+        texture.SetPixels(pixels);
+        texture.Apply();
+        
+        var sprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f));
+        
+        var image = _cursorIndicator.AddComponent<Image>();
+        image.sprite = sprite;
+        image.raycastTarget = false; // 🔧 关键：不阻挡射线检测
+        
+        var rectTransform = _cursorIndicator.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(20, 20); // 20x20 像素的圆点
+        rectTransform.anchorMin = Vector2.zero;
+        rectTransform.anchorMax = Vector2.zero;
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        
+        // 🔧 设置为最高渲染层级
+        _cursorIndicator.transform.SetAsLastSibling();
+        
+        _cursorIndicator.SetActive(false);
     }
 
     #region UI 创建方法
@@ -2656,6 +2740,87 @@ public class MModUI : MonoBehaviour
             NetService.Instance.StartNetwork(false);
         NetService.Instance.ConnectToHost(manualIP, p);
         // 状态会由 UpdateConnectionStatus() 自动同步
+    }
+
+    /// <summary>
+    /// 🆕 复制玩家数据库 JSON 到剪贴板
+    /// </summary>
+    internal void CopyPlayerDatabaseToClipboard()
+    {
+        try
+        {
+            var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+            var json = playerDb.ExportToJsonWithStats(indented: true);
+            
+            GUIUtility.systemCopyBuffer = json;
+            
+            LoggerHelper.Log($"[PlayerDB] 已复制玩家数据库 JSON 到剪贴板 ({playerDb.Count} 名玩家)");
+            LoggerHelper.Log($"[PlayerDB] JSON 内容:\n{json}");
+            
+            SetStatusText($"[OK] 已复制 {playerDb.Count} 名玩家数据到剪贴板", ModernColors.Success);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError($"[PlayerDB] 复制数据库失败: {ex.Message}\n{ex.StackTrace}");
+            SetStatusText("[!] 复制数据库失败", ModernColors.Error);
+        }
+    }
+
+    /// <summary>
+    /// 🆕 发送 JSON 消息到路由器
+    /// </summary>
+    internal void SendJsonMessage()
+    {
+        try
+        {
+            if (_components?.JsonInputField == null)
+            {
+                LoggerHelper.LogWarning("[JSON] 输入框未初始化");
+                return;
+            }
+
+            var json = _components.JsonInputField.text;
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                LoggerHelper.LogWarning("[JSON] 输入内容为空");
+                SetStatusText("[!] 请输入 JSON 消息", ModernColors.Warning);
+                return;
+            }
+
+            LoggerHelper.Log($"[JSON] 准备发送消息:\n{json}");
+
+            // 交给 JSON 路由器处理
+            if (Service != null && Service.connectedPeer != null)
+            {
+                // 客户端：发送到主机
+                JsonMessage.SendToHost(json, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                LoggerHelper.Log("[JSON] 客户端已发送 JSON 消息到主机");
+                SetStatusText("[OK] JSON 消息已发送", ModernColors.Success);
+            }
+            else if (Service != null && Service.IsServer)
+            {
+                // 主机：通过网络发送给自己（触发正常的处理流程）
+                var writer = Service.writer;
+                writer.Reset();
+                writer.Put(json);
+                Service.netManager.SendToAll(writer, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                LoggerHelper.Log("[JSON] 主机已广播 JSON 消息");
+                SetStatusText("[OK] JSON 消息已广播", ModernColors.Success);
+            }
+            else
+            {
+                LoggerHelper.LogWarning("[JSON] 未连接到网络");
+                SetStatusText("[!] 未连接到网络", ModernColors.Warning);
+            }
+
+            // 清空输入框
+            _components.JsonInputField.text = "";
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError($"[JSON] 发送消息失败: {ex.Message}\n{ex.StackTrace}");
+            SetStatusText("[!] 发送 JSON 失败", ModernColors.Error);
+        }
     }
 
     internal void DebugPrintLootBoxes()

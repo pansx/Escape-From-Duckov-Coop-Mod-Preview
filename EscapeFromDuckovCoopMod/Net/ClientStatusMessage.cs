@@ -26,8 +26,13 @@ namespace EscapeFromDuckovCoopMod.Net;
 public static class ClientStatusMessage
 {
     // 🆕 添加 SteamID -> SteamName 的映射缓存
-    private static System.Collections.Generic.Dictionary<string, string> _steamIdToNameMap = 
+    private static System.Collections.Generic.Dictionary<string, string> _steamIdToNameMap =
         new System.Collections.Generic.Dictionary<string, string>();
+
+    // 🆕 客户端状态更新冷却时间（防止频繁处理）
+    private static System.Collections.Generic.Dictionary<string, float> _clientStatusCooldown =
+        new System.Collections.Generic.Dictionary<string, float>();
+    private const float STATUS_UPDATE_COOLDOWN = 5.0f; // 5秒冷却
 
     /// <summary>
     /// 客户端状态数据结构
@@ -121,9 +126,9 @@ public static class ClientStatusMessage
     }
 
     // 🆕 添加 EndPoint -> SteamInfo 的映射缓存
-    private static System.Collections.Generic.Dictionary<string, (string steamId, string steamName)> _endPointToSteamInfoMap = 
+    private static System.Collections.Generic.Dictionary<string, (string steamId, string steamName)> _endPointToSteamInfoMap =
         new System.Collections.Generic.Dictionary<string, (string steamId, string steamName)>();
-    
+
     // 🆕 本地玩家的 Steam 信息缓存（在 Mod 启动时初始化）
     private static string _localSteamId = "";
     private static string _localSteamName = "";
@@ -143,7 +148,7 @@ public static class ClientStatusMessage
             var mySteamId = Steamworks.SteamUser.GetSteamID();
             _localSteamId = mySteamId.ToString();
             _localSteamName = Steamworks.SteamFriends.GetPersonaName();
-            
+
             if (!string.IsNullOrEmpty(_localSteamId) && !string.IsNullOrEmpty(_localSteamName))
             {
                 _steamIdToNameMap[_localSteamId] = _localSteamName;
@@ -216,6 +221,20 @@ public static class ClientStatusMessage
                 return;
             }
 
+            // 🔧 检查冷却时间（5秒内不重复处理同一客户端）
+            var currentTime = UnityEngine.Time.time;
+            if (_clientStatusCooldown.TryGetValue(data.endPoint, out var lastTime))
+            {
+                if (currentTime - lastTime < STATUS_UPDATE_COOLDOWN)
+                {
+                    // 还在冷却中，跳过处理
+                    return;
+                }
+            }
+
+            // 更新冷却时间
+            _clientStatusCooldown[data.endPoint] = currentTime;
+
             LoggerHelper.Log(
                 $"[ClientStatus] 收到客户端状态: EndPoint={data.endPoint}, SteamID={data.steamId}, SteamName={data.steamName}, Name={data.playerName}"
             );
@@ -238,8 +257,15 @@ public static class ClientStatusMessage
                 );
             }
 
+            // 🆕 更新玩家信息数据库
+            UpdatePlayerDatabase(data);
+
             // 🆕 更新投票系统中的玩家信息（根据 Steam ID 匹配）
-            UpdateVotePlayerInfo(data.endPoint, data.steamId, data.steamName);
+            // 注意：只在有活跃投票时才更新
+            if (SceneVoteMessage.HasActiveVote())
+            {
+                UpdateVotePlayerInfo(data.endPoint, data.steamId, data.steamName);
+            }
 
             // 🔧 建立 SteamID 和 EndPoint 的映射
             if (
@@ -263,7 +289,7 @@ public static class ClientStatusMessage
                     // 注意：这需要 SteamEndPointMapper 提供公共方法或者我们使用反射
                     // 暂时使用现有的 RegisterSteamID 方法，它会生成虚拟IP但我们可以忽略返回值
                     // 更好的方案是添加一个新方法来直接注册已有的 EndPoint
-                    
+
                     // 使用反射访问私有字典
                     var mapperType = typeof(SteamEndPointMapper);
                     var steamToEndPointField = mapperType.GetField(
@@ -277,9 +303,9 @@ public static class ClientStatusMessage
 
                     if (steamToEndPointField != null && endPointToSteamField != null)
                     {
-                        var steamToEndPoint = steamToEndPointField.GetValue(SteamEndPointMapper.Instance) 
+                        var steamToEndPoint = steamToEndPointField.GetValue(SteamEndPointMapper.Instance)
                             as System.Collections.Generic.Dictionary<Steamworks.CSteamID, System.Net.IPEndPoint>;
-                        var endPointToSteam = endPointToSteamField.GetValue(SteamEndPointMapper.Instance) 
+                        var endPointToSteam = endPointToSteamField.GetValue(SteamEndPointMapper.Instance)
                             as System.Collections.Generic.Dictionary<System.Net.IPEndPoint, Steamworks.CSteamID>;
 
                         if (steamToEndPoint != null && endPointToSteam != null)
@@ -294,7 +320,7 @@ public static class ClientStatusMessage
                                     LoggerHelper.Log(
                                         $"[ClientStatus] 🔄 检测到端口变化: {oldEndPoint} -> {ipEndPoint} (SteamID={data.steamId})"
                                     );
-                                    
+
                                     // 🔧 同时更新 NetService 中的玩家记录
                                     UpdatePlayerStatusEndPoint(oldEndPoint.ToString(), data.endPoint, data.steamId, data.steamName);
                                 }
@@ -370,7 +396,7 @@ public static class ClientStatusMessage
             {
                 var status = kvp.Value;
                 var (clientSteamId, clientSteamName) = GetSteamInfoFromEndPoint(status.EndPoint);
-                
+
                 playerList.Add(new SceneVoteMessage.PlayerInfo
                 {
                     playerId = status.EndPoint,
@@ -398,7 +424,7 @@ public static class ClientStatusMessage
             // 发送给所有客户端
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(voteData);
             JsonMessage.BroadcastToAllClients(json, LiteNetLib.DeliveryMethod.ReliableOrdered);
-            
+
             LoggerHelper.Log($"[ClientStatus] ✓ 已发送玩家信息更新给所有客户端 (共 {playerList.Count} 名玩家)");
         }
         catch (System.Exception ex)
@@ -416,6 +442,56 @@ public static class ClientStatusMessage
         // 从 64 位 SteamID 提取账户 ID
         ulong accountId = steamId.m_SteamID & 0xFFFFFFFF;
         return accountId.ToString();
+    }
+
+    /// <summary>
+    /// 🆕 更新玩家信息数据库
+    /// </summary>
+    private static void UpdatePlayerDatabase(ClientStatusData data)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(data.steamId))
+            {
+                LoggerHelper.LogWarning("[ClientStatus] 无法更新数据库：SteamID 为空");
+                return;
+            }
+
+            var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+
+            // 添加或更新玩家信息（使用 steamName 作为 playerName）
+            bool success = playerDb.AddOrUpdatePlayer(
+                steamId: data.steamId,
+                playerName: data.steamName ?? data.playerName ?? "Unknown",
+                avatarUrl: data.steamAvatarUrl,
+                isLocal: false,  // 远程玩家
+                endPoint: data.endPoint,
+                lastUpdate: data.timestamp
+            );
+
+            if (success)
+            {
+                LoggerHelper.Log(
+                    $"[ClientStatus] ✓ 已更新玩家数据库: {data.steamName} ({data.steamId})"
+                );
+
+                // 输出当前数据库状态（调试用）
+                // var json = playerDb.ExportToJsonWithStats(indented: false);
+                // LoggerHelper.Log($"[ClientStatus] 数据库状态: {json}");
+            }
+            else
+            {
+                LoggerHelper.LogWarning(
+                    $"[ClientStatus] 更新玩家数据库失败: {data.steamId}"
+                );
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LoggerHelper.LogError(
+                $"[ClientStatus] 更新玩家数据库异常: {ex.Message}\n{ex.StackTrace}"
+            );
+        }
     }
 
     /// <summary>

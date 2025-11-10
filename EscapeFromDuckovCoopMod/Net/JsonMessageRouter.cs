@@ -101,7 +101,7 @@ public static class JsonMessageRouter
 
                 case "updateClientStatus":
                     // 客户端状态上报
-                    HandleClientStatusMessage(reader, json);
+                    HandleClientStatusMessage(json, fromPeer);
                     break;
 
                 case "kick":
@@ -227,7 +227,7 @@ public static class JsonMessageRouter
     /// <summary>
     /// 处理客户端状态上报消息
     /// </summary>
-    private static void HandleClientStatusMessage(NetPacketReader reader, string json)
+    private static void HandleClientStatusMessage(string json, NetPeer fromPeer)
     {
         var service = NetService.Instance;
         if (service == null || !service.IsServer)
@@ -236,40 +236,15 @@ public static class JsonMessageRouter
             return;
         }
 
-        // 从reader获取发送者的peer（主机端才有）
-        // 注意：这里需要从Mod.cs传递fromPeer参数
-        // 暂时使用json中的endPoint来查找对应的peer
+        if (fromPeer == null)
+        {
+            Debug.LogWarning("[JsonRouter] fromPeer为空，无法处理客户端状态消息");
+            return;
+        }
+
         try
         {
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ClientStatusMessage.ClientStatusData>(json);
-            if (data == null)
-            {
-                Debug.LogWarning("[JsonRouter] 客户端状态消息解析失败");
-                return;
-            }
-
-            // 查找对应的peer
-            NetPeer fromPeer = null;
-            if (service.playerStatuses != null)
-            {
-                foreach (var kv in service.playerStatuses)
-                {
-                    if (kv.Value != null && kv.Value.EndPoint == data.endPoint)
-                    {
-                        fromPeer = kv.Key;
-                        break;
-                    }
-                }
-            }
-
-            if (fromPeer != null)
-            {
-                ClientStatusMessage.Host_HandleClientStatus(fromPeer, json);
-            }
-            else
-            {
-                Debug.LogWarning($"[JsonRouter] 找不到对应的peer: {data.endPoint}");
-            }
+            ClientStatusMessage.Host_HandleClientStatus(fromPeer, json);
         }
         catch (System.Exception ex)
         {
