@@ -44,6 +44,10 @@ public class NetService : MonoBehaviour, INetEventListener
 
     public readonly HashSet<int> _dedupeShotFrame = new(); // 本帧已发过的标记
 
+    // 🆕 IsInGame 状态同步定时器
+    private float _isInGameSyncTimer = 0f;
+    private const float IS_IN_GAME_SYNC_INTERVAL = 1.0f; // 每秒同步一次
+
     // ===== 场景切换重连功能 =====
     // 缓存成功连接的IP和端口，用于场景切换后自动重连
     public string cachedConnectedIP = "";
@@ -86,6 +90,17 @@ public class NetService : MonoBehaviour, INetEventListener
         if (SteamP2PLoader.Instance != null)
         {
             SteamP2PLoader.Instance.UseSteamP2P = TransportMode == NetworkTransportMode.SteamP2P;
+        }
+    }
+
+    public void Update()
+    {
+        // 🆕 定期同步 IsInGame 状态到数据库
+        _isInGameSyncTimer += Time.deltaTime;
+        if (_isInGameSyncTimer >= IS_IN_GAME_SYNC_INTERVAL)
+        {
+            _isInGameSyncTimer = 0f;
+            SyncIsInGameStatusToDatabase();
         }
     }
 
@@ -132,7 +147,7 @@ public class NetService : MonoBehaviour, INetEventListener
             status = CoopLocalization.Get("net.connectedTo", peer.EndPoint.ToString());
             isConnecting = false;
             Send_ClientStatus.Instance.SendClientStatusUpdate();
-            
+
             // ✅ 发送包含 Steam 信息的 JSON 状态更新
             Net.ClientStatusMessage.Client_SendStatusUpdate();
 
@@ -147,6 +162,9 @@ public class NetService : MonoBehaviour, INetEventListener
                 isManualConnection = false; // 重置标记
                 Debug.Log($"[AUTO_RECONNECT] 缓存连接信息 - IP: {cachedConnectedIP}, Port: {cachedConnectedPort}");
             }
+
+            // 🆕 客户端：更新本地玩家到数据库
+            UpdateLocalPlayerToDatabase();
         }
         else
         {
@@ -156,6 +174,9 @@ public class NetService : MonoBehaviour, INetEventListener
             // 🕐 记录连接时间，开始超时计时
             _peerConnectionTime[peer] = Time.time;
             Debug.Log($"[JOIN_TIMEOUT] 玩家 {peer.EndPoint} 开始加入，超时时限: {JOIN_TIMEOUT_SECONDS}秒");
+
+            // 🆕 主机：更新本地玩家到数据库（如果还没有）
+            UpdateLocalPlayerToDatabase();
         }
 
         if (!playerStatuses.ContainsKey(peer))
@@ -240,8 +261,11 @@ public class NetService : MonoBehaviour, INetEventListener
                 }
         }
 
-        // 🧪 发送JSON测试消息（双方都发送）
-        JsonMessage.SendTestJson(peer, writer);
+        // 🆕 主机：发送玩家信息更新（active=false 的投票消息）
+        if (IsServer)
+        {
+            Net.ClientStatusMessage.SendPlayerInfoUpdateToClients();
+        }
     }
 
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
@@ -261,11 +285,15 @@ public class NetService : MonoBehaviour, INetEventListener
             _peerConnectionTime.Remove(peer);
         }
 
+        // 🆕 更新数据库中的 LastSeen 时间戳
         if (playerStatuses.ContainsKey(peer))
         {
             var _st = playerStatuses[peer];
             if (_st != null && !string.IsNullOrEmpty(_st.EndPoint))
+            {
+                UpdatePlayerLastSeenInDatabase(_st.EndPoint);
                 SceneNet.Instance._cliLastSceneIdByPlayer.Remove(_st.EndPoint);
+            }
             playerStatuses.Remove(peer);
         }
 
@@ -340,7 +368,12 @@ public class NetService : MonoBehaviour, INetEventListener
     public void OnNetworkLatencyUpdate(NetPeer peer, int latency)
     {
         if (playerStatuses.ContainsKey(peer))
+        {
             playerStatuses[peer].Latency = latency;
+
+            // 🆕 同步延迟到数据库
+            SyncLatencyToDatabase(peer, latency);
+        }
     }
 
     public void OnConnectionRequest(ConnectionRequest request)
@@ -420,6 +453,9 @@ public class NetService : MonoBehaviour, INetEventListener
         {
             ItemAgent_Gun.OnMainCharacterShootEvent -= COOPManager.WeaponHandle.Host_OnMainCharacterShoot;
             ItemAgent_Gun.OnMainCharacterShootEvent += COOPManager.WeaponHandle.Host_OnMainCharacterShoot;
+
+            // 🆕 主机启动时更新自己的信息到数据库
+            UpdateLocalPlayerToDatabase();
         }
 
 
@@ -738,5 +774,213 @@ public class NetService : MonoBehaviour, INetEventListener
 
         // 执行连接
         ConnectToHost(cachedConnectedIP, cachedConnectedPort);
+    }
+
+    /// <summary>
+    /// 🆕 更新本地玩家到数据库
+    /// </summary>
+    private void UpdateLocalPlayerToDatabase()
+    {
+        try
+        {
+            if (localPlayerStatus == null)
+            {
+                Debug.LogWarning("[NetService] 无法更新本地玩家到数据库：localPlayerStatus 为空");
+                return;
+            }
+
+            // 获取 Steam 信息
+            string steamId = "";
+            string steamName = "";
+            string steamAvatarUrl = "";
+
+            if (SteamManager.Initialized)
+            {
+                try
+                {
+                    var mySteamId = Steamworks.SteamUser.GetSteamID();
+                    steamId = mySteamId.ToString();
+                    steamName = Steamworks.SteamFriends.GetPersonaName();
+
+                    // 获取头像 URL
+                    int avatarHandle = Steamworks.SteamFriends.GetLargeFriendAvatar(mySteamId);
+                    if (avatarHandle > 0)
+                    {
+                        ulong accountId = mySteamId.m_SteamID & 0xFFFFFFFF;
+                        steamAvatarUrl = $"https://avatars.steamstatic.com/{accountId}/{avatarHandle:x}_full.jpg";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"[NetService] 获取 Steam 信息失败: {ex.Message}");
+                }
+            }
+
+            var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+
+            // 添加或更新本地玩家
+            bool success = playerDb.AddOrUpdatePlayer(
+                steamId: steamId,
+                playerName: steamName ?? localPlayerStatus.PlayerName ?? "LocalPlayer",
+                avatarUrl: steamAvatarUrl,
+                isLocal: true,  // 本地玩家
+                endPoint: localPlayerStatus.EndPoint,
+                lastUpdate: DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
+            );
+
+            if (success)
+            {
+                // 更新延迟和游戏状态
+                playerDb.SetCustomData(steamId, "Latency", localPlayerStatus.Latency);
+                playerDb.SetCustomData(steamId, "IsInGame", localPlayerStatus.IsInGame);
+
+                Debug.Log($"[NetService] ✓ 已更新本地玩家到数据库: {steamName} ({steamId}), IsLocal=true");
+            }
+            else
+            {
+                Debug.LogWarning($"[NetService] 更新本地玩家到数据库失败");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[NetService] 更新本地玩家到数据库异常: {ex.Message}\n{ex.StackTrace}");
+        }
+    }
+
+    /// <summary>
+    /// 🆕 更新玩家的 LastSeen 时间戳（断开连接时）
+    /// </summary>
+    private void UpdatePlayerLastSeenInDatabase(string endPoint)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(endPoint))
+            {
+                Debug.LogWarning("[NetService] 无法更新 LastSeen：EndPoint 为空");
+                return;
+            }
+
+            var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+            var player = playerDb.GetPlayerByEndPoint(endPoint);
+
+            if (player != null)
+            {
+                player.LastSeen = DateTime.Now;
+                Debug.Log($"[NetService] ✓ 已更新玩家 LastSeen: {player.PlayerName} ({player.SteamId}), EndPoint={endPoint}");
+            }
+            else
+            {
+                Debug.LogWarning($"[NetService] 未找到 EndPoint={endPoint} 的玩家，无法更新 LastSeen");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[NetService] 更新 LastSeen 异常: {ex.Message}\n{ex.StackTrace}");
+        }
+    }
+
+    /// <summary>
+    /// 🆕 同步延迟到数据库
+    /// </summary>
+    private void SyncLatencyToDatabase(NetPeer peer, int latency)
+    {
+        try
+        {
+            if (peer == null)
+                return;
+
+            var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+
+            // 获取玩家的 EndPoint
+            string endPoint = GetPlayerId(peer);
+            if (string.IsNullOrEmpty(endPoint))
+            {
+                Debug.LogWarning($"[NetService] 无法同步延迟：无法获取 EndPoint");
+                return;
+            }
+
+            // 通过 EndPoint 查找玩家
+            var player = playerDb.GetPlayerByEndPoint(endPoint);
+            if (player != null)
+            {
+                // 更新延迟到 CustomData
+                playerDb.SetCustomData(player.SteamId, "Latency", latency);
+                // 不打印日志，避免过于频繁
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[NetService] 同步延迟到数据库异常: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 🆕 定期同步 IsInGame 状态到数据库
+    /// </summary>
+    private void SyncIsInGameStatusToDatabase()
+    {
+        try
+        {
+            var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+
+            // 同步主机端的玩家状态
+            if (IsServer)
+            {
+                // 同步本地玩家（主机）
+                if (localPlayerStatus != null && !string.IsNullOrEmpty(localPlayerStatus.EndPoint))
+                {
+                    var localPlayer = playerDb.GetPlayerByEndPoint(localPlayerStatus.EndPoint);
+                    if (localPlayer != null)
+                    {
+                        playerDb.SetCustomData(localPlayer.SteamId, "IsInGame", localPlayerStatus.IsInGame);
+                    }
+                }
+
+                // 同步所有远程玩家
+                foreach (var kvp in playerStatuses)
+                {
+                    var status = kvp.Value;
+                    if (status != null && !string.IsNullOrEmpty(status.EndPoint))
+                    {
+                        var player = playerDb.GetPlayerByEndPoint(status.EndPoint);
+                        if (player != null)
+                        {
+                            playerDb.SetCustomData(player.SteamId, "IsInGame", status.IsInGame);
+                        }
+                    }
+                }
+            }
+            // 同步客户端的玩家状态
+            else
+            {
+                // 同步本地玩家（客户端）
+                if (localPlayerStatus != null && !string.IsNullOrEmpty(localPlayerStatus.EndPoint))
+                {
+                    var localPlayer = playerDb.GetPlayerByEndPoint(localPlayerStatus.EndPoint);
+                    if (localPlayer != null)
+                    {
+                        playerDb.SetCustomData(localPlayer.SteamId, "IsInGame", localPlayerStatus.IsInGame);
+                    }
+                }
+
+                // 同步客户端看到的其他玩家
+                foreach (var kvp in clientPlayerStatuses)
+                {
+                    var status = kvp.Value;
+                    if (status != null && !string.IsNullOrEmpty(status.EndPoint))
+                    {
+                        var player = playerDb.GetPlayerByEndPoint(status.EndPoint);
+                        if (player != null)
+                        {
+                            playerDb.SetCustomData(player.SteamId, "IsInGame", status.IsInGame);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[NetService] 同步 IsInGame 状态到数据库异常: {ex.Message}");
+        }
     }
 }

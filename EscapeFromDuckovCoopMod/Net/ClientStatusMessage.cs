@@ -47,6 +47,8 @@ public static class ClientStatusMessage
         public string endPoint; // 客户端的 EndPoint（虚拟 IP）
         public string playerName; // 玩家名称
         public string timestamp; // 时间戳
+        public int latency; // 🆕 延迟（毫秒）
+        public bool isInGame; // 🆕 是否在游戏中
     }
 
     /// <summary>
@@ -106,6 +108,10 @@ public static class ClientStatusMessage
             return;
         }
 
+        // 🆕 获取延迟和游戏状态
+        int latency = service.connectedPeer?.Ping ?? 0;
+        bool isInGame = service.localPlayerStatus?.IsInGame ?? false;
+
         var data = new ClientStatusData
         {
             steamId = steamId,
@@ -114,6 +120,8 @@ public static class ClientStatusMessage
             endPoint = endPoint,
             playerName = playerName,
             timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+            latency = latency,
+            isInGame = isInGame,
         };
 
         string json = Newtonsoft.Json.JsonConvert.SerializeObject(
@@ -364,7 +372,7 @@ public static class ClientStatusMessage
     /// <summary>
     /// 🆕 主机：发送玩家信息更新给所有客户端（通过 active=false 的投票 JSON）
     /// </summary>
-    private static void SendPlayerInfoUpdateToClients()
+    public static void SendPlayerInfoUpdateToClients()
     {
         var service = NetService.Instance;
         if (service == null || !service.IsServer)
@@ -471,8 +479,12 @@ public static class ClientStatusMessage
 
             if (success)
             {
+                // 🆕 更新延迟和游戏状态到 CustomData
+                playerDb.SetCustomData(data.steamId, "Latency", data.latency);
+                playerDb.SetCustomData(data.steamId, "IsInGame", data.isInGame);
+
                 LoggerHelper.Log(
-                    $"[ClientStatus] ✓ 已更新玩家数据库: {data.steamName} ({data.steamId})"
+                    $"[ClientStatus] ✓ 已更新玩家数据库: {data.steamName} ({data.steamId}), Latency={data.latency}ms, IsInGame={data.isInGame}"
                 );
 
                 // 输出当前数据库状态（调试用）

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using EscapeFromDuckovCoopMod.Utils.Logger.Tools;
 
 namespace EscapeFromDuckovCoopMod.Utils.Database;
 
@@ -231,6 +232,106 @@ public class PlayerInfoDatabase
     {
         var player = _db.FindByKey(steamId);
         return player?.CustomData.GetValueOrDefault(key);
+    }
+
+    #endregion
+
+    #region 调试功能
+
+    /// <summary>
+    /// 输出数据库内容到日志（用于调试）
+    /// </summary>
+    public void DebugPrintDatabase()
+    {
+        LoggerHelper.Log($"[PlayerInfoDatabase] ========== 数据库内容 ==========");
+        LoggerHelper.Log($"[PlayerInfoDatabase] 总玩家数: {_db.Count}");
+        
+        if (_db.Count == 0)
+        {
+            LoggerHelper.Log($"[PlayerInfoDatabase] 数据库为空");
+            return;
+        }
+
+        foreach (var player in _db.GetAll())
+        {
+            LoggerHelper.Log($"[PlayerInfoDatabase] --- 玩家: {player.PlayerName} ---");
+            LoggerHelper.Log($"[PlayerInfoDatabase]   SteamId: {player.SteamId}");
+            LoggerHelper.Log($"[PlayerInfoDatabase]   EndPoint: {player.EndPoint ?? "null"}");
+            LoggerHelper.Log($"[PlayerInfoDatabase]   IsLocalPlayer: {player.IsLocalPlayer}");
+            LoggerHelper.Log($"[PlayerInfoDatabase]   LastUpdate: {player.LastUpdate ?? "null"}");
+            LoggerHelper.Log($"[PlayerInfoDatabase]   LastSeen: {player.LastSeen:yyyy-MM-dd HH:mm:ss}");
+            LoggerHelper.Log($"[PlayerInfoDatabase]   HasAvatar: {player.AvatarTexture != null}");
+            
+            if (player.CustomData.Count > 0)
+            {
+                LoggerHelper.Log($"[PlayerInfoDatabase]   CustomData:");
+                foreach (var kvp in player.CustomData)
+                {
+                    LoggerHelper.Log($"[PlayerInfoDatabase]     {kvp.Key}: {kvp.Value ?? "null"}");
+                }
+            }
+            else
+            {
+                LoggerHelper.Log($"[PlayerInfoDatabase]   CustomData: 空");
+            }
+        }
+        
+        LoggerHelper.Log($"[PlayerInfoDatabase] ========================================");
+    }
+
+    /// <summary>
+    /// 验证 CustomData 功能（用于测试）
+    /// </summary>
+    public void DebugTestCustomData()
+    {
+        LoggerHelper.Log($"[PlayerInfoDatabase] ========== 测试 CustomData 功能 ==========");
+        
+        // 创建测试玩家
+        var testSteamId = "TEST_PLAYER_12345";
+        var success = AddOrUpdatePlayer(testSteamId, "测试玩家", isLocal: false);
+        LoggerHelper.Log($"[PlayerInfoDatabase] 添加测试玩家: {(success ? "成功" : "失败")}");
+        
+        // 测试设置 Latency
+        success = SetCustomData(testSteamId, "Latency", 50);
+        LoggerHelper.Log($"[PlayerInfoDatabase] 设置 Latency=50: {(success ? "成功" : "失败")}");
+        
+        // 测试设置 IsInGame
+        success = SetCustomData(testSteamId, "IsInGame", true);
+        LoggerHelper.Log($"[PlayerInfoDatabase] 设置 IsInGame=true: {(success ? "成功" : "失败")}");
+        
+        // 读取并验证
+        var player = GetPlayerBySteamId(testSteamId);
+        if (player != null)
+        {
+            LoggerHelper.Log($"[PlayerInfoDatabase] 读取测试玩家成功");
+            
+            if (player.CustomData.TryGetValue("Latency", out var latencyObj))
+            {
+                LoggerHelper.Log($"[PlayerInfoDatabase] 读取 Latency: {latencyObj} (类型: {latencyObj?.GetType().Name ?? "null"})");
+            }
+            else
+            {
+                LoggerHelper.Log($"[PlayerInfoDatabase] 读取 Latency 失败: 键不存在");
+            }
+            
+            if (player.CustomData.TryGetValue("IsInGame", out var isInGameObj))
+            {
+                LoggerHelper.Log($"[PlayerInfoDatabase] 读取 IsInGame: {isInGameObj} (类型: {isInGameObj?.GetType().Name ?? "null"})");
+            }
+            else
+            {
+                LoggerHelper.Log($"[PlayerInfoDatabase] 读取 IsInGame 失败: 键不存在");
+            }
+        }
+        else
+        {
+            LoggerHelper.Log($"[PlayerInfoDatabase] 读取测试玩家失败");
+        }
+        
+        // 清理测试数据
+        RemovePlayer(testSteamId);
+        LoggerHelper.Log($"[PlayerInfoDatabase] 清理测试数据完成");
+        LoggerHelper.Log($"[PlayerInfoDatabase] ==========================================");
     }
 
     #endregion
