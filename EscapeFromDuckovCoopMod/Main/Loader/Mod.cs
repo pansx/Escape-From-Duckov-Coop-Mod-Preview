@@ -1305,9 +1305,9 @@ public class ModBehaviourF : MonoBehaviour
                                 remoteCharacters != null && remoteCharacters.ContainsKey(peer),
                             ["time"] = Time.time,
                         };
-                        Debug.Log(
-                            $"[HP_RECEIVE] {Newtonsoft.Json.JsonConvert.SerializeObject(logData)}"
-                        );
+                        // Debug.Log(
+                        //     $"[HP_RECEIVE] {Newtonsoft.Json.JsonConvert.SerializeObject(logData)}"
+                        // );
 
                         if (max <= 0f)
                         {
@@ -1324,7 +1324,7 @@ public class ModBehaviourF : MonoBehaviour
                             && go
                         )
                         {
-                            Debug.Log($"[HP_RECEIVE] ✓ 应用血量到远程角色: 玩家={playerId}");
+                            // Debug.Log($"[HP_RECEIVE] ✓ 应用血量到远程角色: 玩家={playerId}");
                             // 主机本地先写实自己能立刻看到
                             HealthM.Instance.ApplyHealthAndEnsureBar(go, max, cur);
 

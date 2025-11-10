@@ -1164,7 +1164,26 @@ public class MModUI : MonoBehaviour
         string displayName = status.PlayerName;
         string displayId = status.EndPoint;
 
-        if (isSteamMode)
+        // ✅ 优先从投票数据中获取 Steam 信息
+        bool foundInVoteData = false;
+        if (SceneNet.Instance?.cachedVoteData?.playerList?.items != null)
+        {
+            foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+            {
+                if (player.playerId == status.EndPoint && !string.IsNullOrEmpty(player.steamName))
+                {
+                    bool isHost = player.playerId.StartsWith("Host:");
+                    string prefix = isHost ? "HOST" : "CLIENT";
+                    displayName = $"{prefix}_{player.steamName}";
+                    displayId = player.steamId;
+                    foundInVoteData = true;
+                    LoggerHelper.Log($"[MModUI] 玩家状态面板从投票数据获取名字: {displayName}");
+                    break;
+                }
+            }
+        }
+
+        if (isSteamMode && !foundInVoteData)
         {
             // Steam模式：使用缓存获取Steam用户名和SteamID
             string steamUsername = "Unknown";
@@ -1429,8 +1448,11 @@ public class MModUI : MonoBehaviour
             // ✅ 优先从投票数据中获取 Steam 名字
             if (SceneNet.Instance.cachedVoteData?.playerList?.items != null)
             {
+                int playerCount = SceneNet.Instance.cachedVoteData.playerList.items.Count();
+                LoggerHelper.Log($"[MModUI] 尝试从投票数据获取玩家名字: pid={pid}, 投票数据玩家数={playerCount}");
                 foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
                 {
+                    LoggerHelper.Log($"[MModUI] 检查玩家: playerId={player.playerId}, steamName={player.steamName}");
                     if (player.playerId == pid && !string.IsNullOrEmpty(player.steamName))
                     {
                         // 判断是否是主机
@@ -1438,9 +1460,14 @@ public class MModUI : MonoBehaviour
                         string prefix = isHost ? "HOST" : "CLIENT";
                         displayName = $"{prefix}_{player.steamName}";
                         displayId = player.steamId;
+                        LoggerHelper.Log($"[MModUI] ✅ 从投票数据获取到名字: {displayName}");
                         break;
                     }
                 }
+            }
+            else
+            {
+                LoggerHelper.Log($"[MModUI] ⚠️ 投票数据为空，无法获取 Steam 名字");
             }
 
             // 如果投票数据中没有找到，回退到原来的逻辑
@@ -1557,6 +1584,7 @@ public class MModUI : MonoBehaviour
             }
 
             // 显示名称和ID
+            LoggerHelper.Log($"[MModUI] 最终显示名称: pid={pid}, displayName={displayName}, displayId={displayId}");
             var nameText = CreateText("Name", playerRow.transform, displayName, 14, ModernColors.TextPrimary);
             var nameLayout = nameText.gameObject.GetComponent<LayoutElement>();
             nameLayout.flexibleWidth = 1;
