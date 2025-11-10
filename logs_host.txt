@@ -1,200 +1,200 @@
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] OnDisable (L38): Mod 已禁用，配置已保存
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] Save (L192): 配置已保存: C:/Users/Administrator/AppData/LocalLow/TeamSoda/Duckov\Saves\DuckSortConfig.json
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] OnDisable (L33): Harmony 补丁CustomSortButtons已卸载
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] Disable (L131): AddText 已禁用
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] Disable (L127): 销毁文本对象: 单价
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] Disable (L127): 销毁文本对象: 价重比
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] Disable (L127): 销毁文本对象: 重量
-[21:52:50] [INFO] [DuckSort v1.8.0] [21:52:50] [INFO] Disable (L127): 销毁文本对象: 价格
-[21:52:50] [INFO] ModConfig Disabled
-[21:52:50] [INFO] [Duckov Lucky Animation][DEBUG] 21:52:50.772 Settings config cleaned up.
-[21:52:50] [INFO] [Duckov Lucky Animation][DEBUG] 21:52:50.772 ConfigManager cleaned up.
-[21:52:50] [INFO] [Duckov Lucky Animation][DEBUG] 21:52:50.771 File watcher stopped.
-[21:52:50] [INFO] [Duckov Lucky Animation][DEBUG] 21:52:50.770 Harmony patches removed.
-[21:52:50] [INFO] [Duckov Lucky Animation][DEBUG] 21:52:50.742 Localizations destroyed.
-[21:52:45] [INFO] [Death-Monitor] [21:52:45.718] SaveFile 完成，耗时: 20ms
-[21:52:45] [INFO] [Death-Monitor] [21:52:45.698] SaveFile 开始 (writeSaveTime=True)
-[21:52:40] [Info] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[21:52:40] [Info] 断开连接: 192.168.123.1:9050, 原因: RemoteConnectionClose
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.05864,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.041954,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [INFO] [Death-Monitor] [21:52:40.674] SaveFile 完成，耗时: 15ms
-[21:52:40] [INFO] [Death-Monitor] [21:52:40.659] SaveFile 开始 (writeSaveTime=True)
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0253029,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":37.0086365,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.99197,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.99197,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.99197,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9586372,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.9419556,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":36.8253021,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:40] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:40] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:61443
-[21:52:40] [Info] [SceneVote] 更新投票状态: Level_Farm_Main, 参与者: 2, 已准备: 0/2
-[21:52:40] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:61443)
-[21:52:40] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:61443
-[21:52:40] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:61443), IsSelfId=True
-[21:52:40] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:61443
-[21:52:40] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:61443', steamId='76561198135351010', ready=False
-[21:52:40] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
-[21:52:40] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=False
-[21:52:40] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:61443)
-[21:52:40] [Info] [JSON] 发送到 192.168.123.1:9050
-[21:52:40] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:61443","playerName":"Client","timestamp":"2025-11-10 21:52:40.046"}
-[21:52:40] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
-[21:52:40] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61443","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 21:52:50.608"}
-[21:52:40] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.7253036,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:39] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:39] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:61443
-[21:52:39] [Info] [SceneVote] 更新投票状态: Level_Farm_Main, 参与者: 2, 已准备: 0/2
-[21:52:39] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:61443)
-[21:52:39] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:61443
-[21:52:39] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:61443), IsSelfId=True
-[21:52:39] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:61443
-[21:52:39] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:61443', steamId='76561198135351010', ready=False
-[21:52:39] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
-[21:52:39] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=False
-[21:52:39] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:61443)
-[21:52:39] [Info] [JSON] 发送到 192.168.123.1:9050
-[21:52:39] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:61443","playerName":"Client","timestamp":"2025-11-10 21:52:39.049"}
-[21:52:39] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
-[21:52:39] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61443","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 21:52:49.600"}
-[21:52:39] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.1419678,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[21:52:38] [Info] [HP_REPORT_DEBUG] {"event":"Client_SendSelfHealth_Debug","maxHealth":51.0,"currentHealth":51.0,"force":true,"time":35.09195,"defaultMaxHealth":156,"lastMaxHealth":51.0,"_currentHealth":51.0,"autoInit":false,"gameObjectName":"Character(Clone)","gameObjectActive":true}
-[21:52:38] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] OnDisable (L38): Mod 已禁用，配置已保存
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] Save (L192): 配置已保存: C:/Users/Administrator/AppData/LocalLow/TeamSoda/Duckov\Saves\DuckSortConfig.json
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] OnDisable (L33): Harmony 补丁CustomSortButtons已卸载
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] Disable (L131): AddText 已禁用
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] Disable (L127): 销毁文本对象: 单价
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] Disable (L127): 销毁文本对象: 价重比
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] Disable (L127): 销毁文本对象: 重量
+[21:58:00] [INFO] [DuckSort v1.8.0] [21:58:00] [INFO] Disable (L127): 销毁文本对象: 价格
+[21:58:00] [INFO] ModConfig Disabled
+[21:58:00] [INFO] [Duckov Lucky Animation][DEBUG] 21:58:00.224 Settings config cleaned up.
+[21:58:00] [INFO] [Duckov Lucky Animation][DEBUG] 21:58:00.224 ConfigManager cleaned up.
+[21:58:00] [INFO] [Duckov Lucky Animation][DEBUG] 21:58:00.224 File watcher stopped.
+[21:58:00] [INFO] [Duckov Lucky Animation][DEBUG] 21:58:00.222 Harmony patches removed.
+[21:58:00] [INFO] [Duckov Lucky Animation][DEBUG] 21:58:00.187 Localizations destroyed.
+[21:58:00] [Info] 网络已停止
+[21:57:59] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[21:57:59] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:63637, steamName=ransx
+[21:57:59] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:59] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:63637, 投票数据玩家数=2
+[21:57:59] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[21:57:59] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:59] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[21:57:59] [Info] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.123.1:9050, 原因: RemoteConnectionClose
+[21:57:59] [Info] 断开连接: 192.168.123.1:9050, 原因: RemoteConnectionClose
+[21:57:58] [INFO] [Death-Monitor] [21:57:58.954] SaveFile 完成，耗时: 12ms
+[21:57:58] [INFO] [Death-Monitor] [21:57:58.942] SaveFile 开始 (writeSaveTime=True)
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[21:57:58] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:63637, steamName=ransx
+[21:57:58] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:58] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:63637, 投票数据玩家数=2
+[21:57:58] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[21:57:58] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:58] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[21:57:58] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:63637
+[21:57:58] [Info] [SceneVote] 更新投票状态: Level_Farm_Main, 参与者: 2, 已准备: 0/2
+[21:57:58] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:63637)
+[21:57:58] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:63637
+[21:57:58] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:63637), IsSelfId=True
+[21:57:58] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:63637
+[21:57:58] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:63637', steamId='76561198135351010', ready=False
+[21:57:58] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[21:57:58] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=False
+[21:57:58] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:63637)
+[21:57:58] [Info] [JSON] 发送到 192.168.123.1:9050
+[21:57:58] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:63637","playerName":"Client","timestamp":"2025-11-10 21:57:58.563"}
+[21:57:58] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[21:57:58] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:63637","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 21:58:09.142"}
+[21:57:58] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:58] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[21:57:57] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:63637, steamName=ransx
+[21:57:57] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:57] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:63637, 投票数据玩家数=2
+[21:57:57] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[21:57:57] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:57] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[21:57:57] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:63637
+[21:57:57] [Info] [SceneVote] 更新投票状态: Level_Farm_Main, 参与者: 2, 已准备: 0/2
+[21:57:57] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:63637)
+[21:57:57] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:63637
+[21:57:57] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:63637), IsSelfId=True
+[21:57:57] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:63637
+[21:57:57] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:63637', steamId='76561198135351010', ready=False
+[21:57:57] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[21:57:57] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=False
+[21:57:57] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:63637)
+[21:57:57] [Info] [JSON] 发送到 192.168.123.1:9050
+[21:57:57] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:63637","playerName":"Client","timestamp":"2025-11-10 21:57:57.564"}
+[21:57:57] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[21:57:57] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:63637","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 21:58:08.140"}
+[21:57:57] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:57] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[21:57:56] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:63637, steamName=ransx
+[21:57:56] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:56] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:63637, 投票数据玩家数=2
+[21:57:56] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[21:57:56] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:56] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[21:57:56] [Info] [MModUI] ✅ 从投票数据获取到名字: CLIENT_ransx
+[21:57:56] [Info] [MModUI] 检查玩家: playerId=192.168.137.30:63637, steamName=ransx
+[21:57:56] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:56] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=192.168.137.30:63637, 投票数据玩家数=2
+[21:57:56] [Info] [MModUI] ✅ 从投票数据获取到名字: HOST_pansx
+[21:57:56] [Info] [MModUI] 检查玩家: playerId=Host:9050, steamName=pansx
+[21:57:56] [Info] [MModUI] 尝试从投票数据获取玩家名字: pid=Host:9050, 投票数据玩家数=2
+[21:57:56] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:63637
+[21:57:56] [Info] [SceneVote] 更新投票状态: Level_Farm_Main, 参与者: 2, 已准备: 0/2
+[21:57:56] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:63637)
+[21:57:56] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:63637
+[21:57:56] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:63637), IsSelfId=True
+[21:57:56] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:63637
+[21:57:56] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:63637', steamId='76561198135351010', ready=False
+[21:57:56] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[21:57:56] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=False
+[21:57:56] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:63637)
+[21:57:56] [Info] [JSON] 发送到 192.168.123.1:9050
+[21:57:56] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:63637","playerName":"Client","timestamp":"2025-11-10 21:57:56.565"}
+[21:57:56] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[21:57:56] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_Farm_Main","targetSceneDisplayName":"农场镇","curtainGuid":"","locationName":"OnPointerClick","notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:63637","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-10 21:58:07.136"}
+[21:57:56] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[21:57:56] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:56] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[21:57:55] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
