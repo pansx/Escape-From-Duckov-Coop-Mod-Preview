@@ -1426,7 +1426,25 @@ public class MModUI : MonoBehaviour
             string displayName = pid;
             string displayId = pid;
 
-            if (TransportMode == NetworkTransportMode.SteamP2P && SteamManager.Initialized && LobbyManager != null && LobbyManager.IsInLobby)
+            // ✅ 优先从投票数据中获取 Steam 名字
+            if (SceneNet.Instance.cachedVoteData?.playerList?.items != null)
+            {
+                foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+                {
+                    if (player.playerId == pid && !string.IsNullOrEmpty(player.steamName))
+                    {
+                        // 判断是否是主机
+                        bool isHost = player.playerId.StartsWith("Host:");
+                        string prefix = isHost ? "HOST" : "CLIENT";
+                        displayName = $"{prefix}_{player.steamName}";
+                        displayId = player.steamId;
+                        break;
+                    }
+                }
+            }
+
+            // 如果投票数据中没有找到，回退到原来的逻辑
+            if (displayName == pid && TransportMode == NetworkTransportMode.SteamP2P && SteamManager.Initialized && LobbyManager != null && LobbyManager.IsInLobby)
             {
                 try
                 {
