@@ -40,13 +40,16 @@
 | 🤖 AI | AI角色同步、生命值、装备、动画 | [Main/AI.md](duckovAPI/Main/AI.md) |
 | 💻 ClientService | 客户端服务、状态上报、数据接收 | [Main/ClientService.md](duckovAPI/Main/ClientService.md) |
 | ❤️ Health | 生命值系统、主机权威伤害 | [Main/Health.md](duckovAPI/Main/Health.md) |
+| 💊 HealthM | 生命值管理、血量同步、伤害转发 | [Main/Health_HealthM.md](duckovAPI/Main/Health_HealthM.md) |
 | 🖥️ HostService | 主机服务、玩家管理、权威数据 | [Main/HostService.md](duckovAPI/Main/HostService.md) |
+| 🌐 NetService | 网络服务核心、连接管理、玩家数据库 | [Main/NetService.md](duckovAPI/Main/NetService.md) |
 | 📦 Item | 物品系统、掉落、拾取、容器 | [Main/Item.md](duckovAPI/Main/Item.md) |
 | 🚀 Loader | 模组加载器、初始化入口 | [Main/Loader.md](duckovAPI/Main/Loader.md) |
 | 🌍 Localization | 多语言支持（5种语言） | [Main/Localization.md](duckovAPI/Main/Localization.md) |
 | 👤 LocalPlayer | 本地玩家管理、输入、状态 | [Main/LocalPlayer.md](duckovAPI/Main/LocalPlayer.md) |
 | 🎬 SceneService | 场景服务、切换、投票、同步 | [Main/SceneService.md](duckovAPI/Main/SceneService.md) |
 | 🖼️ UI | 用户界面、菜单、玩家列表 | [Main/UI.md](duckovAPI/Main/UI.md) |
+| 🎨 MModUI | 现代化联机UI、玻璃拟态设计 | [Main/UI_MModUI.md](duckovAPI/Main/UI_MModUI.md) |
 | 🔫 Weapon | 武器系统、射击、换弹、切换 | [Main/Weapon.md](duckovAPI/Main/Weapon.md) |
 | 🌤️ WeatherAndTime | 天气和时间同步 | [Main/WeatherAndTime.md](duckovAPI/Main/WeatherAndTime.md) |
 
@@ -65,6 +68,7 @@
 | 子模块 | 功能 | 文档路径 |
 |--------|------|----------|
 | 📦 NetPack | 数据打包、位置压缩、方向压缩 | [Net/NetPack.md](duckovAPI/Net/NetPack.md) |
+| 📡 ClientStatusMessage | 客户端状态上报、Steam信息同步 | [Net/ClientStatusMessage.md](duckovAPI/Net/ClientStatusMessage.md) |
 | 🎮 Steam | Steam P2P、Lobby管理、端点映射 | [Net/Steam.md](duckovAPI/Net/Steam.md) |
 
 **核心类**:
@@ -96,6 +100,7 @@
 | 💣 Projectile | 投射物补丁、子弹、手榴弹 | [Patch/PatchProjectile.md](duckovAPI/Patch/PatchProjectile.md) |
 | 🎬 Scene | 场景补丁、加载、对象同步 | [Patch/PatchScene.md](duckovAPI/Patch/PatchScene.md) |
 | 🌐 SteamP2P | Steam P2P补丁、Socket拦截 | [Patch/PatchSteamP2P.md](duckovAPI/Patch/PatchSteamP2P.md) |
+| 📊 LevelManagerPatch | 关卡管理器补丁、性能监控 | [Patch/LevelManagerPatch.md](duckovAPI/Patch/LevelManagerPatch.md) |
 
 **补丁技术**:
 - Prefix补丁: 执行前拦截
