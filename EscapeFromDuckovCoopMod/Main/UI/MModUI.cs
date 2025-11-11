@@ -977,12 +977,12 @@ public class MModUI : MonoBehaviour
 
         // 3. 检查是否需要重建 UI
         bool needsRebuild = forceRebuild || !_displayedPlayerIds.SetEquals(currentPlayerIds);
-
+        
         if (!needsRebuild)
             return;
-
+        
         LoggerHelper.Log($"[MModUI] 玩家列表已更新，重建UI (当前: {currentPlayerIds.Count}, 之前: {_displayedPlayerIds.Count}, 强制: {forceRebuild})");
-
+        
         // 4. 清空现有列表
         foreach (Transform child in _components.PlayerListContent)
             Destroy(child.gameObject);
