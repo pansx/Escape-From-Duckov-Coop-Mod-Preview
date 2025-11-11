@@ -285,7 +285,7 @@ public class NetService : MonoBehaviour, INetEventListener
             _peerConnectionTime.Remove(peer);
         }
 
-        // 🆕 更新数据库中的 LastSeen 时间戳
+        // 🆕 更新数据库中的 LastSeen 时间戳并从数据库中删除玩家
         if (playerStatuses.ContainsKey(peer))
         {
             var _st = playerStatuses[peer];
@@ -293,6 +293,14 @@ public class NetService : MonoBehaviour, INetEventListener
             {
                 UpdatePlayerLastSeenInDatabase(_st.EndPoint);
                 SceneNet.Instance._cliLastSceneIdByPlayer.Remove(_st.EndPoint);
+                
+                // 🔥 从数据库中删除断开连接的玩家
+                var player = Utils.Database.PlayerInfoDatabase.Instance.GetPlayerByEndPoint(_st.EndPoint);
+                if (player != null)
+                {
+                    Debug.Log($"[OnPeerDisconnected] 从数据库删除玩家: {player.PlayerName} (SteamId: {player.SteamId})");
+                    Utils.Database.PlayerInfoDatabase.Instance.RemovePlayer(player.SteamId);
+                }
             }
             playerStatuses.Remove(peer);
         }

@@ -333,13 +333,87 @@ public class SceneNet : MonoBehaviour
         // 使用 SendSmart 自动选择传输方式（SCENE_READY_SET → Critical → ReliableOrdered）
         netManager.SendSmart(w, Op.SCENE_READY_SET);
 
-        // 检查是否全员准备
+        // 🆕 检查是否全员准备（只检查在数据库中存在的玩家）
+        Debug.Log($"[SCENE] ========== 开始检查投票状态 ==========");
+        Debug.Log($"[SCENE] sceneParticipantIds 总数: {sceneParticipantIds.Count}");
+        Debug.Log($"[SCENE] sceneReady 总数: {sceneReady.Count}");
+        
+        var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+        Debug.Log($"[SCENE] 玩家数据库总数: {playerDb.Count}");
+        
+        // 🆕 先清理：移除不在数据库中的玩家
+        var toRemove = new System.Collections.Generic.List<string>();
         foreach (var id in sceneParticipantIds)
-            if (!sceneReady.TryGetValue(id, out var r) || !r)
-                return;
-
-        // 全员就绪 → 开始加载
-        Server_BroadcastBeginSceneLoad();
+        {
+            bool isInDatabase = false;
+            
+            // 尝试多种方式查找
+            if (playerDb.GetPlayerBySteamId(id) != null)
+            {
+                isInDatabase = true;
+                Debug.Log($"[SCENE] ✓ 玩家 {id} 在数据库中（通过SteamId）");
+            }
+            else if (playerDb.GetPlayerByEndPoint(id) != null)
+            {
+                isInDatabase = true;
+                Debug.Log($"[SCENE] ✓ 玩家 {id} 在数据库中（通过EndPoint）");
+            }
+            else if (cachedVoteData?.playerList?.items != null)
+            {
+                foreach (var votePlayer in cachedVoteData.playerList.items)
+                {
+                    if (votePlayer.playerId == id && !string.IsNullOrEmpty(votePlayer.steamId))
+                    {
+                        if (playerDb.GetPlayerBySteamId(votePlayer.steamId) != null)
+                        {
+                            isInDatabase = true;
+                            Debug.Log($"[SCENE] ✓ 玩家 {id} 在数据库中（通过投票数据SteamId: {votePlayer.steamId}）");
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (!isInDatabase)
+            {
+                Debug.LogWarning($"[SCENE] ✗ 玩家 {id} 不在数据库中，标记为移除（可能已被踢出）");
+                toRemove.Add(id);
+            }
+        }
+        
+        // 🆕 从投票列表中移除不在数据库的玩家
+        foreach (var id in toRemove)
+        {
+            Debug.LogWarning($"[SCENE] 🗑️ 从投票列表移除玩家: {id}");
+            sceneParticipantIds.Remove(id);
+            sceneReady.Remove(id);
+        }
+        
+        Debug.Log($"[SCENE] 清理后 sceneParticipantIds 数量: {sceneParticipantIds.Count}");
+        Debug.Log($"[SCENE] 清理后 sceneReady 数量: {sceneReady.Count}");
+        
+        // 🆕 统计准备状态
+        int readyCount = 0;
+        foreach (var id in sceneParticipantIds)
+        {
+            bool isReady = sceneReady.TryGetValue(id, out var r) && r;
+            Debug.Log($"[SCENE] 玩家 {id}: {(isReady ? "✅ 已准备" : "⏳ 未准备")}");
+            if (isReady) readyCount++;
+        }
+        
+        Debug.Log($"[SCENE] 📊 投票进度：{readyCount}/{sceneParticipantIds.Count} 玩家已准备");
+        Debug.Log($"[SCENE] ==========================================");
+        
+        // 🆕 检查是否所有玩家都准备好
+        if (sceneParticipantIds.Count > 0 && readyCount >= sceneParticipantIds.Count)
+        {
+            Debug.Log($"[SCENE] 🎉 所有玩家已准备，开始加载场景！");
+            Server_BroadcastBeginSceneLoad();
+        }
+        else
+        {
+            Debug.Log($"[SCENE] ⏸️ 等待更多玩家准备... ({readyCount}/{sceneParticipantIds.Count})");
+        }
     }
 
     // ===== 客户端：收到“投票开始”（带参与者 pid 列表）=====

@@ -368,17 +368,125 @@ public static class SceneVoteMessage
         Host_BroadcastVoteState();
         LoggerHelper.Log($"[SceneVote] 已广播更新的投票状态 ({_hostVoteState.readyPlayers}/{_hostVoteState.totalPlayers})");
 
-        // 检查是否全员准备
-        bool allReady =
-            _hostVoteState.playerList != null
-            && _hostVoteState.playerList.items != null
-            && _hostVoteState.playerList.items.Length > 0
-            && _hostVoteState.playerList.items.All(p => p.ready);
-
+        // 🆕 检查是否全员准备（基于数据库中的玩家）
+        LoggerHelper.Log($"[SceneVote] ========== 开始检查投票状态 ==========");
+        
+        var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+        LoggerHelper.Log($"[SceneVote] 玩家数据库总数: {playerDb.Count}");
+        
+        if (_hostVoteState.playerList == null || _hostVoteState.playerList.items == null)
+        {
+            LoggerHelper.LogWarning("[SceneVote] 投票玩家列表为空");
+            return;
+        }
+        
+        // 🆕 构建数据库中所有玩家的 SteamId 集合
+        var dbPlayerSteamIds = new System.Collections.Generic.HashSet<string>();
+        foreach (var dbPlayer in playerDb.GetAllPlayers())
+        {
+            if (!string.IsNullOrEmpty(dbPlayer.SteamId))
+            {
+                dbPlayerSteamIds.Add(dbPlayer.SteamId);
+            }
+        }
+        
+        LoggerHelper.Log($"[SceneVote] 数据库中的玩家 SteamId: {string.Join(", ", dbPlayerSteamIds)}");
+        
+        // 🆕 统计投票列表中在数据库的玩家
+        int validPlayerCount = 0;
+        int readyPlayerCount = 0;
+        var votedPlayerSteamIds = new System.Collections.Generic.HashSet<string>();
+        
+        foreach (var player in _hostVoteState.playerList.items)
+        {
+            // 检查玩家是否在数据库中
+            bool isInDatabase = false;
+            string playerSteamId = null;
+            
+            // 尝试通过 SteamId 查找
+            if (!string.IsNullOrEmpty(player.steamId) && dbPlayerSteamIds.Contains(player.steamId))
+            {
+                isInDatabase = true;
+                playerSteamId = player.steamId;
+                votedPlayerSteamIds.Add(player.steamId);
+                LoggerHelper.Log($"[SceneVote] ✓ 玩家 {player.playerName}({player.playerId}) 在数据库中（SteamId: {player.steamId}）");
+            }
+            // 尝试通过 PlayerId 查找
+            else if (dbPlayerSteamIds.Contains(player.playerId))
+            {
+                isInDatabase = true;
+                playerSteamId = player.playerId;
+                votedPlayerSteamIds.Add(player.playerId);
+                LoggerHelper.Log($"[SceneVote] ✓ 玩家 {player.playerName}({player.playerId}) 在数据库中（PlayerId）");
+            }
+            // 尝试通过 EndPoint 查找
+            else
+            {
+                var dbPlayer = playerDb.GetPlayerByEndPoint(player.playerId);
+                if (dbPlayer != null && !string.IsNullOrEmpty(dbPlayer.SteamId))
+                {
+                    isInDatabase = true;
+                    playerSteamId = dbPlayer.SteamId;
+                    votedPlayerSteamIds.Add(dbPlayer.SteamId);
+                    LoggerHelper.Log($"[SceneVote] ✓ 玩家 {player.playerName}({player.playerId}) 在数据库中（EndPoint -> SteamId: {dbPlayer.SteamId}）");
+                }
+            }
+            
+            if (isInDatabase)
+            {
+                validPlayerCount++;
+                if (player.ready)
+                {
+                    readyPlayerCount++;
+                    LoggerHelper.Log($"[SceneVote]   → ✅ 已准备");
+                }
+                else
+                {
+                    LoggerHelper.Log($"[SceneVote]   → ⏳ 未准备");
+                }
+            }
+            else
+            {
+                LoggerHelper.LogWarning($"[SceneVote] ✗ 玩家 {player.playerName}({player.playerId}) 不在数据库中，跳过（可能已被踢出或幽灵玩家）");
+            }
+        }
+        
+        // 🆕 检查数据库中是否有玩家不在投票列表中（重连的玩家）
+        var missingPlayers = new System.Collections.Generic.List<string>();
+        foreach (var steamId in dbPlayerSteamIds)
+        {
+            if (!votedPlayerSteamIds.Contains(steamId))
+            {
+                var dbPlayer = playerDb.GetPlayerBySteamId(steamId);
+                if (dbPlayer != null)
+                {
+                    missingPlayers.Add($"{dbPlayer.PlayerName}({steamId})");
+                    validPlayerCount++;
+                    LoggerHelper.LogWarning($"[SceneVote] ⚠️ 玩家 {dbPlayer.PlayerName}({steamId}) 在数据库中但不在投票列表（可能是重连玩家），计入有效玩家但视为未准备");
+                }
+            }
+        }
+        
+        LoggerHelper.Log($"[SceneVote] 📊 投票进度：{readyPlayerCount}/{validPlayerCount} 有效玩家已准备");
+        LoggerHelper.Log($"[SceneVote]    - 投票列表玩家数: {_hostVoteState.playerList.items.Length}");
+        LoggerHelper.Log($"[SceneVote]    - 数据库玩家数: {dbPlayerSteamIds.Count}");
+        if (missingPlayers.Count > 0)
+        {
+            LoggerHelper.LogWarning($"[SceneVote]    - 缺失玩家: {string.Join(", ", missingPlayers)}");
+        }
+        LoggerHelper.Log($"[SceneVote] ==========================================");
+        
+        // 🆕 只有所有有效玩家都准备好才开始加载
+        bool allReady = validPlayerCount > 0 && readyPlayerCount >= validPlayerCount;
+        
         if (allReady)
         {
-            LoggerHelper.Log("[SceneVote] 全员准备，开始加载场景");
+            LoggerHelper.Log("[SceneVote] 🎉 所有有效玩家已准备，开始加载场景！");
             Host_StartSceneLoad();
+        }
+        else
+        {
+            LoggerHelper.Log($"[SceneVote] ⏸️ 等待更多玩家准备... ({readyPlayerCount}/{validPlayerCount})");
         }
     }
 
@@ -595,7 +703,7 @@ public static class SceneVoteMessage
                 // 🆕 特殊处理：voteId=0 表示这是玩家信息更新消息（不是真正的投票）
                 if (data.voteId == 0 && data.playerList != null && data.playerList.items != null)
                 {
-                    LoggerHelper.Log($"[SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI");
+                    LoggerHelper.Log($"[SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库");
                     
                     // 🔧 更新缓存的投票数据（供 UI 使用），但不激活投票
                     sceneNet.cachedVoteData = data;
@@ -604,9 +712,11 @@ public static class SceneVoteMessage
                     sceneNet.sceneParticipantIds.Clear();
                     sceneNet.sceneReady.Clear();
                     
-                    // 🔧 FIX: 同时更新 PlayerInfoDatabase，确保 UI 能从数据库获取到所有玩家
+                    // 🔥 FIX: 完全同步 PlayerInfoDatabase - 先收集主机发来的所有玩家SteamID
                     var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+                    var hostPlayerSteamIds = new System.Collections.Generic.HashSet<string>();
                     
+                    // 第一步：添加或更新主机发来的所有玩家
                     foreach (var player in data.playerList.items)
                     {
                         if (string.IsNullOrEmpty(player.playerId))
@@ -627,6 +737,8 @@ public static class SceneVoteMessage
                         // 🔧 FIX: 更新玩家数据库
                         if (!string.IsNullOrEmpty(player.steamId) && !string.IsNullOrEmpty(player.steamName))
                         {
+                            hostPlayerSteamIds.Add(player.steamId);
+                            
                             playerDb.AddOrUpdatePlayer(
                                 steamId: player.steamId,
                                 playerName: player.steamName,
@@ -638,12 +750,28 @@ public static class SceneVoteMessage
                         }
                     }
                     
-                    LoggerHelper.Log($"[SceneVote] ✓ 已更新玩家信息缓存和参与者列表，共 {data.playerList.items.Length} 名玩家");
+                    // 🔥 第二步：删除数据库中不在主机列表中的玩家（除了本地玩家）
+                    var allPlayersInDb = playerDb.GetAllPlayers().ToList();
+                    foreach (var dbPlayer in allPlayersInDb)
+                    {
+                        // 跳过本地玩家（本地玩家永远不删除）
+                        if (dbPlayer.IsLocalPlayer)
+                            continue;
+                        
+                        // 如果数据库中的玩家不在主机发来的列表中，删除它
+                        if (!hostPlayerSteamIds.Contains(dbPlayer.SteamId))
+                        {
+                            LoggerHelper.Log($"[SceneVote] 🗑️ 删除不在主机列表中的玩家: {dbPlayer.PlayerName} ({dbPlayer.SteamId})");
+                            playerDb.RemovePlayer(dbPlayer.SteamId);
+                        }
+                    }
+                    
+                    LoggerHelper.Log($"[SceneVote] ✓ 已完全同步玩家数据库，共 {data.playerList.items.Length} 名玩家");
                     
                     // 🔧 FIX: 触发 MModUI 重建玩家列表
                     if (MModUI.Instance != null)
                     {
-                        MModUI.Instance.UpdatePlayerList();
+                        MModUI.Instance.UpdatePlayerList(forceRebuild: true);
                     }
                     
                     return;

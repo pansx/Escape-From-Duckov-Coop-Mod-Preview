@@ -27,6 +27,12 @@
 | ☑️ 审查清单 | 文档质量检查清单 | [REVIEW_CHECKLIST.md](REVIEW_CHECKLIST.md) |
 | 🚀 性能优化PR | 场景加载优化与UI增强 | [Performance_Optimization_PR.md](Performance_Optimization_PR.md) |
 
+### 专题文档
+
+| 专题 | 描述 | 路径 |
+|------|------|------|
+| 📦 战利品与坟墓同步 | 怪物掉落、玩家死亡坟墓、战利品箱同步机制 | [战利品与坟墓同步系统.md](战利品与坟墓同步系统.md) |
+
 ---
 
 ## 🏗️ 模块文档索引
@@ -155,6 +161,7 @@
 - [物品模块](duckovAPI/Main/Item.md)
 - [物品补丁](duckovAPI/Patch/PatchItem.md)
 - [背包和战利品](duckovAPI/Patch/PatchInventoryAndLootBox.md)
+- [战利品与坟墓同步系统](战利品与坟墓同步系统.md) ⭐
 
 #### 场景管理
 - [场景切换流程](README.md#6-场景切换和投票流程)

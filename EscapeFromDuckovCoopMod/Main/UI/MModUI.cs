@@ -1258,9 +1258,47 @@ public class MModUI : MonoBehaviour
         listTitleLayout.flexibleWidth = 0;
         listTitleLayout.preferredWidth = -1;
 
+        // 🆕 获取玩家数据库实例
+        var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+
         // 玩家列表
         foreach (var pid in SceneNet.Instance.sceneParticipantIds)
         {
+            // 🆕 过滤：必须在玩家数据库中存在
+            Utils.Database.PlayerInfoEntity playerInfo = null;
+            
+            // 尝试通过不同方式在数据库中查找玩家
+            // 1. 尝试直接用 pid 作为 SteamId 查找
+            playerInfo = playerDb.GetPlayerBySteamId(pid);
+            
+            // 2. 如果没找到，尝试用 EndPoint 查找
+            if (playerInfo == null)
+            {
+                playerInfo = playerDb.GetPlayerByEndPoint(pid);
+            }
+            
+            // 3. 如果还是没找到，尝试从投票数据中获取 SteamId 再查找
+            if (playerInfo == null && SceneNet.Instance.cachedVoteData?.playerList?.items != null)
+            {
+                foreach (var votePlayer in SceneNet.Instance.cachedVoteData.playerList.items)
+                {
+                    if (votePlayer.playerId == pid && !string.IsNullOrEmpty(votePlayer.steamId))
+                    {
+                        playerInfo = playerDb.GetPlayerBySteamId(votePlayer.steamId);
+                        break;
+                    }
+                }
+            }
+            
+            // 🆕 如果在数据库中找不到，跳过此玩家
+            if (playerInfo == null)
+            {
+                LoggerHelper.LogWarning($"[MModUI] 投票玩家 {pid} 不在数据库中，已跳过显示");
+                continue;
+            }
+            
+            LoggerHelper.Log($"[MModUI] ✅ 投票玩家 {pid} 在数据库中找到: {playerInfo.PlayerName} ({playerInfo.SteamId})");
+
             SceneNet.Instance.sceneReady.TryGetValue(pid, out var ready);
             var playerRow = CreateModernListItem(_components.VotePanel.transform, $"Player_{pid}");
 
@@ -1270,37 +1308,44 @@ public class MModUI : MonoBehaviour
             statusLayout.flexibleWidth = 0;
             statusLayout.preferredWidth = 60;
 
-            // 获取玩家显示名称和ID
-            string displayName = pid;
-            string displayId = pid;
-
-            // ✅ 优先从投票数据中获取 Steam 名字
-            if (SceneNet.Instance.cachedVoteData?.playerList?.items != null)
+            // 🆕 优先使用数据库中的玩家名称
+            string displayName = playerInfo.PlayerName;
+            string displayId = playerInfo.SteamId;
+            
+            // 🆕 添加角色前缀（HOST/CLIENT）
+            bool isHost = pid.StartsWith("Host:");
+            if (isHost)
             {
-                int playerCount = SceneNet.Instance.cachedVoteData.playerList.items.Count();
-                LoggerHelper.Log($"[MModUI] 尝试从投票数据获取玩家名字: pid={pid}, 投票数据玩家数={playerCount}");
-                foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
+                displayName = $"HOST_{displayName}";
+            }
+            else if (pid.StartsWith("Client:"))
+            {
+                displayName = $"CLIENT_{displayName}";
+            }
+
+            // 🆕 如果数据库中的名称为空或无效，尝试从其他来源获取
+            if (string.IsNullOrEmpty(displayName) || displayName == "Unknown")
+            {
+                // 尝试从投票数据中获取
+                if (SceneNet.Instance.cachedVoteData?.playerList?.items != null)
                 {
-                    LoggerHelper.Log($"[MModUI] 检查玩家: playerId={player.playerId}, steamName={player.steamName}");
-                    if (player.playerId == pid && !string.IsNullOrEmpty(player.steamName))
+                    foreach (var player in SceneNet.Instance.cachedVoteData.playerList.items)
                     {
-                        // 判断是否是主机
-                        bool isHost = player.playerId.StartsWith("Host:");
-                        string prefix = isHost ? "HOST" : "CLIENT";
-                        displayName = $"{prefix}_{player.steamName}";
-                        displayId = player.steamId;
-                        LoggerHelper.Log($"[MModUI] ✅ 从投票数据获取到名字: {displayName}");
-                        break;
+                        if (player.playerId == pid && !string.IsNullOrEmpty(player.steamName))
+                        {
+                            string prefix = isHost ? "HOST" : "CLIENT";
+                            displayName = $"{prefix}_{player.steamName}";
+                            displayId = player.steamId;
+                            LoggerHelper.Log($"[MModUI] 从投票数据补充名字: {displayName}");
+                            break;
+                        }
                     }
                 }
             }
-            else
-            {
-                LoggerHelper.Log($"[MModUI] ⚠️ 投票数据为空，无法获取 Steam 名字");
-            }
 
-            // 如果投票数据中没有找到，回退到原来的逻辑
-            if (displayName == pid && TransportMode == NetworkTransportMode.SteamP2P && SteamManager.Initialized && LobbyManager != null && LobbyManager.IsInLobby)
+            // 如果还是没有有效名称，尝试从 Steam API 获取（仅 Steam 模式）
+            if ((string.IsNullOrEmpty(displayName) || displayName == "Unknown" || displayName.StartsWith("HOST_Unknown") || displayName.StartsWith("CLIENT_Unknown")) 
+                && TransportMode == NetworkTransportMode.SteamP2P && SteamManager.Initialized && LobbyManager != null && LobbyManager.IsInLobby)
             {
                 try
                 {
