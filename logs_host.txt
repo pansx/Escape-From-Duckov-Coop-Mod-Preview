@@ -1,0 +1,200 @@
+[10:26:03] [Info] [SteamEndPointMapper] 已清空所有映射
+[10:26:03] [Info] [SteamEndPointMapper] 当前映射数: 0
+[10:26:03] [Info] [SteamP2P] ================================
+[10:26:03] [Info] [SteamP2P] 接收丢包率: 0.00% | 发送失败率: 0.00%
+[10:26:03] [Info] [SteamP2P] 队列峰值: 0/512
+[10:26:03] [Info] [SteamP2P] 接收: 0包 (0字节) | 丢包: 0
+[10:26:03] [Info] [SteamP2P] 发送: 0包 (0字节) | 失败: 0
+[10:26:03] [Info] [SteamP2P] ========== 会话统计 ==========
+[10:26:03] [Info] [Patch_OnPeerDisconnected] LiteNetLib断开: 192.168.123.1:9050, 原因: RemoteConnectionClose
+[10:26:03] [Warning] [NetService] 未找到 EndPoint=192.168.123.1:9050 的玩家，无法更新 LastSeen
+[10:26:03] [Info] 断开连接: 192.168.123.1:9050, 原因: RemoteConnectionClose
+[10:25:54] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[10:25:54] [Info] [SceneVote] ✓ 已更新玩家信息缓存和参与者列表，共 1 名玩家
+[10:25:54] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:50614
+[10:25:54] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI
+[10:25:54] [Info] [JSON] 发送到 192.168.123.1:9050
+[10:25:54] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:50614","playerName":"Client","timestamp":"2025-11-11 10:25:54.336","latency":0,"isInGame":true}
+[10:25:54] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[10:25:54] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"192.168.137.30:50614","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":1,"readyPlayers":0,"timestamp":"2025-11-11 10:26:06.430"}
+[10:25:54] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[10:25:54] [Info] [SceneVote] ✓ 已更新玩家信息缓存和参与者列表，共 1 名玩家
+[10:25:54] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:50614
+[10:25:54] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI
+[10:25:54] [Info] [JSON] 发送到 192.168.123.1:9050
+[10:25:54] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:50614","playerName":"Client","timestamp":"2025-11-11 10:25:54.336","latency":0,"isInGame":true}
+[10:25:54] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[10:25:54] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"192.168.137.30:50614","playerName":"Client","steamId":"","steamName":"","ready":false}]},"totalPlayers":1,"readyPlayers":0,"timestamp":"2025-11-11 10:26:06.411"}
+[10:25:54] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[10:25:54] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:50614
+[10:25:54] [Info] [SceneVote] ✓ 已更新玩家信息缓存和参与者列表，共 1 名玩家
+[10:25:54] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:50614
+[10:25:54] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI
+[10:25:54] [Info] [JSON] 发送到 192.168.123.1:9050
+[10:25:54] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:50614","playerName":"Client","timestamp":"2025-11-11 10:25:54.319","latency":0,"isInGame":true}
+[10:25:54] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[10:25:54] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"192.168.137.30:50614","playerName":"Player_0","steamId":"","steamName":"","ready":false}]},"totalPlayers":1,"readyPlayers":0,"timestamp":"2025-11-11 10:26:06.363"}
+[10:25:54] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[10:25:54] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:50614
+[10:25:54] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[10:25:54] [WARNING] Setting angular velocity of a kinematic body is not supported.
+[10:25:54] [WARNING] Setting linear velocity of a kinematic body is not supported.
+[10:25:54] [Info] [CreateRemote] Host:9050 CreateRemoteCharacterForClient
+[10:25:54] [Info] [SetId] ✓ 已发送客户端状态更新（包含 SteamID）
+[10:25:54] [Info] [JSON] 发送到 192.168.123.1:9050
+[10:25:54] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:50614","playerName":"Client","timestamp":"2025-11-11 10:25:54.290","latency":0,"isInGame":true}
+[10:25:54] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[10:25:54] [Info] [SetId] ✓ 已更新 localPlayerStatus.EndPoint: Client:2a35c97c → 192.168.137.30:50614
+[10:25:54] [Info] [SetId] 旧ID: Client:2a35c97c
+[10:25:54] [Info] [SetId] 收到主机告知的网络ID: 192.168.137.30:50614
+[10:25:54] [Info] [JsonRouter] 收到JSON消息，type=setId
+[10:25:54] [Info] [HP_REPORT_INIT] ✓ 初始血量上报成功
+[10:25:54] [Info] [NetService] ✓ 已更新本地玩家到数据库: ransx (76561198135351010), IsLocal=true
+[10:25:54] [Info] [AUTO_RECONNECT] 缓存连接信息 - IP: 192.168.123.1, Port: 9050
+[10:25:54] [Info] [JSON] 发送到 192.168.123.1:9050
+[10:25:54] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"Client:2a35c97c","playerName":"Client","timestamp":"2025-11-11 10:25:54.264","latency":0,"isInGame":true}
+[10:25:54] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[10:25:54] [Info] 连接成功: 192.168.123.1:9050
+[10:25:54] [Info] [SteamP2P扩展] ✓ LiteNetLib网络线程已优化 (1ms 更新周期)
+[10:25:54] [Info] [Patch_Connect] 尝试连接到: 192.168.123.1:9050
+[10:25:54] [Info] [StartNetwork] 使用直连模式（UseNativeSockets=true）
+[10:25:54] [Info] [StartNetwork] WantsP2P=False, P2P可用=False, UseSteamP2P=True, SteamInit=True, IsServer=False, NetRunning=True
+[10:25:54] [Info] 客户端启动
+[10:25:54] [Info] 客户端关卡检查通过，当前场景: Base_SceneV2
+[10:25:50] [Info] [SYNC_UI] 淡出完成，隐藏同步等待界面
+[10:25:50] [Info] [SYNC_UI] 开始淡出隐藏同步等待界面
+[10:25:49] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 60.0 FPS，稳定状态: 已稳定
+[10:25:49] [Info] [SYNC_UI] ✅ 所有任务完成且帧率稳定，1秒后隐藏
+[10:25:49] [Info] [SYNC_UI] 任务状态更新: AI装备接收 - 完成 场景无AI
+[10:25:49] [Info] [AI-LOADOUT] ✓ 客户端同步完成（初始超时10秒，场景无AI）
+[10:25:46] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 60.0 FPS，稳定状态: 已稳定
+[10:25:43] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 60.0 FPS，稳定状态: 已稳定
+[10:25:42] [Info] [SYNC_UI_FPS] ✅ 帧率已稳定：平均 59.3 FPS（已维持 3 秒）
+[10:25:41] [Info] [SYNC_UI] 角色已处于无敌状态
+[10:25:41] [Info] [SYNC_UI] 启用自动进度增长，当前进度: 75%
+[10:25:41] [Info] [SYNC_UI] 任务状态更新: AI名称初始化 - 完成 完成
+[10:25:41] [Info] [AICache] 刷新 NetAiTag 缓存，找到 0 个
+[10:25:40] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 60.1 FPS，稳定状态: 未稳定
+[10:25:39] [Info] [SYNC_UI] 任务状态更新: 环境同步 - 完成 完成
+[10:25:39] [Info] [SYNC_UI_FPS] 📊 帧率开始恢复：当前平均 56.7 FPS
+[10:25:39] [INFO] [Level Initialization] Done!
+[10:25:38] [INFO] [Level Initialization] Setting character position...
+[10:25:38] [INFO] [Level Initialization] Creating map element...
+[10:25:38] [INFO] [Level Initialization] Spawing exits...
+[10:25:38] [INFO] [Level Initialization] Healing...
+[10:25:38] [Info] [SYNC_UI] 任务状态更新: 玩家状态同步 - 完成 
+[10:25:38] [Info] [SYNC_UI] 注册任务: AI名称初始化
+[10:25:38] [Info] [SYNC_UI] 注册任务: AI装备接收
+[10:25:38] [Info] [SYNC_UI] 注册任务: 玩家状态同步
+[10:25:38] [Info] [SYNC_UI] 注册任务: 环境同步
+[10:25:38] [Info] [MOD] 注册同步任务
+[10:25:38] [Info] [AI-LOADOUT] 客户端追踪已重置，启动10秒初始超时检查
+[10:25:38] [Info] [AsyncQueue] 启用批量处理模式，每帧处理 200 个消息，持续 30 秒
+[10:25:38] [Info] [LootManager] 缓存已清理
+[10:25:38] [Info] [CacheManager] 所有缓存已刷新（Destructibles 跳过，Loot 异步刷新）
+[10:25:38] [Info] [LootCache] 协程刷新缓存完成，找到 8 个战利品箱，映射 4 个 Inventory，跳过 4 个未初始化箱子
+[10:25:38] [Info] [LootCache] 开始协程刷新缓存，共 8 个战利品箱
+[10:25:38] [Info] [LootCache] 委托初始化成功（Expression Tree 编译）
+[10:25:38] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[10:25:38] [Info] [SYNC_UI] 更新玩家列表完成，共 1 名玩家
+[10:25:38] [Info] [SYNC_UI] 显示同步等待界面完成
+[10:25:38] [Info] [SYNC_UI] ✅ 已启用角色无敌
+[10:25:38] [Info] [SYNC_UI] 保存原始无敌状态: False
+[10:25:38] [Info] [SYNC_UI_FPS] ✅ 帧率检测已启用（客户端模式）
+[10:25:38] [Info] [SYNC_UI] 超时保护已启动，最大显示时间: 90 秒
+[10:25:38] [Info] [SYNC_UI] Panel已激活
+[10:25:38] [Info] [SYNC_UI] Canvas已启用，sortingOrder=9999
+[10:25:38] [Info] [SYNC_UI] Show() 被调用，_panel=存在, _canvas=存在
+[10:25:38] [Info] [MOD] 找到同步UI实例，开始显示
+[10:25:38] [Info] [MOD] LevelManager_OnLevelInitialized 开始，准备显示同步UI
+[10:25:38] [INFO] [Level Initialization] Invoking initialized event...
+[10:25:38] [INFO] [Level Initialization] Handling raid initialization...
+[10:25:38] [INFO] [Level Initialization] Waiting for other initialization...
+[10:25:38] [INFO] [Level Initialization] Setting character items...
+[10:25:38] [INFO] [Level Initialization] Setting up pet...
+[10:25:38] [INFO] [Level Initialization] Setting up character status...
+[10:25:38] [Info] [COOP] SpawnTomb - 非联机模式，允许正常执行
+[10:25:38] [INFO] [Level Initialization] Spawning bodies
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Reach location task caching
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Reach location task caching
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Spawning item for task
+[10:25:38] [INFO] [Level Initialization] Reach location task caching
+[10:25:38] [INFO] [Level Initialization] Spawning prefabs for task
+[10:25:38] [INFO] [Level Initialization] Hearing Buses
+[10:25:38] [INFO] [Level Initialization] Hearing Ambient
+[10:25:38] [INFO] [Level Initialization] Opening ears
+[10:25:38] [INFO] [Level Initialization] Teleporting to location...
+[10:25:38] [INFO] [Level Initialization] Creating character at location...
+[10:25:38] [INFO] [Level Initialization] Setting start position...
+[10:25:38] [INFO] [Level Initialization] Creating location info...
+[10:25:38] [INFO] [Level Initialization] Getting location...
+[10:25:38] [INFO] Rule is:均衡,Recoil:1
+[10:25:38] [INFO] [Level Initialization] Setting up rule...
+[10:25:38] [INFO] [Level Initialization] Invoking Beginning Event...
+[10:25:38] [INFO] [Level Initialization] Starting up...
+[10:25:38] [Info] [MOD] ========== 场景卸载清理完成: LoadingScreen_Black ==========
+[10:25:38] [Info] [MOD-Cleanup] 触发垃圾回收...
+[10:25:38] [Info] [MOD-Cleanup] 强制关闭同步UI...
+[10:25:38] [Info] [MOD-Cleanup] 清理远程玩家数据...
+[10:25:38] [Info] [MOD-Cleanup] 清理可破坏物数据...
+[10:25:38] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[10:25:38] [Info] [MOD-Cleanup] 清空异步消息队列...
+[10:25:38] [Info] [CacheManager] 所有缓存已清空（场景卸载）
+[10:25:38] [Info] [MOD-Cleanup] 清理游戏对象缓存...
+[10:25:38] [Info] [MOD-Cleanup] 清理掉落物品...
+[10:25:38] [Info] [LootManager] 缓存已清理
+[10:25:38] [Info] [MOD-Cleanup] 清理战利品数据...
+[10:25:38] [Info] [MOD-Cleanup] 清理 AI 数据...
+[10:25:38] [Info] [MOD] ========== 场景卸载清理开始: LoadingScreen_Black ==========
+[10:25:38] [INFO] New boot
+[10:25:38] [INFO] tree data is empty
+[10:25:32] [Info] [MOD] ========== 场景卸载清理完成: MainMenu ==========
+[10:25:32] [Info] [MOD-Cleanup] 触发垃圾回收...
+[10:25:32] [Info] [MOD-Cleanup] 强制关闭同步UI...
+[10:25:32] [Info] [MOD-Cleanup] 清理可破坏物数据...
+[10:25:32] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[10:25:32] [Info] [MOD-Cleanup] 清空异步消息队列...
+[10:25:32] [Info] [CacheManager] 所有缓存已清空（场景卸载）
+[10:25:32] [Info] [MOD-Cleanup] 清理游戏对象缓存...
+[10:25:32] [Info] [MOD-Cleanup] 清理掉落物品...
+[10:25:32] [Info] [LootManager] 缓存已清理
