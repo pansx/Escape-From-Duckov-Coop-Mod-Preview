@@ -24,6 +24,7 @@ using ItemStatsSystem;
 using UnityEngine.SceneManagement;
 using static EscapeFromDuckovCoopMod.LootNet;
 using Object = UnityEngine.Object;
+using EscapeFromDuckovCoopMod.Utils.Logger.Tools;
 
 namespace EscapeFromDuckovCoopMod;
 
@@ -414,6 +415,31 @@ public class LootManager : MonoBehaviour
     {
         Instance = this;
         StartCoroutine(PeriodicCleanup());
+        
+        // ✅ 任务 15.2: 集成主机端初始化
+        // 在场景加载时初始化战利品箱数据库（仅主机端）
+        if (IsServer)
+        {
+            try
+            {
+                LoggerHelper.Log("[LootManager] 主机端：开始初始化战利品箱数据库...");
+                var syncManager = COOPManager.LootNet?.SyncManager;
+                if (syncManager != null)
+                {
+                    syncManager.Host_InitializeDatabase();
+                    LoggerHelper.Log("[LootManager] 主机端：战利品箱数据库初始化完成");
+                }
+                else
+                {
+                    LoggerHelper.LogWarning("[LootManager] 主机端：无法获取 LootBoxSyncManager 实例");
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError($"[LootManager] 主机端：战利品箱数据库初始化失败: {ex.Message}");
+                LoggerHelper.LogError($"[LootManager] Stack trace: {ex.StackTrace}");
+            }
+        }
     }
 
     /// <summary>

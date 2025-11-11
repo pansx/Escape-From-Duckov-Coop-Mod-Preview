@@ -1,200 +1,200 @@
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:51] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
-[22:13:50] [Info] [HP_REPORT] max=51.0, cur=51.0, force=True
+[04:17:46] [INFO] [Death-Monitor] [04:17:46.867] SaveFile 完成，耗时: 34ms
+[04:17:46] [INFO] [Death-Monitor] [04:17:46.833] SaveFile 开始 (writeSaveTime=True)
+[04:17:45] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[04:17:41] [INFO] [Death-Monitor] [04:17:41.818] SaveFile 完成，耗时: 33ms
+[04:17:41] [INFO] [Death-Monitor] [04:17:41.784] SaveFile 开始 (writeSaveTime=True)
+}
+  ]
+    }
+      }
+        "IsInGame": true
+        "Latency": 0,
+      "CustomData": {
+      "LastSeen": "2025-11-11 04:17:14",
+      "IsLocalPlayer": true,
+      "HasAvatar": false,
+      "LastUpdate": "2025-11-11 04:17:14.666",
+      "EndPoint": "Client:0cec8f87",
+      "SteamAvatarUrl": "https://avatars.steamstatic.com/175085282/5a_full.jpg",
+      "PlayerName": "ransx",
+      "SteamId": "76561198135351010",
+    {
+  "Players": [
+  "LocalPlayer": "ransx",
+  "TotalPlayers": 1,
+  "ExportTime": "2025-11-11 04:17:39",
+{
+[04:17:39] [Info] [PlayerDB] JSON 内容:
+[04:17:39] [Info] [PlayerDB] 已复制玩家数据库 JSON 到剪贴板 (1 名玩家)
+[04:17:36] [INFO] [Death-Monitor] [04:17:36.759] SaveFile 完成，耗时: 25ms
+[04:17:36] [INFO] [Death-Monitor] [04:17:36.732] SaveFile 开始 (writeSaveTime=True)
+[04:17:36] [Info] =================================================
+[04:17:36] [Info] {"DebugVersion":"v2.0","Timestamp":"2025-11-11 04:17:36.333","Role":"Client","NetworkStarted":true,"Port":9050,"Status":"已连接到 192.168.123.1:9050","TransportMode":"Direct","LocalPlayer":{"EndPoint":"192.168.137.30:61799","PlayerName":"Client","IsInGame":true,"SceneId":"Base_SceneV2","Position":"(-4.96, 0.02, -85.05)","Rotation":"(0.00, 120.30, 0.00)","Latency":0,"CustomFaceJson":"[1692 chars]","ConnectedPeerEndPoint":"192.168.123.1:9050","ConnectedPeerId":0},"LocalCharacter":{"GameObjectName":"Character(Clone)","InstanceId":-151190,"Active":true,"ActiveInHierarchy":true,"Position":"(-4.96, 0.02, -85.05)","Rotation":"(0.00, 0.00, 0.00)","ScenePath":"Character(Clone)","HasRemoteReplicaTag":false,"TotalRenderers":6,"EnabledRenderers":6,"AllComponents":"Transform, CharacterMainControl, CapsuleCollider, Movement, Health, Rigidbody, ItemAgentHolder, CA_Reload, CA_Interact, CharacterItemControl, CharacterEquipmentController, CA_UseItem, CharacterBuffManager, CA_Skill, CA_Dash, CA_Attack, CharacterSoundMaker, CharacterMovement, FogOfWarHider, DuckovHider, CA_Carry, AudioObject, SimplePointOfInterest","ComponentCount":23},"AllCharactersInScene":{"Count":3,"Data":[{"GameObjectName":"Character(Clone)(Clone)","InstanceId":-169244,"IsMain":false,"Active":true,"Position":"(-6.26, 0.20, -75.24)","HasRemoteReplicaTag":true,"HasNetInterpolator":true,"HasAnimInterpolator":true,"InClientRemoteCharacters":true,"PlayerId":"Host:9050"},{"GameObjectName":"Character(Clone)","InstanceId":-167336,"IsMain":false,"Active":true,"Position":"(-4.96, 0.02, -86.98)","HasRemoteReplicaTag":false,"HasNetInterpolator":false,"HasAnimInterpolator":false,"InClientRemoteCharacters":false,"PlayerId":"null"},{"GameObjectName":"Character(Clone)","InstanceId":-151190,"IsMain":true,"Active":true,"Position":"(-4.96, 0.02, -85.05)","HasRemoteReplicaTag":false,"HasNetInterpolator":false,"HasAnimInterpolator":false,"InClientRemoteCharacters":false,"PlayerId":"null"}]},"ClientRemoteCharacters":{"Count":1,"Data":[{"Index":1,"PlayerId":"Host:9050","GameObjectName":"Character(Clone)(Clone)","GameObjectInstanceId":-169244,"GameObjectActive":true,"GameObjectActiveInHierarchy":true,"Position":"(-6.26, 0.20, -75.24)","Rotation":"(0.00, 60.27, 0.00)","LocalPosition":"(-6.26, 0.20, -75.24)","LocalRotation":"(0.00, 60.27, 0.00)","ScenePath":"Character(Clone)(Clone)","HasCharacterMainControl":true,"CMC_Enabled":true,"CMC_ModelRoot":"ModelRoot","CMC_CharacterModel":"0_CharacterModel_Custom_Template(Clone)","Health_Current":156.0,"Health_Max":156.0,"Health_GameObject":"Character(Clone)(Clone)","Health_Enabled":true,"HasNetInterpolator":true,"NetInterp_Enabled":true,"HasAnimInterpolator":true,"AnimInterp_Enabled":true,"HasRemoteReplicaTag":true,"HasAutoRequestHealthBar":true,"Rigidbody_IsKinematic":true,"Rigidbody_Velocity":"(0.00, 0.00, 0.00)","HasCharacterController":false,"AllComponents":"Transform, CharacterMainControl, CapsuleCollider, Movement, Health, Rigidbody, ItemAgentHolder, CA_Reload, CA_Interact, CharacterItemControl, CharacterEquipmentController, CA_UseItem, CharacterBuffManager, CA_Skill, CA_Dash, CA_Attack, CharacterSoundMaker, CharacterMovement, FogOfWarHider, DuckovHider, CA_Carry, AudioObject, SimplePointOfInterest, RemoteReplicaTag, AutoRequestHealthBar, NetInterpolator, AnimParamInterpolator","ComponentCount":27,"TotalRenderers":13,"EnabledRenderers":13,"ParentName":"null","SiblingIndex":0,"IsLocalPlayerDuplicate":false,"IsSelfId_Check":false}]},"ClientPlayerStatuses":{"Count":1,"Data":[{"PlayerId":"Host:9050","PlayerName":"Host","IsInGame":true,"SceneId":"Base","Latency":0,"Position":"(-6.26, 0.20, -75.24)","EquipmentCount":5,"WeaponCount":2}]},"ConnectedPeer":{"EndPoint":"192.168.123.1:9050","Id":0,"Ping":10,"ConnectionState":"Connected"},"LocalPlayerManager":{"IsInGame":true,"CurrentSceneId":"Base_SceneV2","HasCharacterMain":true},"CreateRemoteInfo":{"HasSelfDuplicate":false,"MyNetworkId":"192.168.123.1:9050","MyLocalPlayerId":"192.168.137.30:61799","AllRemotePlayerIds":"Host:9050"},"SceneNet":{"SceneReadySidSent":"Base_SceneV2","SceneVoteActive":false,"SceneTargetId":"null","LocalReady":false,"ParticipantCount":0,"ReadyCount":0,"CliSceneGateReleased":false}}
+[04:17:36] [Info] ========== Complete Network State JSON ==========
+[04:17:36] [Info]   ConnectedPeer: Connected
+[04:17:36] [Info]   ClientPlayerStatuses: 1
+[04:17:36] [Info]   ClientRemoteCharacters: 1
+[04:17:36] [Info]   LocalPlayer: 192.168.137.30:61799
+[04:17:36] [Info]   NetworkStarted: True
+[04:17:36] [Info]   Role: Client
+[04:17:36] [Info] --- Summary ---
+[04:17:36] [Info] ========================================
+[04:17:36] [Info] Role: 客户端 (Client)
+[04:17:36] [Info] Timestamp: 2025-11-11 04:17:36.333
+[04:17:36] [Info] ========== Network Debug Info ==========
+[04:17:31] [INFO] [Death-Monitor] [04:17:31.709] SaveFile 完成，耗时: 25ms
+[04:17:31] [INFO] [Death-Monitor] [04:17:31.683] SaveFile 开始 (writeSaveTime=True)
+[04:17:30] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[04:17:26] [INFO] [Death-Monitor] [04:17:26.660] SaveFile 完成，耗时: 25ms
+[04:17:26] [INFO] [Death-Monitor] [04:17:26.634] SaveFile 开始 (writeSaveTime=True)
+[04:17:21] [INFO] [Death-Monitor] [04:17:21.614] SaveFile 完成，耗时: 23ms
+[04:17:21] [INFO] [Death-Monitor] [04:17:21.591] SaveFile 开始 (writeSaveTime=True)
+[04:17:16] [INFO] [Death-Monitor] [04:17:16.552] SaveFile 完成，耗时: 35ms
+[04:17:16] [INFO] [Death-Monitor] [04:17:16.517] SaveFile 开始 (writeSaveTime=True)
+[04:17:14] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[04:17:14] [Info] [SceneVote] 忽略过期投票: voteId=0, expiredVoteId=0
+[04:17:14] [Info] [JSON] 发送到 192.168.123.1:9050
+[04:17:14] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:61799","playerName":"Client","timestamp":"2025-11-11 04:17:14.750","latency":0,"isInGame":true}
+[04:17:14] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[04:17:14] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61799","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-11 04:17:26.090"}
+[04:17:14] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[04:17:14] [Info] [SceneVote] 忽略过期投票: voteId=0, expiredVoteId=0
+[04:17:14] [Info] [JSON] 发送到 192.168.123.1:9050
+[04:17:14] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:61799","playerName":"Client","timestamp":"2025-11-11 04:17:14.750","latency":0,"isInGame":true}
+[04:17:14] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[04:17:14] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61799","playerName":"Client","steamId":"","steamName":"","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-11 04:17:26.069"}
+[04:17:14] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[04:17:14] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:61799
+[04:17:14] [Info] [SceneVote] 忽略过期投票: voteId=0, expiredVoteId=0
+[04:17:14] [Info] [JSON] 发送到 192.168.123.1:9050
+[04:17:14] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:61799","playerName":"Client","timestamp":"2025-11-11 04:17:14.720","latency":0,"isInGame":true}
+[04:17:14] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[04:17:14] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:61799","playerName":"Player_0","steamId":"","steamName":"","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-11 04:17:26.020"}
+[04:17:14] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[04:17:14] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:61799
+[04:17:14] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[04:17:14] [WARNING] Setting angular velocity of a kinematic body is not supported.
+[04:17:14] [WARNING] Setting linear velocity of a kinematic body is not supported.
+[04:17:14] [Info] [CreateRemote] Host:9050 CreateRemoteCharacterForClient
+[04:17:14] [Info] [SetId] ✓ 已发送客户端状态更新（包含 SteamID）
+[04:17:14] [Info] [JSON] 发送到 192.168.123.1:9050
+[04:17:14] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"192.168.137.30:61799","playerName":"Client","timestamp":"2025-11-11 04:17:14.696","latency":0,"isInGame":true}
+[04:17:14] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[04:17:14] [Info] [SetId] ✓ 已更新 localPlayerStatus.EndPoint: Client:0cec8f87 → 192.168.137.30:61799
+[04:17:14] [Info] [SetId] 旧ID: Client:0cec8f87
+[04:17:14] [Info] [SetId] 收到主机告知的网络ID: 192.168.137.30:61799
+[04:17:14] [Info] [JsonRouter] 收到JSON消息，type=setId
+[04:17:14] [Info] [HP_REPORT_INIT] ✓ 初始血量上报成功
+[04:17:14] [Info] [HP_REPORT_INIT] {"event":"Client_ReportSelfHealth_IfReadyOnce","maxHealth":51.0,"currentHealth":51.0,"sceneId":"Base_SceneV2","time":136.774109,"isValid":true}
+[04:17:14] [Info] [NetService] ✓ 已更新本地玩家到数据库: ransx (76561198135351010), IsLocal=true
+[04:17:14] [Info] [AUTO_RECONNECT] 缓存连接信息 - IP: 192.168.123.1, Port: 9050
+[04:17:14] [Info] [JSON] 发送到 192.168.123.1:9050
+[04:17:14] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/5a_full.jpg","endPoint":"Client:0cec8f87","playerName":"Client","timestamp":"2025-11-11 04:17:14.664","latency":0,"isInGame":true}
+[04:17:14] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/5a_full.jpg
+[04:17:14] [Info] 连接成功: 192.168.123.1:9050
+[04:17:14] [Info] [SteamP2P扩展] ✓ LiteNetLib网络线程已优化 (1ms 更新周期)
+[04:17:14] [Info] [Patch_Connect] 尝试连接到: 192.168.123.1:9050
+[04:17:14] [Info] [StartNetwork] 使用直连模式（UseNativeSockets=true）
+[04:17:14] [Info] [StartNetwork] WantsP2P=False, P2P可用=False, UseSteamP2P=True, SteamInit=True, IsServer=False, NetRunning=True
+[04:17:14] [Info] 客户端启动
+[04:17:14] [Info] 客户端关卡检查通过，当前场景: Base_SceneV2
+[04:17:11] [INFO] [Death-Monitor] [04:17:11.496] SaveFile 完成，耗时: 21ms
+[04:17:11] [INFO] [Death-Monitor] [04:17:11.475] SaveFile 开始 (writeSaveTime=True)
+[04:17:06] [INFO] [Death-Monitor] [04:17:06.454] SaveFile 完成，耗时: 44ms
+[04:17:06] [INFO] [Death-Monitor] [04:17:06.409] SaveFile 开始 (writeSaveTime=True)
+[04:17:01] [INFO] [Death-Monitor] [04:17:01.377] SaveFile 完成，耗时: 33ms
+[04:17:01] [INFO] [Death-Monitor] [04:17:01.343] SaveFile 开始 (writeSaveTime=True)
+[04:16:56] [INFO] [Death-Monitor] [04:16:56.316] SaveFile 完成，耗时: 25ms
+[04:16:56] [INFO] [Death-Monitor] [04:16:56.291] SaveFile 开始 (writeSaveTime=True)
+[04:16:51] [INFO] [Death-Monitor] [04:16:51.266] SaveFile 完成，耗时: 25ms
+[04:16:51] [INFO] [Death-Monitor] [04:16:51.241] SaveFile 开始 (writeSaveTime=True)
+[04:16:46] [INFO] [Death-Monitor] [04:16:46.216] SaveFile 完成，耗时: 23ms
+[04:16:46] [INFO] [Death-Monitor] [04:16:46.192] SaveFile 开始 (writeSaveTime=True)
+[04:16:41] [INFO] [Death-Monitor] [04:16:41.163] SaveFile 完成，耗时: 21ms
+[04:16:41] [INFO] [Death-Monitor] [04:16:41.142] SaveFile 开始 (writeSaveTime=True)
+[04:16:36] [INFO] [Death-Monitor] [04:16:36.116] SaveFile 完成，耗时: 26ms
+[04:16:36] [INFO] [Death-Monitor] [04:16:36.090] SaveFile 开始 (writeSaveTime=True)
+[04:16:31] [INFO] [Death-Monitor] [04:16:31.065] SaveFile 完成，耗时: 26ms
+[04:16:31] [INFO] [Death-Monitor] [04:16:31.038] SaveFile 开始 (writeSaveTime=True)
+[04:16:26] [INFO] [Death-Monitor] [04:16:26.014] SaveFile 完成，耗时: 27ms
+[04:16:25] [INFO] [Death-Monitor] [04:16:25.987] SaveFile 开始 (writeSaveTime=True)
+[04:16:20] [INFO] [Death-Monitor] [04:16:20.965] SaveFile 完成，耗时: 25ms
+[04:16:20] [INFO] [Death-Monitor] [04:16:20.940] SaveFile 开始 (writeSaveTime=True)
+[04:16:15] [INFO] [Death-Monitor] [04:16:15.915] SaveFile 完成，耗时: 22ms
+[04:16:15] [INFO] [Death-Monitor] [04:16:15.892] SaveFile 开始 (writeSaveTime=True)
+[04:16:10] [INFO] [Death-Monitor] [04:16:10.860] SaveFile 完成，耗时: 21ms
+[04:16:10] [INFO] [Death-Monitor] [04:16:10.840] SaveFile 开始 (writeSaveTime=True)
+[04:16:05] [INFO] [Death-Monitor] [04:16:05.815] SaveFile 完成，耗时: 24ms
+[04:16:05] [INFO] [Death-Monitor] [04:16:05.790] SaveFile 开始 (writeSaveTime=True)
+[04:16:00] [INFO] [Death-Monitor] [04:16:00.757] SaveFile 完成，耗时: 32ms
+[04:16:00] [INFO] [Death-Monitor] [04:16:00.724] SaveFile 开始 (writeSaveTime=True)
+[04:15:55] [INFO] [Death-Monitor] [04:15:55.695] SaveFile 完成，耗时: 21ms
+[04:15:55] [INFO] [Death-Monitor] [04:15:55.674] SaveFile 开始 (writeSaveTime=True)
+[04:15:53] [Info] [SYNC_UI] ✅ 已恢复角色HP为最大值: 51
+[04:15:53] [Info] [SYNC_UI] ✅ 已恢复角色无敌状态为: False
+[04:15:53] [Info] [SYNC_UI] 🛡️ 无敌计时器结束（持续 30 秒），解除无敌状态
+[04:15:50] [INFO] [Death-Monitor] [04:15:50.652] SaveFile 完成，耗时: 30ms
+[04:15:50] [INFO] [Death-Monitor] [04:15:50.622] SaveFile 开始 (writeSaveTime=True)
+[04:15:45] [INFO] [Death-Monitor] [04:15:45.599] SaveFile 完成，耗时: 33ms
+[04:15:45] [INFO] [Death-Monitor] [04:15:45.566] SaveFile 开始 (writeSaveTime=True)
+[04:15:41] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[04:15:40] [INFO] [Death-Monitor] [04:15:40.541] SaveFile 完成，耗时: 24ms
+[04:15:40] [INFO] [Death-Monitor] [04:15:40.516] SaveFile 开始 (writeSaveTime=True)
+[04:15:35] [INFO] [Death-Monitor] [04:15:35.492] SaveFile 完成，耗时: 24ms
+[04:15:35] [INFO] [Death-Monitor] [04:15:35.467] SaveFile 开始 (writeSaveTime=True)
+[04:15:30] [INFO] [Death-Monitor] [04:15:30.442] SaveFile 完成，耗时: 25ms
+[04:15:30] [INFO] [Death-Monitor] [04:15:30.416] SaveFile 开始 (writeSaveTime=True)
+[04:15:25] [INFO] [Death-Monitor] [04:15:25.390] SaveFile 完成，耗时: 24ms
+[04:15:25] [INFO] [Death-Monitor] [04:15:25.366] SaveFile 开始 (writeSaveTime=True)
+[04:15:23] [Info] [SYNC_UI] 淡出完成，隐藏同步等待界面
+[04:15:23] [Info] [SYNC_UI] 开始淡出隐藏同步等待界面
+[04:15:22] [Info] [SYNC_UI] ✅ 所有任务完成，1秒后隐藏
+[04:15:22] [Info] [SYNC_UI] 任务状态更新: AI装备接收 - 完成 场景无AI
+[04:15:22] [Info] [AI-LOADOUT] ✓ 客户端同步完成（初始超时10秒，场景无AI）
+[04:15:20] [INFO] [Death-Monitor] [04:15:20.346] SaveFile 完成，耗时: 22ms
+[04:15:20] [INFO] [Death-Monitor] [04:15:20.324] SaveFile 开始 (writeSaveTime=True)
+[04:15:15] [INFO] [Death-Monitor] [04:15:15.303] SaveFile 完成，耗时: 70ms
+[04:15:15] [INFO] [Death-Monitor] [04:15:15.233] SaveFile 开始 (writeSaveTime=True)
+[04:15:14] [Info] [SYNC_UI] 角色已处于无敌状态
+[04:15:14] [Info] [SYNC_UI] 启用自动进度增长，当前进度: 75%
+[04:15:14] [Info] [SYNC_UI] 任务状态更新: AI名称初始化 - 完成 完成
+[04:15:14] [Info] [AICache] 刷新 NetAiTag 缓存，找到 0 个
+[04:15:12] [Info] [SYNC_UI] 任务状态更新: 环境同步 - 完成 完成
+[04:15:11] [INFO] [Level Initialization] Done!
+[04:15:11] [INFO] [Level Initialization] Setting character position...
+[04:15:11] [INFO] [Level Initialization] Creating map element...
+[04:15:11] [INFO] [Level Initialization] Spawing exits...
+[04:15:11] [INFO] [Level Initialization] Healing...
+[04:15:11] [Info] [SYNC_UI] 任务状态更新: 玩家状态同步 - 完成 
+[04:15:11] [Info] [SYNC_UI] 注册任务: AI名称初始化
+[04:15:11] [Info] [SYNC_UI] 注册任务: AI装备接收
+[04:15:11] [Info] [SYNC_UI] 注册任务: 玩家状态同步
+[04:15:11] [Info] [SYNC_UI] 注册任务: 环境同步
+[04:15:11] [Info] [MOD] 注册同步任务
+[04:15:11] [Info] [AI-LOADOUT] 客户端追踪已重置，启动10秒初始超时检查
+[04:15:11] [Info] [AsyncQueue] 启用批量处理模式，每帧处理 200 个消息，持续 30 秒
+[04:15:11] [Info] [LootManager] 缓存已清理
+[04:15:11] [Info] [CacheManager] 所有缓存已刷新（Destructibles 跳过，Loot 异步刷新）
+[04:15:11] [Info] [LootCache] 协程刷新缓存完成，找到 8 个战利品箱，映射 4 个 Inventory，跳过 4 个未初始化箱子
+[04:15:11] [Info] [LootCache] 开始协程刷新缓存，共 8 个战利品箱
+[04:15:11] [Info] [LootCache] 委托初始化成功（Expression Tree 编译）
+[04:15:11] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[04:15:11] [Info] [SYNC_UI] 更新玩家列表完成，共 1 名玩家
+[04:15:11] [Info] [SYNC_UI] 显示同步等待界面完成
+[04:15:11] [Info] [SYNC_UI] ✅ 已启用角色无敌
+[04:15:11] [Info] [SYNC_UI] 保存原始无敌状态: False
+[04:15:11] [Info] [SYNC_UI] 超时保护已启动，最大显示时间: 90 秒
+[04:15:11] [Info] [SYNC_UI] Panel已激活
+[04:15:11] [Info] [SYNC_UI] Canvas已启用，sortingOrder=9999
+[04:15:11] [Info] [SYNC_UI] Show() 被调用，_panel=存在, _canvas=存在
+[04:15:11] [Info] [MOD] 找到同步UI实例，开始显示
+[04:15:11] [Info] [MOD] LevelManager_OnLevelInitialized 开始，准备显示同步UI
+[04:15:11] [INFO] [Level Initialization] Invoking initialized event...
+[04:15:11] [INFO] [Level Initialization] Handling raid initialization...
+[04:15:11] [INFO] [Level Initialization] Waiting for other initialization...
+[04:15:11] [INFO] [Level Initialization] Setting character items...
+[04:15:11] [INFO] [Level Initialization] Setting up pet...
+[04:15:11] [INFO] [Level Initialization] Setting up character status...
+[04:15:11] [Info] [COOP] SpawnTomb - 非联机模式，允许正常执行
+[04:15:11] [INFO] [Level Initialization] Spawning bodies
+[04:15:11] [INFO] [Level Initialization] Spawning prefabs for task

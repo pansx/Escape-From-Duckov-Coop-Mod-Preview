@@ -14,6 +14,11 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
 
+// ✅ 任务 15.4: 条件编译支持
+// 定义 NEW_LOOT_SYSTEM 以启用新的战利品箱数据库系统
+// 注释掉此行以回退到旧系统
+#define NEW_LOOT_SYSTEM
+
 using System.Text;
 using Duckov.Scenes;
 using Duckov.UI;
@@ -41,6 +46,11 @@ public class LootNet
     // 客户端：本地 put 请求的 token -> Item 实例（用于 put 成功后从玩家背包删去这个本地实例）
     public uint _nextLootToken = 1;
     public bool _serverApplyingLoot; // 主机：处理客户端请求时抑制 Postfix 二次广播
+    
+    // ====== 新的战利品箱同步管理器 ======
+    private LootBoxSyncManager _syncManager;
+    public LootBoxSyncManager SyncManager => _syncManager ?? (_syncManager = LootBoxSyncManager.Instance);
+    
     private NetService Service => NetService.Instance;
 
     private bool IsServer => Service != null && Service.IsServer;
@@ -60,6 +70,8 @@ public class LootNet
         set => _nextLootToken = value;
     }
 
+#if !NEW_LOOT_SYSTEM
+    // ✅ 旧系统：使用原有的 Op Code 方式
     public void Client_RequestLootState(Inventory lootInv)
     {
         if (!networkStarted || IsServer || connectedPeer == null || lootInv == null) return;
@@ -84,6 +96,44 @@ public class LootNet
 
         connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
     }
+#else
+    // ✅ 新系统：使用 LootBoxSyncManager（任务 15.3）
+    public void Client_RequestLootState(Inventory lootInv)
+    {
+        if (!networkStarted || IsServer || connectedPeer == null || lootInv == null) return;
+
+        if (LootboxDetectUtil.IsPrivateInventory(lootInv)) return;
+
+        // 生成 SetId（使用与主机端相同的逻辑）
+        var lootbox = LootManager.Instance?.FindLootboxByInventory(lootInv);
+        if (lootbox == null)
+        {
+            Debug.LogWarning("[LootNet] 无法找到对应的 InteractableLootbox");
+            return;
+        }
+
+        var setId = GenerateLootBoxSetId(lootbox.gameObject);
+        
+        // 调用新的同步管理器方法
+        SyncManager?.Client_RequestOpen(setId);
+    }
+    
+    /// <summary>
+    /// 生成战利品箱的唯一 SetId（与主机端保持一致）
+    /// </summary>
+    private string GenerateLootBoxSetId(GameObject go)
+    {
+        if (go == null) return System.Guid.NewGuid().ToString();
+
+        var sceneName = go.scene.name;
+        var pos = go.transform.position;
+        
+        // 使用位置哈希（精度到厘米）
+        var posKey = $"{Mathf.RoundToInt(pos.x * 100)}_{Mathf.RoundToInt(pos.y * 100)}_{Mathf.RoundToInt(pos.z * 100)}";
+        
+        return $"{sceneName}_{posKey}";
+    }
+#endif
 
 
     // 主机：应答快照（发给指定 peer 或广播）
@@ -280,6 +330,8 @@ public class LootNet
     }
 
 
+#if !NEW_LOOT_SYSTEM
+    // ✅ 旧系统：使用原有的 Op Code 方式
     // Mod.cs
     public void Client_SendLootPutRequest(Inventory lootInv, Item item, int preferPos)
     {
@@ -313,6 +365,28 @@ public class LootNet
         ItemTool.WriteItemSnapshot(w, item);
         connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
     }
+#else
+    // ✅ 新系统：使用 LootBoxSyncManager（任务 15.3）
+    public void Client_SendLootPutRequest(Inventory lootInv, Item item, int preferPos)
+    {
+        if (!networkStarted || IsServer || connectedPeer == null || lootInv == null || item == null) return;
+
+        if (LootboxDetectUtil.IsPrivateInventory(lootInv)) return;
+
+        // 生成 SetId
+        var lootbox = LootManager.Instance?.FindLootboxByInventory(lootInv);
+        if (lootbox == null)
+        {
+            Debug.LogWarning("[LootNet] 无法找到对应的 InteractableLootbox");
+            return;
+        }
+
+        var setId = GenerateLootBoxSetId(lootbox.gameObject);
+        
+        // 调用新的同步管理器方法
+        SyncManager?.Client_RequestPut(setId, item, preferPos);
+    }
+#endif
 
 
     // 作用：发送 TAKE 请求（携带目标信息）；客户端暂不落位，等回包
@@ -1267,6 +1341,405 @@ public class LootNet
         ItemTool.Server_DoSplitAsync(inv, srcPos, count, prefer).Forget();
     }
 
+
+    #region 任务 13: 客户端操作响应处理
+
+    /// <summary>
+    /// 客户端：统一处理操作响应（任务 13.1）
+    /// 检查操作是否成功，记录日志，并根据操作类型分发处理
+    /// </summary>
+    public void Client_HandleOperationResponse(uint token, bool success, string errorMessage = null, ItemSnapshot? resultItem = null)
+    {
+        // 记录日志：Token、Success、ErrorMessage
+        if (success)
+        {
+            Debug.Log($"[LOOT][Client] Operation success: Token={token}");
+        }
+        else
+        {
+            Debug.LogWarning($"[LOOT][Client] Operation failed: Token={token}, Error={errorMessage ?? "unknown"}");
+            
+            // 显示错误消息（使用日志，未来可以集成 UI 提示）
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                Debug.LogWarning($"[LOOT][Client] Error details: {errorMessage}");
+            }
+            
+            return; // 失败时不继续处理
+        }
+
+        // 成功时，根据 token 类型分发到具体的处理逻辑
+        // PUT 操作：检查 _cliPendingPut 或 _cliPendingSlotPlug
+        if (_cliPendingPut.ContainsKey(token) || _cliPendingSlotPlug.ContainsKey(token))
+        {
+            Client_HandlePutOperationSuccess(token);
+        }
+        // TAKE 操作：检查 _cliPendingTake，需要 resultItem
+        else if (LootManager.Instance._cliPendingTake.ContainsKey(token))
+        {
+            if (resultItem.HasValue)
+            {
+                Client_HandleTakeOperationSuccess(token, resultItem.Value);
+            }
+            else
+            {
+                Debug.LogError($"[LOOT][Client] TAKE operation success but no resultItem provided for token={token}");
+            }
+        }
+    }
+
+    /// <summary>
+    /// 客户端：处理 PUT 操作成功（任务 13.2）
+    /// 从 _pendingPutItems 中查找并删除物品，销毁本地物品
+    /// </summary>
+    private void Client_HandlePutOperationSuccess(uint token)
+    {
+        // 处理装备槽插入的情况
+        if (_cliPendingSlotPlug.TryGetValue(token, out var victim) && victim)
+        {
+            try
+            {
+                var srcInv = victim.InInventory;
+                if (srcInv)
+                {
+                    try
+                    {
+                        srcInv.RemoveItem(victim);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"[LOOT][Client] Failed to remove item from inventory: {ex.Message}");
+                    }
+                }
+
+                Object.Destroy(victim.gameObject);
+                Debug.Log($"[LOOT][Client] PUT success: Destroyed slot plug item, Token={token}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[LOOT][Client] Failed to destroy slot plug item: {ex.Message}");
+            }
+            finally
+            {
+                _cliPendingSlotPlug.Remove(token);
+            }
+
+            return; // 不再继续走"普通 PUT"流程
+        }
+
+        // 处理普通 PUT 操作
+        if (_cliPendingPut.TryGetValue(token, out var localItem) && localItem)
+        {
+            _cliPendingPut.Remove(token);
+
+            // 交换路径：这次 PUT 的 localItem 是否正是我们等待交换的 victim？
+            if (_cliSwapByVictim.TryGetValue(localItem, out var ctx))
+            {
+                _cliSwapByVictim.Remove(localItem);
+
+                // 1) victim 已经成功 PUT 到容器：本地把它清理掉
+                try
+                {
+                    localItem.Detach();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[LOOT][Client] Failed to detach swap victim: {ex.Message}");
+                }
+
+                try
+                {
+                    Object.Destroy(localItem.gameObject);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[LOOT][Client] Failed to destroy swap victim: {ex.Message}");
+                }
+
+                // 2) 把"新物"真正落位（槽或背包格）
+                try
+                {
+                    if (ctx.destSlot != null)
+                    {
+                        if (ctx.destSlot.CanPlug(ctx.newItem))
+                        {
+                            ctx.destSlot.Plug(ctx.newItem, out _);
+                            Debug.Log($"[LOOT][Client] PUT success: Swapped item to slot, Token={token}");
+                        }
+                    }
+                    else if (ctx.destInv != null && ctx.destPos >= 0)
+                    {
+                        // 目标格此时应为空（victim 已被 PUT 走）
+                        ctx.destInv.AddAt(ctx.newItem, ctx.destPos);
+                        Debug.Log($"[LOOT][Client] PUT success: Swapped item to inventory position, Token={token}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[LOOT][Client] Failed to place swapped item: {ex.Message}");
+                }
+
+                // 3) 清理可能遗留的同物品 pending
+                var toRemove = new List<uint>();
+                foreach (var kv in _cliPendingPut)
+                {
+                    if (!kv.Value || ReferenceEquals(kv.Value, localItem))
+                        toRemove.Add(kv.Key);
+                }
+                foreach (var k in toRemove)
+                    _cliPendingPut.Remove(k);
+
+                return; // 交换流程结束
+            }
+
+            // 普通 PUT 成功：维持原有的清理逻辑
+            try
+            {
+                localItem.Detach();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[LOOT][Client] Failed to detach item: {ex.Message}");
+            }
+
+            try
+            {
+                Object.Destroy(localItem.gameObject);
+                Debug.Log($"[LOOT][Client] PUT success: Destroyed local item, Token={token}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[LOOT][Client] Failed to destroy item: {ex.Message}");
+            }
+
+            // 清理重复引用（遍历 _pendingPutItems，移除已销毁的物品）
+            var stale = new List<uint>();
+            foreach (var kv in _cliPendingPut)
+            {
+                if (!kv.Value || ReferenceEquals(kv.Value, localItem))
+                    stale.Add(kv.Key);
+            }
+            foreach (var k in stale)
+                _cliPendingPut.Remove(k);
+        }
+    }
+
+    /// <summary>
+    /// 客户端：处理 TAKE 操作成功（任务 13.3）
+    /// 从 response.ResultItem 重建物品，根据目的地类型放入
+    /// </summary>
+    private void Client_HandleTakeOperationSuccess(uint token, ItemSnapshot resultItem)
+    {
+        // 1) 从 ItemSnapshot 重建物品
+        var newItem = ItemTool.BuildItemFromSnapshot(resultItem);
+        if (newItem == null)
+        {
+            Debug.LogError($"[LOOT][Client] Failed to rebuild item from snapshot for token={token}");
+            return;
+        }
+
+        Debug.Log($"[LOOT][Client] TAKE success: Rebuilt item from snapshot, Token={token}");
+
+        // 取出期望目的地（可能为空）
+        PendingTakeDest dest;
+        if (LootManager.Instance._cliPendingTake.TryGetValue(token, out dest))
+        {
+            LootManager.Instance._cliPendingTake.Remove(token);
+        }
+        else
+        {
+            dest = default;
+        }
+
+        // 小工具：不入队、不打 token 的"放回来源容器"
+        void PutBackToSource_NoTrack(Item item, PendingTakeDest srcInfo)
+        {
+            var loot = srcInfo.srcLoot != null ? srcInfo.srcLoot
+                : LootView.Instance ? LootView.Instance.TargetInventory : null;
+            var preferPos = srcInfo.srcPos >= 0 ? srcInfo.srcPos : -1;
+
+            try
+            {
+                if (networkStarted && !IsServer && connectedPeer != null && loot != null && item != null)
+                {
+                    var w = writer;
+                    if (w == null) return;
+                    w.Reset();
+                    w.Put((byte)Op.LOOT_REQ_PUT);
+                    LootManager.Instance.PutLootId(w, loot);
+                    w.Put(preferPos);
+                    w.Put((uint)0); // 不占用 _cliPendingPut，避免 Duplicate PUT
+                    ItemTool.WriteItemSnapshot(w, item);
+                    connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
+                    
+                    Debug.Log($"[LOOT][Client] TAKE failed: Putting item back to source, Token={token}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[LOOT][Client] Failed to put item back to source: {ex.Message}");
+            }
+
+            // 本地立刻清掉临时实例，防止"幽灵物品"
+            try
+            {
+                item.Detach();
+            }
+            catch { }
+
+            try
+            {
+                Object.Destroy(item.gameObject);
+            }
+            catch { }
+
+            // 请求刷新容器状态
+            try
+            {
+                var lv = LootView.Instance;
+                var inv = lv ? lv.TargetInventory : null;
+                if (inv) Client_RequestLootState(inv);
+            }
+            catch { }
+        }
+
+        // 2) 容器内"重排/换位"：有标记则直接 PUT 回目标格
+        if (LootManager.Instance._cliPendingReorder.TryGetValue(token, out var reo))
+        {
+            LootManager.Instance._cliPendingReorder.Remove(token);
+            Client_SendLootPutRequest(reo.inv, newItem, reo.pos);
+            Debug.Log($"[LOOT][Client] TAKE success: Reordering item, Token={token}");
+            return;
+        }
+
+        // 3) 目标是装备槽：尝试直插或交换；失败则拒绝（放回来源容器）
+        if (dest.slot != null)
+        {
+            Item victim = null;
+            try
+            {
+                victim = dest.slot.Content;
+            }
+            catch { }
+
+            if (victim != null)
+            {
+                // 需要交换
+                _cliSwapByVictim[victim] = (newItem, null, -1, dest.slot);
+                var srcLoot = dest.srcLoot ?? (LootView.Instance ? LootView.Instance.TargetInventory : null);
+                Client_SendLootPutRequest(srcLoot, victim, dest.srcPos);
+                Debug.Log($"[LOOT][Client] TAKE success: Swapping with slot item, Token={token}");
+                return;
+            }
+
+            try
+            {
+                if (dest.slot.CanPlug(newItem) && dest.slot.Plug(newItem, out _))
+                {
+                    Debug.Log($"[LOOT][Client] TAKE success: Plugged item to slot, Token={token}");
+                    return; // 穿戴成功
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[LOOT][Client] Failed to plug item to slot: {ex.Message}");
+            }
+
+            // 插槽不兼容/失败：拒绝并放回
+            Debug.LogWarning($"[LOOT][Client] TAKE failed: Cannot plug to slot, putting back, Token={token}");
+            PutBackToSource_NoTrack(newItem, dest);
+            return;
+        }
+
+        // 4) 目标是具体背包：AddAt/合并/普通加入；失败则拒绝并放回
+        if (dest.inv != null)
+        {
+            Item victim = null;
+            try
+            {
+                if (dest.pos >= 0) victim = dest.inv.GetItemAt(dest.pos);
+            }
+            catch { }
+
+            if (dest.pos >= 0 && victim != null)
+            {
+                // 需要交换
+                _cliSwapByVictim[victim] = (newItem, dest.inv, dest.pos, null);
+                var srcLoot = dest.srcLoot ?? (LootView.Instance ? LootView.Instance.TargetInventory : null);
+                Client_SendLootPutRequest(srcLoot, victim, dest.srcPos);
+                Debug.Log($"[LOOT][Client] TAKE success: Swapping with inventory item, Token={token}");
+                return;
+            }
+
+            try
+            {
+                if (dest.pos >= 0 && dest.inv.AddAt(newItem, dest.pos))
+                {
+                    Debug.Log($"[LOOT][Client] TAKE success: Added item to inventory at position, Token={token}");
+                    return;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (dest.inv.AddAndMerge(newItem, Mathf.Max(0, dest.pos)))
+                {
+                    Debug.Log($"[LOOT][Client] TAKE success: Merged item to inventory, Token={token}");
+                    return;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (dest.inv.AddItem(newItem))
+                {
+                    Debug.Log($"[LOOT][Client] TAKE success: Added item to inventory, Token={token}");
+                    return;
+                }
+            }
+            catch { }
+
+            // 背包放不下：拒绝并放回来源容器（绝不落地）
+            Debug.LogWarning($"[LOOT][Client] TAKE failed: Cannot add to inventory, putting back, Token={token}");
+            PutBackToSource_NoTrack(newItem, dest);
+            return;
+        }
+
+        // 5) 未指定目的地：尝试主背包；失败则拒绝并放回
+        var mc = LevelManager.Instance ? LevelManager.Instance.MainCharacter : null;
+        var backpack = mc ? mc.CharacterItem != null ? mc.CharacterItem.Inventory : null : null;
+
+        if (backpack != null)
+        {
+            try
+            {
+                if (backpack.AddAndMerge(newItem))
+                {
+                    Debug.Log($"[LOOT][Client] TAKE success: Added item to main backpack, Token={token}");
+                    return;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (backpack.AddItem(newItem))
+                {
+                    Debug.Log($"[LOOT][Client] TAKE success: Added item to main backpack (fallback), Token={token}");
+                    return;
+                }
+            }
+            catch { }
+        }
+
+        // 主背包也塞不进：拒绝并放回
+        Debug.LogWarning($"[LOOT][Client] TAKE failed: Cannot add to main backpack, putting back, Token={token}");
+        PutBackToSource_NoTrack(newItem, dest);
+    }
+
+    #endregion
 
     public struct ItemSnapshot
     {

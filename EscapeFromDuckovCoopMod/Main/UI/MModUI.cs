@@ -3378,6 +3378,42 @@ public class MModUI : MonoBehaviour
         SetStatusText(errorMsg, ModernColors.Error);
     }
 
+    /// <summary>
+    /// 复制战利品箱数据库 JSON 到剪贴板（调试用）
+    /// </summary>
+    internal void DebugExportLootBoxDatabase()
+    {
+        try
+        {
+            // 获取战利品箱同步管理器实例
+            var syncManager = LootBoxSyncManager.Instance;
+            if (syncManager == null)
+            {
+                LoggerHelper.LogWarning("[MModUI] LootBoxSyncManager 未初始化");
+                SetStatusText("[!] 战利品箱数据库未初始化", ModernColors.Warning);
+                return;
+            }
+
+            // 导出数据库为 JSON
+            var json = syncManager.ExportDatabaseToJson(indented: true);
+
+            // 复制到剪贴板
+            GUIUtility.systemCopyBuffer = json;
+
+            // 显示日志
+            LoggerHelper.Log($"[MModUI] 战利品箱数据库 JSON 已复制到剪贴板 ({json.Length} 字节)");
+
+            // 更新状态文本
+            SetStatusText("[OK] 已复制战利品箱数据库到剪贴板", ModernColors.Success);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError($"[MModUI] 复制战利品箱数据库失败: {ex.Message}");
+            LoggerHelper.LogError($"[MModUI] 堆栈: {ex.StackTrace}");
+            SetStatusText("[!] 复制战利品箱数据库失败", ModernColors.Error);
+        }
+    }
+
     #endregion
 }
 
@@ -3531,7 +3567,5 @@ public class InputFieldFocusHandler : MonoBehaviour
         }
     }
 }
-
-
 
 #endregion
