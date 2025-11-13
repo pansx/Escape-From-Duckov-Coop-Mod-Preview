@@ -1304,6 +1304,77 @@ public static class SceneVoteMessage
     }
 
     /// <summary>
+    /// 🆕 将玩家添加到投票列表（重连时调用）
+    /// </summary>
+    public static void AddPlayerToVote(LiteNetLib.NetPeer peer)
+    {
+        if (_hostVoteState == null || !_hostVoteState.active)
+            return;
+
+        if (_hostVoteState.playerList == null || _hostVoteState.playerList.items == null)
+            return;
+
+        var service = NetService.Instance;
+        if (service == null || !service.IsServer)
+            return;
+
+        // 获取玩家状态
+        if (!service.playerStatuses.TryGetValue(peer, out var status) || status == null)
+        {
+            LoggerHelper.LogWarning($"[SceneVote] 无法获取玩家状态: {peer.EndPoint}");
+            return;
+        }
+
+        var playerId = status.EndPoint;
+
+        // 检查是否已经在投票列表中
+        if (_hostVoteState.playerList.items.Any(p => p.playerId == playerId))
+        {
+            LoggerHelper.Log($"[SceneVote] 玩家 {playerId} 已在投票列表中");
+            return;
+        }
+
+        // 获取玩家的 Steam 信息
+        var clientSteamId = GetSteamId(peer);
+        var clientSteamName = GetSteamName(peer);
+
+        // 添加到投票列表
+        var playerList = new System.Collections.Generic.List<PlayerInfo>(_hostVoteState.playerList.items);
+        playerList.Add(
+            new PlayerInfo
+            {
+                playerId = playerId,
+                playerName = status.PlayerName ?? "Player",
+                steamId = clientSteamId,
+                steamName = clientSteamName,
+                ready = false,
+            }
+        );
+
+        _hostVoteState.playerList.items = playerList.ToArray();
+        _hostVoteState.totalPlayers = playerList.Count;
+        _hostVoteState.readyPlayers = playerList.Count(p => p.ready);
+
+        LoggerHelper.Log(
+            $"[SceneVote] ✓ 已将玩家添加到投票列表: {status.PlayerName}({playerId}), 总计 {_hostVoteState.totalPlayers} 人"
+        );
+
+        // 🔧 同步更新 SceneNet
+        var sceneNet = SceneNet.Instance;
+        if (sceneNet != null)
+        {
+            if (!sceneNet.sceneParticipantIds.Contains(playerId))
+            {
+                sceneNet.sceneParticipantIds.Add(playerId);
+            }
+            sceneNet.sceneReady[playerId] = false;
+        }
+
+        // 立即广播更新后的状态
+        Host_BroadcastVoteState();
+    }
+
+    /// <summary>
     /// 🆕 从投票列表中移除玩家（断开连接时调用）
     /// </summary>
     public static void RemovePlayerFromVote(string playerId)

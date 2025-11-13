@@ -194,6 +194,13 @@ public class NetService : MonoBehaviour, INetEventListener
 
         if (IsServer) SendLocalPlayerStatus.Instance.SendPlayerStatusUpdate();
 
+        // 🆕 如果有活跃的投票，将新连接的客户端添加到投票列表
+        if (IsServer && Net.SceneVoteMessage.HasActiveVote())
+        {
+            Debug.Log($"[OnPeerConnected] 检测到活跃投票，将新连接的玩家添加到投票列表: {peer.EndPoint}");
+            Net.SceneVoteMessage.AddPlayerToVote(peer);
+        }
+
         if (IsServer)
         {
             // 1) 主机自己
