@@ -392,7 +392,11 @@ public static class SceneVoteMessage
 
         LoggerHelper.Log($"[SceneVote] 数据库中的玩家 SteamId: {string.Join(", ", dbPlayerSteamIds)}");
 
-        // 🆕 统计投票列表中在数据库的玩家
+        // 🆕 获取主机当前场景ID
+        string hostSceneId = _hostVoteState.hostSceneId ?? "";
+        LoggerHelper.Log($"[SceneVote] 主机当前场景: {hostSceneId}");
+
+        // 🆕 统计投票列表中在数据库且在同一场景的玩家
         int validPlayerCount = 0;
         int readyPlayerCount = 0;
         var votedPlayerSteamIds = new System.Collections.Generic.HashSet<string>();
@@ -402,6 +406,7 @@ public static class SceneVoteMessage
             // 检查玩家是否在数据库中
             bool isInDatabase = false;
             string playerSteamId = null;
+            Utils.Database.PlayerInfoEntity dbPlayerEntity = null;
 
             // 尝试通过 SteamId 查找
             if (!string.IsNullOrEmpty(player.steamId) && dbPlayerSteamIds.Contains(player.steamId))
@@ -409,6 +414,7 @@ public static class SceneVoteMessage
                 isInDatabase = true;
                 playerSteamId = player.steamId;
                 votedPlayerSteamIds.Add(player.steamId);
+                dbPlayerEntity = playerDb.GetPlayerBySteamId(player.steamId);
                 LoggerHelper.Log($"[SceneVote] ✓ 玩家 {player.playerName}({player.playerId}) 在数据库中（SteamId: {player.steamId}）");
             }
             // 尝试通过 PlayerId 查找
@@ -417,23 +423,38 @@ public static class SceneVoteMessage
                 isInDatabase = true;
                 playerSteamId = player.playerId;
                 votedPlayerSteamIds.Add(player.playerId);
+                dbPlayerEntity = playerDb.GetPlayerBySteamId(player.playerId);
                 LoggerHelper.Log($"[SceneVote] ✓ 玩家 {player.playerName}({player.playerId}) 在数据库中（PlayerId）");
             }
             // 尝试通过 EndPoint 查找
             else
             {
-                var dbPlayer = playerDb.GetPlayerByEndPoint(player.playerId);
-                if (dbPlayer != null && !string.IsNullOrEmpty(dbPlayer.SteamId))
+                dbPlayerEntity = playerDb.GetPlayerByEndPoint(player.playerId);
+                if (dbPlayerEntity != null && !string.IsNullOrEmpty(dbPlayerEntity.SteamId))
                 {
                     isInDatabase = true;
-                    playerSteamId = dbPlayer.SteamId;
-                    votedPlayerSteamIds.Add(dbPlayer.SteamId);
-                    LoggerHelper.Log($"[SceneVote] ✓ 玩家 {player.playerName}({player.playerId}) 在数据库中（EndPoint -> SteamId: {dbPlayer.SteamId}）");
+                    playerSteamId = dbPlayerEntity.SteamId;
+                    votedPlayerSteamIds.Add(dbPlayerEntity.SteamId);
+                    LoggerHelper.Log($"[SceneVote] ✓ 玩家 {player.playerName}({player.playerId}) 在数据库中（EndPoint -> SteamId: {dbPlayerEntity.SteamId}）");
                 }
             }
 
-            if (isInDatabase)
+            if (isInDatabase && dbPlayerEntity != null)
             {
+                // 🆕 检查玩家是否在同一场景
+                string playerSceneId = "";
+                if (dbPlayerEntity.CustomData != null && dbPlayerEntity.CustomData.ContainsKey("CurrentSceneId"))
+                {
+                    playerSceneId = dbPlayerEntity.CustomData["CurrentSceneId"] as string ?? "";
+                }
+                
+                // 如果玩家场景ID为空或与主机场景不同，跳过该玩家
+                if (!string.IsNullOrEmpty(playerSceneId) && playerSceneId != hostSceneId)
+                {
+                    LoggerHelper.LogWarning($"[SceneVote] ⚠️ 玩家 {player.playerName}({player.playerId}) 在不同场景（{playerSceneId}），不计入投票");
+                    continue;
+                }
+
                 validPlayerCount++;
                 if (player.ready)
                 {
@@ -1333,32 +1354,51 @@ public static class SceneVoteMessage
                 }
             }
 
+            // 🆕 获取主机当前场景ID
+            string hostSceneId = _hostVoteState.hostSceneId ?? "";
+
             int validPlayerCount = 0;
             int readyPlayerCount = 0;
 
             foreach (var player in _hostVoteState.playerList.items)
             {
                 bool isInDatabase = false;
+                Utils.Database.PlayerInfoEntity dbPlayerEntity = null;
                 
                 if (!string.IsNullOrEmpty(player.steamId) && dbPlayerSteamIds.Contains(player.steamId))
                 {
                     isInDatabase = true;
+                    dbPlayerEntity = playerDb.GetPlayerBySteamId(player.steamId);
                 }
                 else if (dbPlayerSteamIds.Contains(player.playerId))
                 {
                     isInDatabase = true;
+                    dbPlayerEntity = playerDb.GetPlayerBySteamId(player.playerId);
                 }
                 else
                 {
-                    var dbPlayer = playerDb.GetPlayerByEndPoint(player.playerId);
-                    if (dbPlayer != null && !string.IsNullOrEmpty(dbPlayer.SteamId))
+                    dbPlayerEntity = playerDb.GetPlayerByEndPoint(player.playerId);
+                    if (dbPlayerEntity != null && !string.IsNullOrEmpty(dbPlayerEntity.SteamId))
                     {
                         isInDatabase = true;
                     }
                 }
 
-                if (isInDatabase)
+                if (isInDatabase && dbPlayerEntity != null)
                 {
+                    // 🆕 检查玩家是否在同一场景
+                    string playerSceneId = "";
+                    if (dbPlayerEntity.CustomData != null && dbPlayerEntity.CustomData.ContainsKey("CurrentSceneId"))
+                    {
+                        playerSceneId = dbPlayerEntity.CustomData["CurrentSceneId"] as string ?? "";
+                    }
+                    
+                    // 如果玩家场景ID为空或与主机场景不同，跳过该玩家
+                    if (!string.IsNullOrEmpty(playerSceneId) && playerSceneId != hostSceneId)
+                    {
+                        continue;
+                    }
+
                     validPlayerCount++;
                     if (player.ready)
                     {
