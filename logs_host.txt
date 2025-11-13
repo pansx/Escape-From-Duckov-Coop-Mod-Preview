@@ -1,0 +1,900 @@
+[02:50:51] [Info] [NetService] ✓ 已清空玩家数据库
+[02:50:51] [Info] 网络已停止
+[02:50:51] [Info] [SteamEndPointMapper] 已清空所有映射
+[02:50:51] [Info] [SteamEndPointMapper] 当前映射数: 0
+[02:50:51] [Info] [SteamP2P] ================================
+[02:50:51] [Info] [SteamP2P] 接收丢包率: 0.00% | 发送失败率: 0.00%
+[02:50:51] [Info] [SteamP2P] 队列峰值: 0/512
+[02:50:51] [Info] [SteamP2P] 接收: 0包 (0字节) | 丢包: 0
+[02:50:51] [Info] [SteamP2P] 发送: 0包 (0字节) | 失败: 0
+[02:50:51] [Info] [SteamP2P] ========== 会话统计 ==========
+
+EscapeFromDuckovCoopMod.SteamP2PManager:OnDestroy()
+SteamManager:get_Initialized()
+SteamManager:get_Instance()
+UnityEngine.GameObject:AddComponent()
+[02:50:51] SteamManager.Awake () (at <7c82da41edbe4051b5c92d726719f58b>:0)
+[02:50:51] [ERROR] Exception: Tried to Initialize the SteamAPI twice in one session!
+[02:50:51] [INFO] Creating steam manager
+
+EscapeFromDuckovCoopMod.Utils.NetHelper.NetMessageConsumer.OnDestroy () (at <7472198120344befa74e960af9d96d89>:0)
+EscapeFromDuckovCoopMod.Utils.NetHelper.NetMessageConsumer.Shutdown () (at <7472198120344befa74e960af9d96d89>:0)
+System.Threading.CancellationTokenSource.Cancel () (at <1071a2cb0cb3433aae80a793c277a048>:0)
+[02:50:51] System.Threading.CancellationTokenSource.Cancel (System.Boolean throwOnFirstException) (at <1071a2cb0cb3433aae80a793c277a048>:0)
+[02:50:51] [ERROR] ObjectDisposedException: The CancellationTokenSource has been disposed.
+[02:50:51] [Info] [NetMessageConsumer] 已关闭
+[02:50:51] [Warning] [NetMessageConsumer] =====================================
+[02:50:51] [Warning] [NetMessageConsumer] AUTH_HEALTH_REMOTE: 接收=2, 主线程处理=2, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] PLAYER_STATUS_UPDATE: 接收=4, 主线程处理=4, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] AI_NAME_ICON: 接收=10, 主线程处理=10, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] JSON: 接收=30, 主线程处理=30, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] ENV_SYNC_STATE: 接收=32, 主线程处理=32, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] HOST_BUFF_PROXY_APPLY: 接收=33, 主线程处理=33, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] AUDIO_EVENT: 接收=81, 主线程处理=81, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] AUTH_HEALTH_SELF: 接收=161, 主线程处理=161, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] AI_TRANSFORM_SNAPSHOT: 接收=574, 主线程处理=574, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] AI_HEALTH_SYNC: 接收=984, 主线程处理=984, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] ANIM_SYNC: 接收=1628, 主线程处理=1628, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] POSITION_UPDATE: 接收=1628, 主线程处理=1628, 后台处理=0, 待处理=0
+[02:50:51] [Warning] [NetMessageConsumer] ========== 消息统计 (按 OP 码) ==========
+[02:50:51] [Warning] [NetMessageConsumer] 队列大小 - 主线程: 0, 后台: 0
+[02:50:51] [Warning] [NetMessageConsumer] 处理统计 - 主线程: 5167, 后台: 0, 失败: 0, 未知: 0
+[02:50:51] [Warning] [NetMessageConsumer] ========== 状态统计 ==========
+[02:50:51] [Info] [NetMessageConsumer] 后台线程已退出
+[02:50:50] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:50:50] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:50:50] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:50] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:50] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:50:50] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:50] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:50.681","latency":12,"isInGame":true}
+[02:50:50] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:50] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:51:02.114"}
+[02:50:50] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:50] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:50] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:50] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:50.637","latency":12,"isInGame":true}
+[02:50:50] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:50] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:51:02.066"}
+[02:50:50] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:49] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:49] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:49] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:49] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:49] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:49] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:49] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:49] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:49.637","latency":12,"isInGame":true}
+[02:50:49] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:49] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:51:01.066"}
+[02:50:49] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:48] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:48] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:48] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:48.634","latency":12,"isInGame":true}
+[02:50:48] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:48] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:51:00.062"}
+[02:50:48] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:47] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:47] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:47] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:47.627","latency":13,"isInGame":true}
+[02:50:47] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:47] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:59.065"}
+[02:50:47] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:46] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:46] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:46] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:46.629","latency":14,"isInGame":true}
+[02:50:46] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:46] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:58.066"}
+[02:50:46] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:45] [Info] [DestructibleCache] 刷新缓存，找到 3 个可破坏物（总共 3 个 HealthSimpleBase）
+[02:50:45] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:50:45] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:50:45] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:45] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:45] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:50:45] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:45] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:45.676","latency":14,"isInGame":true}
+[02:50:45] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:45] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:50:57.110"}
+[02:50:45] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:45] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:45] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:45] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:45.632","latency":14,"isInGame":true}
+[02:50:45] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:45] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:57.064"}
+[02:50:45] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:45] [Info] [AICache] 刷新 NetAiTag 缓存，找到 6 个
+[02:50:44] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:44] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:44] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:44.630","latency":17,"isInGame":true}
+[02:50:44] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:44] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:56.060"}
+[02:50:44] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:43] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:43] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:43] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:43.651","latency":18,"isInGame":true}
+[02:50:43] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:43] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:55.062"}
+[02:50:43] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:42] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:42] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:42] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:42.632","latency":22,"isInGame":true}
+[02:50:42] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:42] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:54.063"}
+[02:50:42] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:41] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:41] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:41] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:41.623","latency":13,"isInGame":true}
+[02:50:41] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:41] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:53.059"}
+[02:50:41] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:41] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:41] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:41] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:41.467","latency":13,"isInGame":true}
+[02:50:41] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:41] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:50:52.898"}
+[02:50:41] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:40] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:50:40] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:50:40] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:40] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:40] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:50:40] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:40] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:40.664","latency":13,"isInGame":true}
+[02:50:40] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:40] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:50:52.103"}
+[02:50:40] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:40] [Info] [SceneVote] 不同场景，忽略投票: host=Level_GroundZero_1, me=Base_SceneV2
+[02:50:40] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:40] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:40.620","latency":13,"isInGame":true}
+[02:50:40] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:40] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":2,"active":true,"targetSceneId":"Base","targetSceneDisplayName":"地堡","curtainGuid":"00000000000000000000000000000000","locationName":"TeleportTargets/BunkerBack","notifyEvac":true,"saveToFile":false,"useLocation":true,"hostSceneId":"Level_GroundZero_1","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:50:52.059"}
+[02:50:40] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:39] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:39] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:39] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:39] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:39] [Warning] [AI_icon_Name 10s] cmc is null!
+[02:50:38] [Info] [AICache] 刷新 NetAiTag 缓存，找到 6 个
+[02:50:35] [Info] [DestructibleCache] 刷新缓存，找到 3 个可破坏物（总共 3 个 HealthSimpleBase）
+[02:50:35] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:50:35] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:50:35] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:35] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:35] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:50:35] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:35] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:35.527","latency":0,"isInGame":true}
+[02:50:35] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:35] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:50:46.953"}
+[02:50:35] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:35] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:35] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:50:35] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:50:35] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:35] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:50:35] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:35] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:35.512","latency":0,"isInGame":true}
+[02:50:35] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:35] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:62740","playerName":"Client","steamId":"","steamName":"","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:50:46.940"}
+[02:50:35] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:35] [Info] [AICache] 刷新 NetAiTag 缓存，找到 6 个
+[02:50:35] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:35] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[02:50:35] [WARNING] Setting angular velocity of a kinematic body is not supported.
+[02:50:35] [WARNING] Setting linear velocity of a kinematic body is not supported.
+[02:50:35] [Info] [CreateRemote] Host:9050 CreateRemoteCharacterForClient
+[02:50:35] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 1, 强制: True)
+[02:50:35] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:50:35] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:62740
+[02:50:35] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:50:35] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:35] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:35.475","latency":0,"isInGame":true}
+[02:50:35] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:35] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:62740","playerName":"Player_0","steamId":"","steamName":"","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:50:46.896"}
+[02:50:35] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:50:35] [Info] [SetId] ✓ 已发送客户端状态更新（包含 SteamID）
+[02:50:35] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:35] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:62740","playerName":"Client","timestamp":"2025-11-14 02:50:35.475","latency":0,"isInGame":true}
+[02:50:35] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:35] [Info] [SetId] ✓ 已更新 localPlayerStatus.EndPoint: Client:d2cf18af → 192.168.137.30:62740
+[02:50:35] [Info] [SetId] 旧ID: Client:d2cf18af
+[02:50:35] [Info] [SetId] 收到主机告知的网络ID: 192.168.137.30:62740
+[02:50:35] [Info] [JsonRouter] 收到JSON消息，type=setId
+[02:50:35] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 1, 之前: 0, 强制: False)
+[02:50:35] [Info] [NetService] ✓ 已更新本地玩家到数据库: ransx (76561198135351010), IsLocal=true
+[02:50:35] [Info] [AUTO_RECONNECT] 缓存连接信息 - IP: 192.168.123.1, Port: 9050
+[02:50:35] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:50:35] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"Client:d2cf18af","playerName":"Client","timestamp":"2025-11-14 02:50:35.456","latency":0,"isInGame":true}
+[02:50:35] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:50:35] [Info] 连接成功: 192.168.123.1:9050
+[02:50:35] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 0, 之前: 1, 强制: False)
+[02:50:35] [Info] [Patch_Connect] 尝试连接到: 192.168.123.1:9050
+[02:50:35] [Info] [StartNetwork] 使用直连模式（UseNativeSockets=true）
+[02:50:35] [Info] [StartNetwork] WantsP2P=False, P2P可用=False, UseSteamP2P=True, SteamInit=True, IsServer=False, NetRunning=True
+[02:50:35] [Info] 客户端启动
+[02:50:35] [Info] [NetService] ✓ 已清空玩家数据库
+[02:50:35] [Info] 网络已停止
+[02:50:35] [Info] 客户端关卡检查通过，当前场景: Base_SceneV2
+[02:50:21] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:50:06] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:49:51] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:49:36] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:49:21] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:49:06] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:48:56] [Info] [MModUI] 房主取消了投票
+[02:48:56] [Info] [SceneTriggerResetter] 总共完成 53 项重置操作
+[02:48:56] [Info] [SceneTriggerResetter] 成功重置 48 个 InteractableBase 交互状态
+[02:48:56] [Info] [SceneTriggerResetter] 成功重置 MultiSceneTeleporter 传送冷却时间
+[02:48:56] [Info] [SceneTriggerResetter] 成功重置 4 个 OnTriggerEnterEvent 触发器
+[02:48:55] [Info] [SceneTriggerResetter] 成功初始化触发器重置工具
+[02:48:55] [Info] [SceneTriggerResetter] 在程序集 TeamSoda.Duckov.Core 中找到 InteractableBase 类型
+[02:48:55] [Info] [SceneTriggerResetter] 在程序集 TeamSoda.Duckov.Core 中找到 MultiSceneTeleporter 类型
+[02:48:55] [Info] [SceneTriggerResetter] 在程序集 TeamSoda.Duckov.Core 中找到 OnTriggerEnterEvent 类型
+[02:48:55] [Info] [SCENE] 服务器已广播取消投票消息（JSON + 二进制）
+[02:48:55] [Info] [SCENE] 取消投票，重置场景触发器
+[02:48:55] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:55] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:55] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:55] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:54] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:54] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:54] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:54] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:53] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:53] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:53] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:53] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:52] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:52] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:52] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:52] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:51] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:51] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:51] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:51] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:51] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:48:50] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:50] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:50] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:50] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:49] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:49] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:49] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:49] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:48] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:48] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:48] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:48] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:47] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:47] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:47] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:47] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:46] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:46] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:46] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:46] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:45] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:45] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:45] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:45] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:44] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:44] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:44] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:44] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:43] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:43] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:43] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:43] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:42] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:42] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:42] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:42] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:41] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:41] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:41] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:41] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:40] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:40] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:40] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:40] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:39] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:39] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:39] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:39] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:38] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:38] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:38] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:38] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:37] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:37] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:37] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:37] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:36] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:36] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:36] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:36] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:36] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:48:35] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:35] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:35] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:35] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:34] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:34] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:34] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:34] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:33] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:33] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:33] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:33] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:32] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:32] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:32] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:32] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:31] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:31] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:31] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:31] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:30] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:30] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:30] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:30] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:29] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:29] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:29] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:29] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:28] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:28] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:28] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:28] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:27] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:27] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:27] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:27] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:26] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:26] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:26] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:26] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:25] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:25] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:25] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:25] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:24] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:24] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:24] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:24] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:23] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:23] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:23] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:23] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:22] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:22] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:22] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:22] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:21] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:21] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:21] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:21] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:21] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:48:20] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:20] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:20] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:20] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:19] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:19] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:19] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:19] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:18] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:18] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:18] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:18] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:17] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:17] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:17] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:17] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:16] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:16] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:16] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:16] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:15] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:15] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:15] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:15] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:14] [Info] [SYNC_UI] ✅ 已恢复角色HP为最大值: 63.75
+[02:48:14] [Info] [SYNC_UI] ✅ 已恢复角色无敌状态为: False
+[02:48:14] [Info] [SYNC_UI] 🛡️ 无敌计时器结束（持续 30 秒），解除无敌状态
+[02:48:14] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:14] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:14] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:14] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:13] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:13] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:13] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:13] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:12] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:12] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:12] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:12] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:11] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:11] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:11] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:11] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:10] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:10] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:10] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:10] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:09] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:09] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:09] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:09] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:08] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:08] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:08] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:08] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:07] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:07] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:07] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:07] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:06] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:06] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:06] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:06] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:06] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:48:05] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:05] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:05] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_ransx, displayId=76561198135351010
+[02:48:05] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: ransx (76561198135351010)
+[02:48:05] [INFO] Load bool:StormZone_GetHardDrive  value:False
+[02:48:05] [Info] [AI-SEND] ver=5 aiId=460317387 model='CharacterModel_Dummy_1' icon=0 showName=False
+[02:48:05] [Info] [AI-SEND] ver=5 aiId=477095006 model='CharacterModel_Dummy_1' icon=0 showName=False
+[02:48:05] [Info] [AI-SEND] ver=5 aiId=493872625 model='CharacterModel_Dummy_1' icon=0 showName=False
+[02:48:05] [Info] [AI-SEND] ver=5 aiId=510650244 model='CharacterModel_Dummy_1' icon=0 showName=False
+[02:48:05] [Info] [AI-SEND] ver=5 aiId=527427863 model='CharacterModel_Dummy_1' icon=0 showName=False
+[02:48:05] [Info] [AI-SEND] ver=5 aiId=544205482 model='CharacterModel_Dummy_1' icon=0 showName=False
+[02:48:05] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 1, 之前: 2, 强制: False)
+[02:48:05] [Info] 主机创建成功，使用端口: 9050
+[02:48:05] [Info] [StartNetwork] 使用直连模式（UseNativeSockets=true）
+[02:48:05] [Info] [StartNetwork] WantsP2P=False, P2P可用=False, UseSteamP2P=True, SteamInit=True, IsServer=True, NetRunning=True
+[02:48:05] [Info] [NetService] ✓ 已更新本地玩家到数据库: ransx (76561198135351010), IsLocal=true
+[02:48:05] [Info] 服务器启动，监听端口 9050
+[02:48:05] [Info] [NetService] ✓ 已清空玩家数据库
+[02:48:05] [Info] 网络已停止
+[02:48:04] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:04] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:04] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[02:48:04] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: pansx (76561198101474180)
+[02:48:04] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:54094
+[02:48:04] [Info] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2, 已准备: 1/2
+[02:48:04] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:54094)
+[02:48:04] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:04] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:54094), IsSelfId=True
+[02:48:04] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:04] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:54094', steamId='76561198135351010', ready=False
+[02:48:04] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[02:48:04] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=True
+[02:48:04] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:54094)
+[02:48:04] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:48:04] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:48:04.369","latency":12,"isInGame":true}
+[02:48:04] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:48:04] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_GroundZero_Main","targetSceneDisplayName":"零号区","curtainGuid":"6c3b27a21ce5bc4459d15f0f2cdd6dbc","locationName":"Special/BunkerEntry","notifyEvac":false,"saveToFile":false,"useLocation":true,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:48:15.798"}
+[02:48:04] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:48:03] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:03] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:03] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[02:48:03] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: pansx (76561198101474180)
+[02:48:03] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:54094
+[02:48:03] [Info] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2, 已准备: 1/2
+[02:48:03] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:54094)
+[02:48:03] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:03] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:54094), IsSelfId=True
+[02:48:03] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:03] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:54094', steamId='76561198135351010', ready=False
+[02:48:03] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[02:48:03] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=True
+[02:48:03] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:54094)
+[02:48:03] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:48:03] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:48:03.364","latency":12,"isInGame":true}
+[02:48:03] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:48:03] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_GroundZero_Main","targetSceneDisplayName":"零号区","curtainGuid":"6c3b27a21ce5bc4459d15f0f2cdd6dbc","locationName":"Special/BunkerEntry","notifyEvac":false,"saveToFile":false,"useLocation":true,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:48:14.798"}
+[02:48:03] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:48:02] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:02] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:02] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[02:48:02] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: pansx (76561198101474180)
+[02:48:02] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:54094
+[02:48:02] [Info] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2, 已准备: 1/2
+[02:48:02] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:54094)
+[02:48:02] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:02] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:54094), IsSelfId=True
+[02:48:02] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:02] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:54094', steamId='76561198135351010', ready=False
+[02:48:02] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[02:48:02] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=True
+[02:48:02] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:54094)
+[02:48:02] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:48:02] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:48:02.374","latency":13,"isInGame":true}
+[02:48:02] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:48:02] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_GroundZero_Main","targetSceneDisplayName":"零号区","curtainGuid":"6c3b27a21ce5bc4459d15f0f2cdd6dbc","locationName":"Special/BunkerEntry","notifyEvac":false,"saveToFile":false,"useLocation":true,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:48:13.796"}
+[02:48:02] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:48:01] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:01] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:01] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[02:48:01] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: pansx (76561198101474180)
+[02:48:01] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:54094
+[02:48:01] [Info] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2, 已准备: 1/2
+[02:48:01] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:54094)
+[02:48:01] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:01] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:54094), IsSelfId=True
+[02:48:01] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:01] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:54094', steamId='76561198135351010', ready=False
+[02:48:01] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[02:48:01] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=True
+[02:48:01] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:54094)
+[02:48:01] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:48:01] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:48:01.388","latency":13,"isInGame":true}
+[02:48:01] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:48:01] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_GroundZero_Main","targetSceneDisplayName":"零号区","curtainGuid":"6c3b27a21ce5bc4459d15f0f2cdd6dbc","locationName":"Special/BunkerEntry","notifyEvac":false,"saveToFile":false,"useLocation":true,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":true},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":1,"timestamp":"2025-11-14 02:48:12.814"}
+[02:48:01] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:48:01] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:54094
+[02:48:01] [Info] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2, 已准备: 0/2
+[02:48:01] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:54094)
+[02:48:01] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:01] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:54094), IsSelfId=True
+[02:48:01] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:01] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:54094', steamId='76561198135351010', ready=False
+[02:48:01] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[02:48:01] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=False
+[02:48:01] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:54094)
+[02:48:01] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:48:01] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:48:01.363","latency":13,"isInGame":true}
+[02:48:01] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:48:01] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_GroundZero_Main","targetSceneDisplayName":"零号区","curtainGuid":"6c3b27a21ce5bc4459d15f0f2cdd6dbc","locationName":"Special/BunkerEntry","notifyEvac":false,"saveToFile":false,"useLocation":true,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:48:12.794"}
+[02:48:01] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:48:00] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:48:00] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:48:00] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:00] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:00] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:48:00] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:48:00] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:48:00.418","latency":13,"isInGame":true}
+[02:48:00] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:48:00] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:48:11.844"}
+[02:48:00] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:48:00] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:00] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:00] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[02:48:00] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: pansx (76561198101474180)
+[02:48:00] [Info] [MModUI] 最终显示名称: pid=192.168.137.30:54094, displayName=ransx, displayId=76561198135351010
+[02:48:00] [Info] [MModUI] ✅ 投票玩家 192.168.137.30:54094 在数据库中找到: ransx (76561198135351010)
+[02:48:00] [Info] [MModUI] 最终显示名称: pid=Host:9050, displayName=HOST_pansx, displayId=76561198101474180
+[02:48:00] [Info] [MModUI] ✅ 投票玩家 Host:9050 在数据库中找到: pansx (76561198101474180)
+[02:48:00] [Info] [SceneVote] 参与者列表: Host:9050, 192.168.137.30:54094
+[02:48:00] [Info] [SceneVote] 更新投票状态: Level_GroundZero_Main, 参与者: 2, 已准备: 0/2
+[02:48:00] [Info] [SceneVote] 识别到自己: Client(192.168.137.30:54094)
+[02:48:00] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:00] [Info] [SceneVote] 添加参与者: Client(192.168.137.30:54094), IsSelfId=True
+[02:48:00] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:48:00] [Info] [SceneVote] 解析玩家: name='Client', id='192.168.137.30:54094', steamId='76561198135351010', ready=False
+[02:48:00] [Info] [SceneVote] 添加参与者: Host(Host:9050), IsSelfId=False
+[02:48:00] [Info] [SceneVote] 解析玩家: name='Host', id='Host:9050', steamId='76561198101474180', ready=False
+[02:48:00] [Info] [SceneVote] 收到 2 个玩家信息: Host(Host:9050), Client(192.168.137.30:54094)
+[02:48:00] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:48:00] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:48:00.376","latency":13,"isInGame":true}
+[02:48:00] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:48:00] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":1,"active":true,"targetSceneId":"Level_GroundZero_Main","targetSceneDisplayName":"零号区","curtainGuid":"6c3b27a21ce5bc4459d15f0f2cdd6dbc","locationName":"Special/BunkerEntry","notifyEvac":false,"saveToFile":false,"useLocation":true,"hostSceneId":"Base_SceneV2","playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:48:11.798"}
+[02:48:00] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:47:48] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:47:48] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:47:48] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:47:48] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:47:48] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:47:48] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:47:48] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:47:48.756","latency":0,"isInGame":true}
+[02:47:48] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:47:48] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"76561198135351010","steamName":"ransx","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:48:00.173"}
+[02:47:48] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:47:48] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 2, 强制: True)
+[02:47:48] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:47:48] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:47:48] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:47:48] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:47:48] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:47:48.750","latency":0,"isInGame":true}
+[02:47:48] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:47:48] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:54094","playerName":"Client","steamId":"","steamName":"","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:48:00.152"}
+[02:47:48] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:47:48] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:47:48] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 2, 之前: 1, 强制: True)
+[02:47:48] [Info] [SceneVote] ✓ 已完全同步玩家数据库，共 2 名玩家
+[02:47:48] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:47:48] [Info] [SceneVote] 收到玩家信息更新消息 (voteId=0)，完全同步数据库
+[02:47:48] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:47:48] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:47:48.727","latency":0,"isInGame":true}
+[02:47:48] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:47:48] [Info] [SceneVote] 客户端收到 JSON: {"type":"sceneVote","voteId":0,"active":false,"targetSceneId":"","targetSceneDisplayName":"","curtainGuid":null,"locationName":null,"notifyEvac":false,"saveToFile":false,"useLocation":false,"hostSceneId":null,"playerList":{"items":[{"playerId":"Host:9050","playerName":"Host","steamId":"76561198101474180","steamName":"pansx","ready":false},{"playerId":"192.168.137.30:54094","playerName":"Player_0","steamId":"","steamName":"","ready":false}]},"totalPlayers":2,"readyPlayers":0,"timestamp":"2025-11-14 02:48:00.094"}
+[02:47:48] [Info] [JsonRouter] 收到JSON消息，type=sceneVote
+[02:47:48] [Info] [IsSelfId] ✓ 匹配本地ID: 192.168.137.30:54094
+[02:47:48] [Info] [COOP][FACE] stripped 9 CustomFacePart
+[02:47:48] [WARNING] Setting angular velocity of a kinematic body is not supported.
+[02:47:48] [WARNING] Setting linear velocity of a kinematic body is not supported.
+[02:47:48] [Info] [CreateRemote] Host:9050 CreateRemoteCharacterForClient
+[02:47:48] [Info] [SetId] ✓ 已发送客户端状态更新（包含 SteamID）
+[02:47:48] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:47:48] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"192.168.137.30:54094","playerName":"Client","timestamp":"2025-11-14 02:47:48.692","latency":0,"isInGame":true}
+[02:47:48] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:47:48] [Info] [SetId] ✓ 已更新 localPlayerStatus.EndPoint: Client:b1b5957c → 192.168.137.30:54094
+[02:47:48] [Info] [SetId] 旧ID: Client:b1b5957c
+[02:47:48] [Info] [SetId] 收到主机告知的网络ID: 192.168.137.30:54094
+[02:47:48] [Info] [JsonRouter] 收到JSON消息，type=setId
+[02:47:48] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 1, 之前: 0, 强制: False)
+[02:47:48] [Info] [HP_REPORT_INIT] ✓ 初始血量上报成功
+[02:47:48] [Info] [NetService] ✓ 已更新本地玩家到数据库: ransx (76561198135351010), IsLocal=true
+[02:47:48] [Info] [AUTO_RECONNECT] 缓存连接信息 - IP: 192.168.123.1, Port: 9050
+[02:47:48] [Info] [JSON] 发送到 192.168.123.1:9050
+[02:47:48] [Info] [ClientStatus] 客户端发送状态更新: {"type":"updateClientStatus","steamId":"76561198135351010","steamName":"ransx","steamAvatarUrl":"https://avatars.steamstatic.com/175085282/18a_full.jpg","endPoint":"Client:b1b5957c","playerName":"Client","timestamp":"2025-11-14 02:47:48.663","latency":0,"isInGame":true}
+[02:47:48] [Info] [ClientStatus] Steam 信息: ID=76561198135351010, Name=ransx, Avatar=https://avatars.steamstatic.com/175085282/18a_full.jpg
+[02:47:48] [Info] 连接成功: 192.168.123.1:9050
+[02:47:48] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 0, 之前: 1, 强制: False)
+[02:47:48] [Info] [SteamP2P扩展] ✓ LiteNetLib网络线程已优化 (1ms 更新周期)
+[02:47:48] [Info] [Patch_Connect] 尝试连接到: 192.168.123.1:9050
+[02:47:48] [Info] [StartNetwork] 使用直连模式（UseNativeSockets=true）
+[02:47:48] [Info] [StartNetwork] WantsP2P=False, P2P可用=False, UseSteamP2P=True, SteamInit=True, IsServer=False, NetRunning=True
+[02:47:48] [Info] 客户端启动
+[02:47:48] [Info] [NetService] ✓ 已清空玩家数据库
+[02:47:48] [Info] 客户端关卡检查通过，当前场景: Base_SceneV2
+[02:47:45] [Info] [SYNC_UI] 淡出完成，隐藏同步等待界面
+[02:47:44] [Info] [SYNC_UI] 开始淡出隐藏同步等待界面
+[02:47:43] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[02:47:43] [Info] [SYNC_UI] ✅ 所有任务完成且帧率稳定，1秒后隐藏
+[02:47:43] [Warning] [SYNC_UI] ⚠️ 任务卡住检测：AI装备接收 已 30.0 秒未更新，自动标记为完成
+[02:47:42] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 90.0 FPS，稳定状态: 已稳定
+[02:47:39] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 90.0 FPS，稳定状态: 已稳定
+[02:47:39] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 90.0 FPS，稳定状态: 已稳定
+[02:47:36] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 90.0 FPS，稳定状态: 已稳定
+[02:47:33] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 89.9 FPS，稳定状态: 已稳定
+[02:47:33] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 89.0 FPS，稳定状态: 已稳定
+[02:47:30] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 89.9 FPS，稳定状态: 已稳定
+[02:47:27] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 89.0 FPS，稳定状态: 已稳定
+[02:47:26] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 90.0 FPS，稳定状态: 已稳定
+[02:47:24] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 89.8 FPS，稳定状态: 已稳定
+[02:47:21] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 90.0 FPS，稳定状态: 已稳定
+[02:47:20] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 89.5 FPS，稳定状态: 已稳定
+[02:47:18] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 90.0 FPS，稳定状态: 已稳定
+[02:47:17] [Info] [SYNC_UI_FPS] ✅ 帧率已稳定：平均 90.0 FPS（已维持 3 秒）
+[02:47:15] [Info] [SYNC_UI_FPS] 📊 当前平均帧率: 89.9 FPS，稳定状态: 未稳定
+[02:47:14] [Info] [SYNC_UI] 角色已处于无敌状态
+[02:47:14] [Info] [SYNC_UI] 启用自动进度增长，当前进度: 75%
+[02:47:14] [Info] [SYNC_UI] 任务状态更新: AI名称初始化 - 完成 完成
+[02:47:14] [Info] [SYNC_UI] 任务状态更新: 环境同步 - 完成 完成
+[02:47:14] [Info] [SYNC_UI_FPS] 📊 帧率开始恢复：当前平均 84.1 FPS
+[02:47:13] [INFO] [Level Initialization] Done!
+[02:47:13] [INFO] [Level Initialization] Setting character position...
+[02:47:13] [INFO] [Level Initialization] Creating map element...
+[02:47:13] [INFO] [Level Initialization] Spawing exits...
+[02:47:13] [INFO] [Level Initialization] Healing...
+[02:47:13] [Info] [SYNC_UI] 任务状态更新: 玩家状态同步 - 完成 
+[02:47:13] [Info] [SYNC_UI] 注册任务: AI名称初始化
+[02:47:13] [Info] [SYNC_UI] 注册任务: AI装备接收
+[02:47:13] [Info] [SYNC_UI] 注册任务: 玩家状态同步
+[02:47:13] [Info] [SYNC_UI] 注册任务: 环境同步
+[02:47:13] [Info] [MOD] 注册同步任务
+[02:47:13] [Info] [AsyncQueue] 启用批量处理模式，每帧处理 200 个消息，持续 30 秒
+[02:47:13] [Info] [LootManager] 缓存已清理
+[02:47:13] [Info] [CacheManager] 所有缓存已刷新（Destructibles 跳过，Loot 异步刷新）
+[02:47:13] [Info] [LootCache] 协程刷新缓存完成，找到 8 个战利品箱，映射 4 个 Inventory，跳过 4 个未初始化箱子
+[02:47:13] [Info] [LootCache] 开始协程刷新缓存，共 8 个战利品箱
+[02:47:13] [Info] [LootCache] 委托初始化成功（Expression Tree 编译）
+[02:47:13] [Info] [EnvironmentCache] 刷新缓存：5 个 LootBoxLoader, 1 个 Door, 7 个 SceneLoaderProxy
+[02:47:13] [Info] [SYNC_UI] 更新玩家列表完成，共 1 名玩家
+[02:47:13] [Info] [SYNC_UI] 显示同步等待界面完成
+[02:47:13] [Info] [SYNC_UI] ✅ 已启用角色无敌
+[02:47:13] [Info] [SYNC_UI] 保存原始无敌状态: False
+[02:47:13] [Info] [SYNC_UI_FPS] ✅ 帧率检测已启用（客户端模式）
+[02:47:13] [Info] [SYNC_UI] 超时保护已启动，最大显示时间: 90 秒
+[02:47:13] [Info] [SYNC_UI] Panel已激活
+[02:47:13] [Info] [SYNC_UI] Canvas已启用，sortingOrder=9999
+[02:47:13] [Info] [SYNC_UI] Show() 被调用，_panel=存在, _canvas=存在
+[02:47:13] [Info] [MOD] 找到同步UI实例，开始显示
+[02:47:13] [Info] [MOD] LevelManager_OnLevelInitialized 开始，准备显示同步UI
+[02:47:13] [INFO] [Level Initialization] Invoking initialized event...
+[02:47:13] [INFO] [Level Initialization] Handling raid initialization...
+[02:47:13] [INFO] [Level Initialization] Waiting for other initialization...
+[02:47:13] [INFO] [Level Initialization] Setting character items...
+[02:47:13] [INFO] [Level Initialization] Setting up pet...
+[02:47:13] [INFO] [Level Initialization] Setting up character status...
+[02:47:13] [INFO] [Level Initialization] Spawning bodies
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Reach location task caching
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Reach location task caching
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Spawning item for task
+[02:47:13] [INFO] [Level Initialization] Spawning prefabs for task
+[02:47:13] [INFO] [Level Initialization] Hearing Buses
+[02:47:13] [INFO] [Level Initialization] Hearing Ambient
+[02:47:13] [INFO] [Level Initialization] Opening ears
+[02:47:13] [INFO] [Level Initialization] Teleporting to location...
+[02:47:13] [INFO] [Level Initialization] Creating character at location...
+[02:47:13] [INFO] [Level Initialization] Setting start position...
+[02:47:13] [INFO] [Level Initialization] Creating location info...
+[02:47:13] [INFO] [Level Initialization] Getting location...
+[02:47:13] [INFO] Rule is:均衡,Recoil:1
+[02:47:13] [INFO] [Level Initialization] Setting up rule...
+[02:47:13] [INFO] [Level Initialization] Invoking Beginning Event...
+[02:47:13] [INFO] [Level Initialization] Starting up...
+[02:47:13] [Info] [MOD] ========== 场景卸载清理完成: LoadingScreen_Black ==========
+[02:47:13] [Info] [MOD-Cleanup] 触发垃圾回收...
+[02:47:13] [Info] [MOD-Cleanup] 强制关闭同步UI...
+[02:47:13] [Info] [MOD-Cleanup] 清理远程玩家数据...
+[02:47:13] [Info] [MOD-Cleanup] 清理可破坏物数据...
+[02:47:13] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[02:47:13] [Info] [MOD-Cleanup] 清空异步消息队列...
+[02:47:13] [Info] [CacheManager] 所有缓存已清空（场景卸载）
+[02:47:13] [Info] [MOD-Cleanup] 清理游戏对象缓存...
+[02:47:13] [Info] [MOD-Cleanup] 清理掉落物品...
+[02:47:13] [Info] [LootManager] 缓存已清理
+[02:47:13] [Info] [MOD-Cleanup] 清理战利品数据...
+[02:47:13] [Info] [MOD-Cleanup] 清理 AI 数据...
+[02:47:13] [Info] [MOD] ========== 场景卸载清理开始: LoadingScreen_Black ==========
+[02:47:13] [INFO] New boot
+[02:47:13] [INFO] tree data is empty
+[02:47:07] [Info] [MOD] ========== 场景卸载清理完成: MainMenu ==========
+[02:47:07] [Info] [MOD-Cleanup] 触发垃圾回收...
+[02:47:07] [Info] [MOD-Cleanup] 强制关闭同步UI...
+[02:47:07] [Info] [MOD-Cleanup] 清理可破坏物数据...
+[02:47:07] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[02:47:07] [Info] [MOD-Cleanup] 清空异步消息队列...
+[02:47:07] [Info] [CacheManager] 所有缓存已清空（场景卸载）
+[02:47:07] [Info] [MOD-Cleanup] 清理游戏对象缓存...
+[02:47:07] [Info] [MOD-Cleanup] 清理掉落物品...
+[02:47:07] [Info] [LootManager] 缓存已清理
+[02:47:07] [Info] [MOD-Cleanup] 清理战利品数据...
+[02:47:07] [Info] [MOD-Cleanup] 清理 AI 数据...
+[02:47:07] [Info] [MOD] ========== 场景卸载清理开始: MainMenu ==========
+
+鸭科夫联机Mod
+EscapeFromDuckovCoopMod
+控制台Mod
+LiteNetLibLoader
+HarmonyLoadMod
+CFKillFeedback
+ShowInventoryCount
+ItemLevelAndSearchSoundMod
+DisplayItemValue
+DuckSort
+ModConfig
+CustomHotkey
+MapTeleport
+DuckovLuckyAnimation
+DisplayTotalReward
+[02:47:06] [INFO] Sorted mods:
+[02:46:55] [Info] [MModUI] 玩家列表已更新，重建UI (当前: 1, 之前: 0, 强制: False)
+[02:46:55] [Info] [MOD] ========== 场景卸载清理完成: Startup ==========
+[02:46:55] [Info] [MOD-Cleanup] 强制关闭同步UI...
+[02:46:55] [Info] [MOD-Cleanup] 清理远程玩家数据...
+[02:46:55] [Info] [MOD-Cleanup] 清理可破坏物数据...
+[02:46:55] [Info] [AsyncQueue] 切换回正常处理模式，每帧处理 30 个消息
+[02:46:55] [Info] [MOD-Cleanup] 清空异步消息队列...
+[02:46:55] [Info] [CacheManager] 所有缓存已清空（场景卸载）
+[02:46:55] [Info] [MOD-Cleanup] 清理游戏对象缓存...
+[02:46:55] [Info] [MOD-Cleanup] 清理掉落物品...
+[02:46:55] [Info] [LootManager] 缓存已清理
+[02:46:55] [Info] [MOD-Cleanup] 清理战利品数据...
+[02:46:55] [Info] [MOD-Cleanup] 清理 AI 数据...
+[02:46:55] [Info] [MOD] ========== 场景卸载清理开始: Startup ==========
+[02:46:55] [INFO] ModActive_鸭科夫联机Mod: False
+[02:46:55] [INFO] Mod Loaded: EscapeFromDuckovCoopMod
+[02:46:55] [Info] ModBehaviour Awake
+[02:46:55] [Warning] 主相机未找到，模糊效果将不可用
+[02:46:55] [Info] [SteamP2P扩展] 初始化完成！按F9使用Steam邀请好友（需先开始游戏）
+[02:46:55] [Info] [SteamP2P扩展] Steam P2P组件已启动
+[02:46:55] [Info] [SteamLobby] 回调已设置（包括邀请监听和数据更新）
+[02:46:55] [Info] [SteamEndPointMapper] 初始化完成
+[02:46:55] [Info] [SteamP2P] Steam回调已设置
+[02:46:55] [Info] [SteamP2P] ✓ 已启用中继服务器（用于NAT穿透）
+[02:46:55] [Info] [SteamP2P扩展] 开始初始化...
+[02:46:55] [Info] [AsyncQueue] 初始化完成，等待场景加载时启用批量模式
+[02:46:55] [Info] [SYNC_UI] 初始隐藏完成
+[02:46:55] [Info] [SYNC_UI] UI创建完成
+[02:46:55] [Warning] [SYNC_UI] 背景图片不存在: C:\Program Files (x86)\Steam\steamapps\common\Escape from Duckov\Duckov_Data\Mods\EscapeFromDuckovCoopMod\Assets\bg.png，使用纯黑背景
+[02:46:55] [Info] [SYNC_UI] 尝试加载背景图片: C:\Program Files (x86)\Steam\steamapps\common\Escape from Duckov\Duckov_Data\Mods\EscapeFromDuckovCoopMod\Assets\bg.png
+[02:46:55] [Info] [SYNC_UI] 实例已创建并设置为DontDestroyOnLoad
+[02:46:55] [Info] [SYNC_UI] Awake() 被调用
+[02:46:55] [Info] [CoopLocalization] Initialized with language: zh-CN
+[02:46:55] [Info] [CoopLocalization] Loaded 121 translations from C:\Program Files (x86)\Steam\steamapps\common\Escape from Duckov\Duckov_Data\Mods\EscapeFromDuckovCoopMod\Localization\zh-CN.json
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=REMOTE_DESPAWN
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=DOOR_STATE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=DOOR_REQ_SET
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AUDIO_EVENT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=PLAYER_DEAD_TREE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=DEAD_LOOT_SPAWN
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_SEED_PATCH
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_NAME_ICON
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_HEALTH_REPORT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_HEALTH_SYNC
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_ATTACK_SWING
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_ANIM_SNAPSHOT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_TRANSFORM_SNAPSHOT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_LOADOUT_SNAPSHOT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AI_SEED_SNAPSHOT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_REQ_SLOT_PLUG
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_REQ_SLOT_UNPLUG
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_REQ_SPLIT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_DENY
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_TAKE_OK
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_PUT_OK
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_REQ_TAKE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_REQ_PUT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_STATE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=LOOT_REQ_OPEN
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ENV_SYNC_STATE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ENV_SYNC_REQUEST
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=PLAYER_APPEARANCE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_GATE_RELEASE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_GATE_READY
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_READY
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_CANCEL
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_BEGIN_LOAD
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_READY_SET
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_VOTE_REQ
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=SCENE_VOTE_START
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=HOST_BUFF_PROXY_APPLY
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=PLAYER_BUFF_SELF_APPLY
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=PLAYER_HURT_EVENT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AUTH_HEALTH_REMOTE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=AUTH_HEALTH_SELF
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=PLAYER_HEALTH_REPORT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ENV_DEAD_EVENT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ENV_HURT_EVENT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ENV_HURT_REQUEST
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=MELEE_HIT_REPORT
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=MELEE_ATTACK_SWING
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=MELEE_ATTACK_REQUEST
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ITEM_DESPAWN
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ITEM_PICKUP_REQUEST
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ITEM_SPAWN
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=ITEM_DROP_REQUEST
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=GRENADE_EXPLODE
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=GRENADE_SPAWN
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=GRENADE_THROW_REQUEST
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=JSON
+[02:46:55] [Info] [NetMessageConsumer] 已注册主线程处理器: OpCode=FIRE_EVENT

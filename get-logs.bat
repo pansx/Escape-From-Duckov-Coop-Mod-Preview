@@ -7,7 +7,7 @@ echo 获取并分析游戏日志
 echo ========================================
 echo.
 
-set "AUTH_TOKEN=Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImFkbWluIiwiaWF0IjoxNzYyNzY1Mjg0LCJleHAiOjE3NjI4NTE2ODR9.g5wd39C9VCdqMQFoRMvRnEQV2NFKgR9qQzEZeRdoKcjkq7Ks1JrXh_wtFlCBr6sz"
+set "AUTH_TOKEN=Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImFkbWluIiwiaWF0IjoxNzYzMDU4ODk5LCJleHAiOjE3NjMxNDUyOTl9.l_yTsyYh0c_Rw9R-nsIfRnCy4pSDMFm9jMZjJ_G5vQpFgU1cYyedQby0OdoO-iWU"
 
 echo [1/4] 获取主机端日志 (clientId=1)...
 curl -s -X GET "http://127.0.0.1:8080/api/logs?clientId=1&page=0&size=900" ^

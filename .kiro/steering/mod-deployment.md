@@ -140,7 +140,7 @@ curl.exe -X POST "http://localhost:8080/api/mods/upload" -H "Authorization: Bear
 dotnet build EscapeFromDuckovCoopMod.sln --configuration Release
 
 # 上传
-curl.exe -X POST "http://localhost:8080/api/mods/upload" -H "Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImFkbWluIiwiaWF0IjoxNzYyOTk0NzQ3LCJleHAiOjE3NjMwODExNDd9.oSJfmLTOrxJ_3lRvgzbNDXTuGRkNsNCM5oDHJ_Fxoq_tWEnNN0hbjwmOsgCOt5O-" -F "file=@EscapeFromDuckovCoopMod\bin\Release\netstandard2.1\EscapeFromDuckovCoopMod.dll"
+curl.exe -X POST "http://localhost:8080/api/mods/upload" -H "Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImFkbWluIiwiaWF0IjoxNzYzMDU4ODk5LCJleHAiOjE3NjMxNDUyOTl9.l_yTsyYh0c_Rw9R-nsIfRnCy4pSDMFm9jMZjJ_G5vQpFgU1cYyedQby0OdoO-iWU" -F "file=@EscapeFromDuckovCoopMod\bin\Release\netstandard2.1\EscapeFromDuckovCoopMod.dll"
 ```
 
 ### 检查部署结果
