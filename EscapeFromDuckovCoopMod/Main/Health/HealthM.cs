@@ -1,4 +1,4 @@
-// Escape-From-Duckov-Coop-Mod-Preview
+﻿// Escape-From-Duckov-Coop-Mod-Preview
 // Copyright (C) 2025  Mr.sans and InitLoader's team
 //
 // This program is not a free software.
@@ -14,8 +14,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
 
-using System.Collections;
 using EscapeFromDuckovCoopMod.Utils.Logger.Tools;
+using System.Collections;
 
 namespace EscapeFromDuckovCoopMod;
 
@@ -187,7 +187,7 @@ public class HealthM : MonoBehaviour
     }
 
 
-    public void Client_ApplySelfHurtFromServer(NetPacketReader r)
+    public void Client_ApplySelfHurtFromServer(NetDataReader r)
     {
         try
         {
@@ -280,14 +280,14 @@ public class HealthM : MonoBehaviour
             ["time"] = Time.time,
             ["isValid"] = max > 0f && cur > 0f
         };
-        LoggerHelper.Log($"[HP_REPORT_INIT] {Newtonsoft.Json.JsonConvert.SerializeObject(logData)}");
+        // LoggerHelper.Log($"[HP_REPORT_INIT] {Newtonsoft.Json.JsonConvert.SerializeObject(logData)}");
 
         // ⚠️ 检查血量是否有效
-        if (max <= 0f || cur <= 0f)
-        {
-            LoggerHelper.LogWarning($"[HP_REPORT_INIT] ⚠️ 血量未初始化，延迟上报: max={max}, cur={cur}");
-            return; // 不上报，等待下一帧重试
-        }
+        // if (max <= 0f || cur <= 0f)
+        // {
+        //     LoggerHelper.LogWarning($"[HP_REPORT_INIT] ⚠️ 血量未初始化，延迟上报: max={max}, cur={cur}");
+        //     return; // 不上报，等待下一帧重试
+        // }
 
         var w = new NetDataWriter();
         w.Put((byte)Op.PLAYER_HEALTH_REPORT);

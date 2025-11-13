@@ -1,4 +1,4 @@
-// Escape-From-Duckov-Coop-Mod-Preview
+﻿// Escape-From-Duckov-Coop-Mod-Preview
 // Copyright (C) 2025  Mr.sans and InitLoader's team
 //
 // This program is not a free software.
@@ -17,13 +17,15 @@
 using System.Collections;
 using ItemStatsSystem;
 using UnityEngine.SceneManagement;
-using EscapeFromDuckovCoopMod.Net;  // 引入智能发送扩展方法
+using EscapeFromDuckovCoopMod.Net;
+using Object = UnityEngine.Object;  // 引入智能发送扩展方法
 
 namespace EscapeFromDuckovCoopMod;
 
 public class DeadLootBox : MonoBehaviour
 {
-    public const bool EAGER_BROADCAST_LOOT_STATE_ON_SPAWN = false;
+    // ★ 修复：启用立即广播，确保客户端生成盒子时就能收到物品数据
+    public const bool EAGER_BROADCAST_LOOT_STATE_ON_SPAWN = true;
     public static DeadLootBox Instance;
 
     private NetService Service => NetService.Instance;
@@ -115,7 +117,16 @@ public class DeadLootBox : MonoBehaviour
                 foreach (var (p, snap) in pack.Item2)
                 {
                     var item = ItemTool.BuildItemFromSnapshot(snap);
-                    if (item) inv.AddAt(item, p);
+                    if (item && !InventoryPlacementUtil.TryPlaceItemExact(inv, item, p))
+                    {
+                        try
+                        {
+                            Object.Destroy(item.gameObject);
+                        }
+                        catch
+                        {
+                        }
+                    }
                 }
             }
             finally
@@ -216,21 +227,21 @@ public class DeadLootBox : MonoBehaviour
             // >>> 放在 writer.Reset() 之前 <<<
             if (inv != null)
             {
-                inv.NeedInspection = true;
+                inv.NeedInspection = false;
                 // 尝试把“这个箱子以前被搜过”的标记也清空（有的版本有这个字段）
                 try
                 {
-                    Traverse.Create(inv).Field<bool>("hasBeenInspectedInLootBox").Value = false;
+                    Traverse.Create(inv).Field<bool>("hasBeenInspectedInLootBox").Value = true;
                 }
                 catch
                 {
                 }
 
-                // 把当前内容全部标记为“未鉴定”
+                // 把当前内容全部标记为“已鉴定”
                 for (var i = 0; i < inv.Content.Count; ++i)
                 {
                     var it = inv.GetItemAt(i);
-                    if (it) it.Inspected = false;
+                    if (it) it.Inspected = true;
                 }
             }
 
@@ -260,7 +271,25 @@ public class DeadLootBox : MonoBehaviour
 
         yield return null; // 给原版填充时间
         yield return null;
-        if (box && box.Inventory) COOPManager.LootNet.Server_SendLootboxState(null, box.Inventory);
+
+        if (box && box.Inventory)
+        {
+            var inv = box.Inventory;
+            Debug.Log($"[DEAD-LOOT] 准备广播战利品盒子内容，物品数量: {inv.Content.Count}");
+
+            // 列出所有物品
+            for (int i = 0; i < inv.Content.Count; i++)
+            {
+                var item = inv.GetItemAt(i);
+                if (item != null)
+                {
+                    Debug.Log($"[DEAD-LOOT] 物品 {i}: {item.DisplayName} (TypeID={item.TypeID})");
+                }
+            }
+
+            COOPManager.LootNet.Server_SendLootboxState(null, inv);
+            Debug.Log($"[DEAD-LOOT] 战利品盒子内容已广播");
+        }
     }
 
 

@@ -402,9 +402,6 @@ public class MModUILayoutBuilder
 
         _ui.CreateModernButton("DebugNetworkState", actionsCard.transform, "Debug: 网络状态 JSON", _ui.DebugPrintRemoteCharacters, -1, MModUI.ModernColors.Warning, 40, 15);
 
-        // 🆕 复制战利品箱数据库按钮
-        _ui.CreateModernButton("ExportLootBoxDB", actionsCard.transform, "复制战利品箱数据库", _ui.DebugExportLootBoxDatabase, -1, MModUI.ModernColors.Info, 40, 15);
-
         // 🆕 复制玩家数据库 JSON 到剪贴板
         _ui.CreateModernButton("CopyPlayerDB", actionsCard.transform, "复制玩家数据库 JSON", _ui.CopyPlayerDatabaseToClipboard, -1, MModUI.ModernColors.Success, 40, 15);
 

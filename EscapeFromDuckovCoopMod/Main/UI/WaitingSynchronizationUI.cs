@@ -1444,6 +1444,12 @@ public class WaitingSynchronizationUI : MonoBehaviour
         _fpsIsStable = false;
         _fpsStableStartTime = 0f;
 
+        // ✅ 重置帧率检测状态
+        _fpsCheckEnabled = false;
+        _fpsHistory.Clear();
+        _fpsIsStable = false;
+        _fpsStableStartTime = 0f;
+
         if (_panel != null && _panel.activeSelf)
         {
             // 停止之前的淡出协程（如果有）

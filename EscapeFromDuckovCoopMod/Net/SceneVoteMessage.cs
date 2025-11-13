@@ -564,9 +564,6 @@ public static class SceneVoteMessage
         // 🔍 输出接收到的完整 JSON（单行）
         LoggerHelper.Log($"[SceneVote] 客户端收到 JSON: {json}");
 
-        // 🆕 收到投票消息时，立即上报客户端状态（确保 Steam 名字信息最新）
-        ClientStatusMessage.Client_SendStatusUpdate();
-
         try
         {
             // 🔧 使用 Newtonsoft.Json 反序列化，支持嵌套对象
@@ -581,43 +578,12 @@ public static class SceneVoteMessage
             if (sceneNet == null)
                 return;
 
-            // 🆕 特殊处理：voteId=0 表示这是玩家信息更新消息（不是真正的投票），不受过期检查限制
-            if (data.voteId == 0 && !data.active && data.playerList != null && data.playerList.items != null)
-            {
-                LoggerHelper.Log($"[SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI");
-                
-                // 🔧 更新缓存的投票数据（供 UI 使用），但不激活投票
-                sceneNet.cachedVoteData = data;
-                
-                // 🆕 将玩家信息同步到数据库
-                foreach (var player in data.playerList.items)
-                {
-                    if (string.IsNullOrEmpty(player.steamId) || string.IsNullOrEmpty(player.steamName))
-                        continue;
-                    
-                    var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
-                    bool isLocal = service.IsSelfId(player.playerId);
-                    
-                    playerDb.AddOrUpdatePlayer(
-                        steamId: player.steamId,
-                        playerName: player.steamName,
-                        avatarUrl: "",
-                        isLocal: isLocal,
-                        endPoint: player.playerId,
-                        lastUpdate: System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
-                    );
-                    
-                    LoggerHelper.Log(
-                        $"[SceneVote] ✓ 已同步玩家到数据库: {player.steamName} ({player.steamId}), IsLocal={isLocal}"
-                    );
-                }
-                
-                LoggerHelper.Log($"[SceneVote] ✓ 已更新玩家信息缓存，共 {data.playerList.items.Length} 名玩家");
-                return;
-            }
+            // 🆕 收到投票消息时，立即上报客户端状态（确保 Steam 名字信息最新）
+            // 放在过期检查之前，确保即使消息被忽略也能更新数据库
+            ClientStatusMessage.Client_SendStatusUpdate();
 
-            // 🆕 检查投票ID是否过期
-            if (data.voteId <= sceneNet.expiredVoteId)
+            // 🆕 检查投票ID是否过期（voteId=0 是特殊的玩家信息更新消息，不检查过期）
+            if (data.voteId > 0 && data.voteId <= sceneNet.expiredVoteId)
             {
                 LoggerHelper.Log($"[SceneVote] 忽略过期投票: voteId={data.voteId}, expiredVoteId={sceneNet.expiredVoteId}");
                 return;
@@ -626,6 +592,62 @@ public static class SceneVoteMessage
             // 如果投票已取消
             if (!data.active)
             {
+                // 🆕 特殊处理：voteId=0 表示这是玩家信息更新消息（不是真正的投票）
+                if (data.voteId == 0 && data.playerList != null && data.playerList.items != null)
+                {
+                    LoggerHelper.Log($"[SceneVote] 收到玩家信息更新消息 (voteId=0)，更新缓存但不激活投票UI");
+                    
+                    // 🔧 更新缓存的投票数据（供 UI 使用），但不激活投票
+                    sceneNet.cachedVoteData = data;
+                    
+                    // 🔧 FIX: 即使不激活投票UI，也要更新参与者列表，让 UI 能显示所有玩家
+                    sceneNet.sceneParticipantIds.Clear();
+                    sceneNet.sceneReady.Clear();
+                    
+                    // 🔧 FIX: 同时更新 PlayerInfoDatabase，确保 UI 能从数据库获取到所有玩家
+                    var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+                    
+                    foreach (var player in data.playerList.items)
+                    {
+                        if (string.IsNullOrEmpty(player.playerId))
+                            continue;
+                        
+                        if (!sceneNet.sceneParticipantIds.Contains(player.playerId))
+                        {
+                            sceneNet.sceneParticipantIds.Add(player.playerId);
+                        }
+                        sceneNet.sceneReady[player.playerId] = player.ready;
+                        
+                        // 检查是否是自己
+                        if (service.IsSelfId(player.playerId))
+                        {
+                            sceneNet.localReady = player.ready;
+                        }
+                        
+                        // 🔧 FIX: 更新玩家数据库
+                        if (!string.IsNullOrEmpty(player.steamId) && !string.IsNullOrEmpty(player.steamName))
+                        {
+                            playerDb.AddOrUpdatePlayer(
+                                steamId: player.steamId,
+                                playerName: player.steamName,
+                                avatarUrl: "", // 投票数据中没有头像 URL
+                                isLocal: service.IsSelfId(player.playerId),
+                                endPoint: player.playerId,
+                                lastUpdate: System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
+                            );
+                        }
+                    }
+                    
+                    LoggerHelper.Log($"[SceneVote] ✓ 已更新玩家信息缓存和参与者列表，共 {data.playerList.items.Length} 名玩家");
+                    
+                    // 🔧 FIX: 触发 MModUI 重建玩家列表
+                    if (MModUI.Instance != null)
+                    {
+                        MModUI.Instance.UpdatePlayerList();
+                    }
+                    
+                    return;
+                }
                 
                 // 🆕 更新过期ID，避免后续收到旧的投票包
                 sceneNet.expiredVoteId = data.voteId;

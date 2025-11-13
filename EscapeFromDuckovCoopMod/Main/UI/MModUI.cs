@@ -963,7 +963,7 @@ public class MModUI : MonoBehaviour
         return entry;
     }
 
-    private void UpdatePlayerList()
+    public void UpdatePlayerList(bool forceRebuild = false)
     {
         if (_components?.PlayerListContent == null) return;
 
@@ -976,12 +976,12 @@ public class MModUI : MonoBehaviour
         );
         
         // 3. 检查是否需要重建 UI
-        bool needsRebuild = !_displayedPlayerIds.SetEquals(currentPlayerIds);
+        bool needsRebuild = forceRebuild || !_displayedPlayerIds.SetEquals(currentPlayerIds);
         
         if (!needsRebuild)
             return;
         
-        LoggerHelper.Log($"[MModUI] 玩家列表已更新，重建UI (当前: {currentPlayerIds.Count}, 之前: {_displayedPlayerIds.Count})");
+        LoggerHelper.Log($"[MModUI] 玩家列表已更新，重建UI (当前: {currentPlayerIds.Count}, 之前: {_displayedPlayerIds.Count}, 强制: {forceRebuild})");
         
         // 4. 清空现有列表
         foreach (Transform child in _components.PlayerListContent)
@@ -3378,42 +3378,6 @@ public class MModUI : MonoBehaviour
         SetStatusText(errorMsg, ModernColors.Error);
     }
 
-    /// <summary>
-    /// 复制战利品箱数据库 JSON 到剪贴板（调试用）
-    /// </summary>
-    internal void DebugExportLootBoxDatabase()
-    {
-        try
-        {
-            // 获取战利品箱同步管理器实例
-            var syncManager = LootBoxSyncManager.Instance;
-            if (syncManager == null)
-            {
-                LoggerHelper.LogWarning("[MModUI] LootBoxSyncManager 未初始化");
-                SetStatusText("[!] 战利品箱数据库未初始化", ModernColors.Warning);
-                return;
-            }
-
-            // 导出数据库为 JSON
-            var json = syncManager.ExportDatabaseToJson(indented: true);
-
-            // 复制到剪贴板
-            GUIUtility.systemCopyBuffer = json;
-
-            // 显示日志
-            LoggerHelper.Log($"[MModUI] 战利品箱数据库 JSON 已复制到剪贴板 ({json.Length} 字节)");
-
-            // 更新状态文本
-            SetStatusText("[OK] 已复制战利品箱数据库到剪贴板", ModernColors.Success);
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.LogError($"[MModUI] 复制战利品箱数据库失败: {ex.Message}");
-            LoggerHelper.LogError($"[MModUI] 堆栈: {ex.StackTrace}");
-            SetStatusText("[!] 复制战利品箱数据库失败", ModernColors.Error);
-        }
-    }
-
     #endregion
 }
 
@@ -3567,5 +3531,7 @@ public class InputFieldFocusHandler : MonoBehaviour
         }
     }
 }
+
+
 
 #endregion
