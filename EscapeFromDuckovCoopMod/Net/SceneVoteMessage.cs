@@ -1281,4 +1281,104 @@ public static class SceneVoteMessage
             }
         }
     }
+
+    /// <summary>
+    /// 🆕 从投票列表中移除玩家（断开连接时调用）
+    /// </summary>
+    public static void RemovePlayerFromVote(string playerId)
+    {
+        if (_hostVoteState == null || !_hostVoteState.active)
+            return;
+
+        if (_hostVoteState.playerList == null || _hostVoteState.playerList.items == null)
+            return;
+
+        // 查找玩家
+        var playerList = new System.Collections.Generic.List<PlayerInfo>(_hostVoteState.playerList.items);
+        var removedPlayer = playerList.Find(p => p.playerId == playerId);
+        
+        if (removedPlayer != null)
+        {
+            playerList.Remove(removedPlayer);
+            _hostVoteState.playerList.items = playerList.ToArray();
+            _hostVoteState.totalPlayers = playerList.Count;
+            _hostVoteState.readyPlayers = playerList.Count(p => p.ready);
+
+            LoggerHelper.Log(
+                $"[SceneVote] ✓ 已从投票列表移除玩家: {removedPlayer.playerName}({playerId}), 剩余 {_hostVoteState.totalPlayers} 人"
+            );
+
+            // 🔧 同步更新 SceneNet
+            var sceneNet = SceneNet.Instance;
+            if (sceneNet != null)
+            {
+                sceneNet.sceneParticipantIds.Remove(playerId);
+                sceneNet.sceneReady.Remove(playerId);
+            }
+
+            // 立即广播更新后的状态
+            Host_BroadcastVoteState();
+
+            // 🆕 重新检查投票状态（可能所有在线玩家都已准备）
+            LoggerHelper.Log("[SceneVote] 玩家断开后重新检查投票状态...");
+            
+            // 🔍 使用与 Host_HandleReadyToggle 相同的检查逻辑
+            var playerDb = Utils.Database.PlayerInfoDatabase.Instance;
+            var dbPlayerSteamIds = new System.Collections.Generic.HashSet<string>();
+            foreach (var dbPlayer in playerDb.GetAllPlayers())
+            {
+                if (!string.IsNullOrEmpty(dbPlayer.SteamId))
+                {
+                    dbPlayerSteamIds.Add(dbPlayer.SteamId);
+                }
+            }
+
+            int validPlayerCount = 0;
+            int readyPlayerCount = 0;
+
+            foreach (var player in _hostVoteState.playerList.items)
+            {
+                bool isInDatabase = false;
+                
+                if (!string.IsNullOrEmpty(player.steamId) && dbPlayerSteamIds.Contains(player.steamId))
+                {
+                    isInDatabase = true;
+                }
+                else if (dbPlayerSteamIds.Contains(player.playerId))
+                {
+                    isInDatabase = true;
+                }
+                else
+                {
+                    var dbPlayer = playerDb.GetPlayerByEndPoint(player.playerId);
+                    if (dbPlayer != null && !string.IsNullOrEmpty(dbPlayer.SteamId))
+                    {
+                        isInDatabase = true;
+                    }
+                }
+
+                if (isInDatabase)
+                {
+                    validPlayerCount++;
+                    if (player.ready)
+                    {
+                        readyPlayerCount++;
+                    }
+                }
+            }
+
+            LoggerHelper.Log($"[SceneVote] 📊 重新检查投票进度：{readyPlayerCount}/{validPlayerCount} 有效玩家已准备");
+
+            bool allReady = validPlayerCount > 0 && readyPlayerCount >= validPlayerCount;
+            if (allReady)
+            {
+                LoggerHelper.Log("[SceneVote] 🎉 玩家断开后检测到所有在线玩家已准备，开始加载场景！");
+                Host_StartSceneLoad();
+            }
+        }
+        else
+        {
+            LoggerHelper.LogWarning($"[SceneVote] 未在投票列表中找到玩家: {playerId}");
+        }
+    }
 }

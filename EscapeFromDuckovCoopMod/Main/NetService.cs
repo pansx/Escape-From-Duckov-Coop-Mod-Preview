@@ -301,6 +301,13 @@ public class NetService : MonoBehaviour, INetEventListener
                     Debug.Log($"[OnPeerDisconnected] 从数据库删除玩家: {player.PlayerName} (SteamId: {player.SteamId})");
                     Utils.Database.PlayerInfoDatabase.Instance.RemovePlayer(player.SteamId);
                 }
+                
+                // 🆕 如果有活跃的投票，从投票列表中移除该玩家并重新检查
+                if (IsServer && Net.SceneVoteMessage.HasActiveVote())
+                {
+                    Debug.Log($"[OnPeerDisconnected] 检测到活跃投票，从投票列表移除玩家: {_st.EndPoint}");
+                    Net.SceneVoteMessage.RemovePlayerFromVote(_st.EndPoint);
+                }
             }
             playerStatuses.Remove(peer);
         }
