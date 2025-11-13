@@ -1,4 +1,4 @@
-// Escape-From-Duckov-Coop-Mod-Preview
+﻿// Escape-From-Duckov-Coop-Mod-Preview
 // Copyright (C) 2025  Mr.sans and InitLoader's team
 //
 // This program is not a free software.
@@ -125,20 +125,7 @@ public class LootNet
     }
 
 
-    /// <summary>
-    /// ✅ 包装方法：接受 NetDataReader（用于异步队列处理）
-    /// </summary>
     public void Client_ApplyLootboxState(NetDataReader r)
-    {
-        Client_ApplyLootboxStateInternal(r);
-    }
-
-    public void Client_ApplyLootboxState(NetPacketReader r)
-    {
-        Client_ApplyLootboxStateInternal(r);
-    }
-
-    private void Client_ApplyLootboxStateInternal(NetDataReader r)
     {
         var scene = r.GetInt();
         var posKey = r.GetInt();
@@ -147,27 +134,6 @@ public class LootNet
 
         var capacity = r.GetInt();
         var count = r.GetInt();
-
-        // 🛡️ 场景初始化检查：如果场景还未完全加载，缓存包并稍后处理
-        var lm = LevelManager.Instance;
-        if (lm == null || LevelManager.LootBoxInventories == null)
-        {
-            // 场景尚未就绪，缓存这个 LOOT_STATE 包
-            var list = new List<(int pos, ItemSnapshot snap)>(count);
-            for (var k = 0; k < count; ++k)
-            {
-                var p = r.GetInt();
-                var snap = ItemTool.ReadItemSnapshot(r);
-                list.Add((p, snap));
-            }
-
-            if (lootUid >= 0)
-            {
-                LootManager.Instance._pendingLootStatesByUid[lootUid] = (capacity, list);
-                Debug.Log($"[LOOT] Scene not ready, cached LOOT_STATE for uid={lootUid}");
-            }
-            return;
-        }
 
         Inventory inv = null;
 
@@ -198,63 +164,26 @@ public class LootNet
         // ★ 容量安全阈值：防止因为误匹配把 UI 撑爆（真正根因是冲突/错配）
         capacity = Mathf.Clamp(capacity, 1, 128);
 
-        // ✅ 提取所有物品数据
-        var itemData = new List<(int pos, ItemSnapshot snap)>(count);
-        for (var k = 0; k < count; ++k)
-        {
-            var pos = r.GetInt();
-            var snap = ItemTool.ReadItemSnapshot(r);
-            itemData.Add((pos, snap));
-        }
-
-        // ✅ 启动协程异步处理（分帧执行，避免掉帧）
-        ModBehaviourF.Instance.StartCoroutine(Client_ApplyLootboxStateCoroutine(inv, capacity, itemData));
-    }
-
-    /// <summary>
-    /// ✅ 协程：分帧处理战利品箱状态更新，避免主线程阻塞导致掉帧
-    /// </summary>
-    private System.Collections.IEnumerator Client_ApplyLootboxStateCoroutine(
-        Inventory inv,
-        int capacity,
-        List<(int pos, ItemSnapshot snap)> itemData)
-    {
-        if (inv == null) yield break;
-
         _applyingLootState = true;
         try
         {
             inv.SetCapacity(capacity);
             inv.Loading = false;
 
-            // ✅ 删除旧物品（每删除 5 个物品后 yield 一次）
-            int deleteCount = 0;
             for (var i = inv.Content.Count - 1; i >= 0; --i)
             {
                 Item removed;
                 inv.RemoveAt(i, out removed);
                 if (removed) Object.Destroy(removed.gameObject);
-
-                deleteCount++;
-                if (deleteCount % 5 == 0)
-                {
-                    yield return null; // 每删除5个物品后等待1帧
-                }
             }
 
-            // ✅ 添加新物品（每添加 3 个物品后 yield 一次）
-            int addCount = 0;
-            foreach (var (pos, snap) in itemData)
+            for (var k = 0; k < count; ++k)
             {
+                var pos = r.GetInt();
+                var snap = ItemTool.ReadItemSnapshot(r);
                 var item = ItemTool.BuildItemFromSnapshot(snap);
                 if (item == null) continue;
                 inv.AddAt(item, pos);
-
-                addCount++;
-                if (addCount % 3 == 0)
-                {
-                    yield return null; // 每添加3个物品后等待1帧（物品创建比删除更耗时）
-                }
             }
         }
         finally
@@ -262,7 +191,7 @@ public class LootNet
             _applyingLootState = false;
         }
 
-        // ✅ 刷新 UI（如果箱子正在被查看）
+
         try
         {
             var lv = LootView.Instance;
@@ -363,7 +292,7 @@ public class LootNet
 
 
     // 主机：处理 PUT（客户端 -> 主机）
-    public void Server_HandleLootPutRequest(NetPeer peer, NetPacketReader r)
+    public void Server_HandleLootPutRequest(NetPeer peer, NetDataReader r)
     {
         var scene = r.GetInt();
         var posKey = r.GetInt();
@@ -447,7 +376,7 @@ public class LootNet
     }
 
 
-    public void Server_HandleLootTakeRequest(NetPeer peer, NetPacketReader r)
+    public void Server_HandleLootTakeRequest(NetPeer peer, NetDataReader r)
     {
         var scene = r.GetInt();
         var posKey = r.GetInt();
@@ -525,7 +454,7 @@ public class LootNet
     }
 
     // 客户端：收到 PUT_OK -> 把“本地发起的那件物品”从自己背包删掉
-    public void Client_OnLootPutOk(NetPacketReader r)
+    public void Client_OnLootPutOk(NetDataReader r)
     {
         var token = r.GetUInt();
 
@@ -636,7 +565,7 @@ public class LootNet
     }
 
 
-    public void Client_OnLootTakeOk(NetPacketReader r)
+    public void Client_OnLootTakeOk(NetDataReader r)
     {
         var token = r.GetUInt();
 
@@ -837,11 +766,7 @@ public class LootNet
                 core.inLevelData[kv.Key] = kv.Value; // 没有就加，有就覆盖
 
             // 刷新当前场景已存在的 LootBoxLoader 显示
-            // ✅ 优化：使用缓存管理器获取 LootBoxLoader，避免 FindObjectsOfType
-            IEnumerable<LootBoxLoader> loaders = Utils.GameObjectCacheManager.Instance != null
-                ? Utils.GameObjectCacheManager.Instance.Environment.GetAllLoaders()
-                : Object.FindObjectsOfType<LootBoxLoader>(true);
-
+            var loaders = Object.FindObjectsOfType<LootBoxLoader>(true);
             foreach (var l in loaders)
                 try
                 {
@@ -858,7 +783,7 @@ public class LootNet
         }
     }
 
-    public void Server_HandleLootSlotPlugRequest(NetPeer peer, NetPacketReader r)
+    public void Server_HandleLootSlotPlugRequest(NetPeer peer, NetDataReader r)
     {
         // 1) 容器定位
         var scene = r.GetInt();
@@ -1104,7 +1029,7 @@ public class LootNet
         connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
     }
 
-    public void Server_HandleLootSlotUnplugRequest(NetPeer peer, NetPacketReader r)
+    public void Server_HandleLootSlotUnplugRequest(NetPeer peer, NetDataReader r)
     {
         // 1) 容器定位
         var scene = r.GetInt();
@@ -1232,7 +1157,7 @@ public class LootNet
         connectedPeer.Send(w, DeliveryMethod.ReliableOrdered);
     }
 
-    public void Server_HandleLootSplitRequest(NetPeer peer, NetPacketReader r)
+    public void Server_HandleLootSplitRequest(NetPeer peer, NetDataReader r)
     {
         var scene = r.GetInt();
         var posKey = r.GetInt();
