@@ -324,7 +324,7 @@ public class WaitingSynchronizationUI : MonoBehaviour
                 Debug.LogWarning(
                     $"[SYNC_UI] ⚠️ 超时保护触发！UI已显示 {elapsedTime:F1} 秒，强制关闭"
                 );
-                ForceClose("超时保护");
+                Close();
                 return;
             }
 
@@ -715,59 +715,7 @@ public class WaitingSynchronizationUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ✅ 强制关闭UI（多重保险，确保一定关闭）
-    /// </summary>
-    private void ForceClose(string reason)
-    {
-        Debug.LogWarning($"[SYNC_UI] 🔴 强制关闭UI：{reason}");
 
-        try
-        {
-            // 1. 停止所有协程
-            if (_fadeOutCoroutine != null)
-            {
-                StopCoroutine(_fadeOutCoroutine);
-                _fadeOutCoroutine = null;
-            }
-            StopAllCoroutines();
-
-            // 2. 解除无敌
-            DisableCharacterInvincibility();
-
-            // 3. 重置帧率检测状态
-            _fpsCheckEnabled = false;
-            _fpsHistory.Clear();
-            _fpsIsStable = false;
-            _fpsStableStartTime = 0f;
-
-            // 4. 强制隐藏所有UI元素
-            if (_canvasGroup != null)
-            {
-                _canvasGroup.alpha = 0f;
-            }
-
-            if (_panel != null)
-            {
-                _panel.SetActive(false);
-            }
-
-            if (_canvas != null)
-            {
-                _canvas.enabled = false;
-            }
-
-            // 5. 重置状态
-            _allTasksCompleted = true;
-            _autoProgressEnabled = false;
-
-            Debug.Log($"[SYNC_UI] ✅ 强制关闭完成：{reason}");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[SYNC_UI] 强制关闭失败: {ex.Message}");
-        }
-    }
 
     private void LoadBackgroundImage(Image targetImage)
     {
@@ -1435,14 +1383,11 @@ public class WaitingSynchronizationUI : MonoBehaviour
     /// </summary>
     public void Hide()
     {
+        // ✅ 客机：发送完成同步UI消息，上报位置
+        SendFinishSyncUiMessage();
+
         // ✅ 启动无敌计时器（延迟解除无敌）
         StartInvincibilityTimer();
-
-        // ✅ 重置帧率检测状态
-        _fpsCheckEnabled = false;
-        _fpsHistory.Clear();
-        _fpsIsStable = false;
-        _fpsStableStartTime = 0f;
 
         // ✅ 重置帧率检测状态
         _fpsCheckEnabled = false;
@@ -1474,6 +1419,9 @@ public class WaitingSynchronizationUI : MonoBehaviour
     /// </summary>
     public void Close()
     {
+        // ✅ 客机：发送完成同步UI消息，上报位置
+        SendFinishSyncUiMessage();
+
         // ✅ 启动无敌计时器（延迟解除无敌）
         StartInvincibilityTimer();
 
@@ -1593,7 +1541,7 @@ public class WaitingSynchronizationUI : MonoBehaviour
     {
         if (_panel != null && _panel.activeSelf)
         {
-            ForceClose(reason);
+            Close();
         }
     }
 
@@ -1829,6 +1777,34 @@ public class WaitingSynchronizationUI : MonoBehaviour
         finally
         {
             _invincibilityTimerCoroutine = null;
+        }
+    }
+
+    /// <summary>
+    /// 发送完成同步UI消息（客机 -> 主机）
+    /// </summary>
+    private void SendFinishSyncUiMessage()
+    {
+        try
+        {
+            // 只有客机才发送
+            var service = NetService.Instance;
+            if (service == null || service.IsServer)
+            {
+                Debug.Log("[SYNC_UI] 跳过发送完成同步UI消息：不是客机或服务未初始化");
+                return;
+            }
+
+            Debug.Log("[SYNC_UI] 准备发送完成同步UI消息（上报位置给主机）");
+
+            // 调用 TeleportMessage 发送消息
+            Net.TeleportMessage.Client_SendFinishSyncUi();
+
+            Debug.Log("[SYNC_UI] ✅ 完成同步UI消息发送完成");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[SYNC_UI] 发送完成同步UI消息失败: {ex.Message}\n{ex.StackTrace}");
         }
     }
 }

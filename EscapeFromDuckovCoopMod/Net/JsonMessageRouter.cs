@@ -107,6 +107,16 @@ public static class JsonMessageRouter
                     KickMessage.Client_HandleKickMessage(json);
                     break;
 
+                case "finishSyncUi":
+                    // 客户端完成同步UI，上报位置
+                    HandleFinishSyncUiMessage(json, fromPeer);
+                    break;
+
+                case "teleport":
+                    // 主机下发传送指令
+                    HandleTeleportMessage(json);
+                    break;
+
                 case "test":
                     // 测试消息（向后兼容）
                     HandleTestMessage(json);
@@ -247,6 +257,62 @@ public static class JsonMessageRouter
         catch (System.Exception ex)
         {
             Debug.LogError($"[JsonRouter] 处理客户端状态消息失败: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 处理完成同步UI消息（主机接收）
+    /// </summary>
+    private static void HandleFinishSyncUiMessage(string json, NetPeer fromPeer)
+    {
+        var service = NetService.Instance;
+        if (service == null || !service.IsServer)
+        {
+            Debug.LogWarning("[JsonRouter] 只有主机可以接收完成同步UI消息");
+            return;
+        }
+
+        if (fromPeer == null)
+        {
+            Debug.LogWarning("[JsonRouter] fromPeer为空，无法处理完成同步UI消息");
+            return;
+        }
+
+        try
+        {
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<
+                TeleportMessage.FinishSyncUiData
+            >(json);
+            TeleportMessage.Host_HandleFinishSyncUi(fromPeer, data);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[JsonRouter] 处理完成同步UI消息失败: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 处理传送消息（客户端接收）
+    /// </summary>
+    private static void HandleTeleportMessage(string json)
+    {
+        var service = NetService.Instance;
+        if (service == null || service.IsServer)
+        {
+            Debug.LogWarning("[JsonRouter] 只有客户端可以接收传送消息");
+            return;
+        }
+
+        try
+        {
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<TeleportMessage.TeleportData>(
+                json
+            );
+            TeleportMessage.Client_HandleTeleport(data);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[JsonRouter] 处理传送消息失败: {ex.Message}");
         }
     }
 
