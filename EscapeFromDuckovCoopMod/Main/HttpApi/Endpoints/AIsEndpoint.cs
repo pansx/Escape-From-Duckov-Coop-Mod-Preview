@@ -31,9 +31,10 @@ public class AIsEndpoint : IHttpEndpoint
 
                 try
                 {
-                    var cmc = ai.GetComponent<CharacterMainControl>();
-                    var health = ai.GetComponent<Health>();
-                    var brain = ai.GetComponent<AIMainBrain>();
+                    // 使用 GetComponentInChildren 查找子对象上的组件
+                    var cmc = ai.GetComponentInChildren<CharacterMainControl>();
+                    var health = ai.GetComponentInChildren<Health>();
+                    var brain = ai.GetComponentInChildren<AIMainBrain>();
 
                     var aiData = new
                     {
@@ -64,13 +65,15 @@ public class AIsEndpoint : IHttpEndpoint
                         // AI 状态
                         aiState = brain != null ? new
                         {
-                            isActive = brain.enabled
+                            isActive = brain.enabled,
+                            hasBrain = true
                         } : null,
                         
                         // 角色信息
                         character = cmc != null ? new
                         {
-                            exists = true
+                            exists = true,
+                            name = cmc.gameObject.name
                         } : null
                     };
 
