@@ -173,6 +173,18 @@ public class RootEndpoint : IHttpEndpoint
             <div class='endpoint-url'>http://localhost:{port}/api/vote</div>
         </div>
         
+        <div class='endpoint' onclick='window.location.href=""/api/ais""'>
+            <strong>GET /api/ais</strong>
+            <div class='endpoint-desc'>获取所有 AI 角色列表，包含位置、血量、状态（JSON）</div>
+            <div class='endpoint-url'>http://localhost:{port}/api/ais</div>
+        </div>
+        
+        <div class='endpoint' onclick='window.location.href=""/api/lootboxes""'>
+            <strong>GET /api/lootboxes</strong>
+            <div class='endpoint-desc'>获取所有战利品箱列表，包含位置、物品清单（JSON）</div>
+            <div class='endpoint-url'>http://localhost:{port}/api/lootboxes</div>
+        </div>
+        
         <div class='footer'>
             <p>Escape From Duckov - Coop Mod v1.0</p>
             <p>© 2025 Mr.sans and InitLoader's team</p>
