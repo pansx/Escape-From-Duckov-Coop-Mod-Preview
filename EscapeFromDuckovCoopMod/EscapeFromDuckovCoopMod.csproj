@@ -273,6 +273,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Refit" Version="6.3.2" />
     </ItemGroup>
 
     <!-- 本地化文件 -->

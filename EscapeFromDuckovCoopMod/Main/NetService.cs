@@ -471,6 +471,15 @@ public class NetService : MonoBehaviour, INetEventListener
         clientRemoteCharacters.Clear();
 
         LocalPlayerManager.Instance.InitializeLocalPlayer();
+
+        // 🌐 启动 HTTP 服务器（监听相同端口）
+        if (SimpleHttpServer.Instance == null)
+        {
+            var httpServerGo = new GameObject("SimpleHttpServer");
+            DontDestroyOnLoad(httpServerGo);
+            httpServerGo.AddComponent<SimpleHttpServer>();
+        }
+        SimpleHttpServer.Instance?.StartServer(port);
         if (IsServer)
         {
             ItemAgent_Gun.OnMainCharacterShootEvent -= COOPManager.WeaponHandle.Host_OnMainCharacterShoot;
@@ -574,6 +583,9 @@ public class NetService : MonoBehaviour, INetEventListener
         Debug.Log("[NetService] ✓ 已清空玩家数据库");
 
         ItemAgent_Gun.OnMainCharacterShootEvent -= COOPManager.WeaponHandle.Host_OnMainCharacterShoot;
+
+        // 🌐 停止 HTTP 服务器
+        SimpleHttpServer.Instance?.StopServer();
     }
 
     public void ConnectToHost(string ip, int port)
