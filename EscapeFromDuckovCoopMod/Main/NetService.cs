@@ -472,14 +472,18 @@ public class NetService : MonoBehaviour, INetEventListener
 
         LocalPlayerManager.Instance.InitializeLocalPlayer();
 
-        // 🌐 启动 HTTP 服务器（监听相同端口）
+        // 🌐 启动 HTTP 服务器
+        // 主机使用配置的端口，客户端使用固定的调试端口（避免冲突）
         if (SimpleHttpServer.Instance == null)
         {
             var httpServerGo = new GameObject("SimpleHttpServer");
             DontDestroyOnLoad(httpServerGo);
             httpServerGo.AddComponent<SimpleHttpServer>();
         }
-        SimpleHttpServer.Instance?.StartServer(port);
+        
+        int httpPort = IsServer ? port : 9050; // 客户端使用 9050 端口
+        SimpleHttpServer.Instance?.StartServer(httpPort);
+        Debug.Log($"[NetService] HTTP 服务器已启动，端口: {httpPort} (角色: {(IsServer ? "主机" : "客户端")})");
         if (IsServer)
         {
             ItemAgent_Gun.OnMainCharacterShootEvent -= COOPManager.WeaponHandle.Host_OnMainCharacterShoot;

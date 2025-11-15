@@ -50,6 +50,8 @@ public class SimpleHttpServer : MonoBehaviour
         RegisterEndpoint(new VoteEndpoint());
         RegisterEndpoint(new AIsEndpoint());
         RegisterEndpoint(new LootboxesEndpoint());
+        RegisterEndpoint(new DebugEndpoint());
+        RegisterEndpoint(new LogEndpoint());
 
         Debug.Log($"[SimpleHttpServer] 已注册 {_endpoints.Count} 个端点");
     }
