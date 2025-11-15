@@ -417,10 +417,26 @@ WaitingSynchronizationUI.Instance.CompleteTask("env_sync", "完成");
 #### 隐藏 UI
 
 ```csharp
+// 方法1: 淡出隐藏（推荐）
 // 所有任务完成后自动隐藏（带淡出动画）
-// 或手动隐藏
 WaitingSynchronizationUI.Instance.Hide();
+
+// 方法2: 立即关闭（发送完成消息）
+// 用于正常关闭流程，会发送完成同步UI消息并启动无敌计时器
+WaitingSynchronizationUI.Instance.Close();
+
+// 方法3: 强制关闭（外部调用）
+// 用于场景卸载等外部请求，如果UI可见则调用Close()
+WaitingSynchronizationUI.Instance.ForceCloseIfVisible("场景卸载");
 ```
+
+**关闭方法说明**:
+
+- `Hide()`: 带淡出动画的隐藏，所有任务完成后自动调用
+- `Close()`: 立即关闭UI，会发送完成同步UI消息给主机，并启动无敌计时器（延迟解除无敌）
+- `ForceCloseIfVisible()`: 供外部调用的强制关闭方法，内部调用`Close()`
+
+**重要**: 超时保护触发时也会调用`Close()`方法，确保即使超时也会发送完成消息，不会破坏传送逻辑。
 
 ### 技术亮点
 
