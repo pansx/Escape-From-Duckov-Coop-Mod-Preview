@@ -20,10 +20,41 @@ public class AIsEndpoint : IHttpEndpoint
     {
         try
         {
+            // 安全检查：确保游戏已完全加载
+            if (CharacterMainControl.Main == null)
+            {
+                var safeResult = new
+                {
+                    count = 0,
+                    ais = new List<object>(),
+                    timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    message = "游戏未完全加载，AI 数据暂不可用"
+                };
+                HttpHelper.SendJson(context.Response, safeResult);
+                return;
+            }
+
             var ais = new List<object>();
 
-            // 查找所有 AI 角色控制器
-            var aiControllers = UnityEngine.Object.FindObjectsOfType<AICharacterController>();
+            // 使用 try-catch 包裹 FindObjectsOfType，防止在场景切换时崩溃
+            AICharacterController[] aiControllers;
+            try
+            {
+                aiControllers = UnityEngine.Object.FindObjectsOfType<AICharacterController>();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[AIsEndpoint] 无法获取 AI 列表（可能正在加载场景）: {ex.Message}");
+                var safeResult = new
+                {
+                    count = 0,
+                    ais = new List<object>(),
+                    timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    message = "场景正在加载中"
+                };
+                HttpHelper.SendJson(context.Response, safeResult);
+                return;
+            }
 
             foreach (var ai in aiControllers)
             {

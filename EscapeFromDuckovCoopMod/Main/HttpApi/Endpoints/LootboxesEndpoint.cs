@@ -21,10 +21,41 @@ public class LootboxesEndpoint : IHttpEndpoint
     {
         try
         {
+            // 安全检查：确保游戏已完全加载
+            if (CharacterMainControl.Main == null)
+            {
+                var safeResult = new
+                {
+                    count = 0,
+                    lootboxes = new List<object>(),
+                    timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    message = "游戏未完全加载，战利品箱数据暂不可用"
+                };
+                HttpHelper.SendJson(context.Response, safeResult);
+                return;
+            }
+
             var lootboxes = new List<object>();
 
-            // 查找所有可交互的战利品箱
-            var interactableLootboxes = UnityEngine.Object.FindObjectsOfType<InteractableLootbox>();
+            // 使用 try-catch 包裹 FindObjectsOfType，防止在场景切换时崩溃
+            InteractableLootbox[] interactableLootboxes;
+            try
+            {
+                interactableLootboxes = UnityEngine.Object.FindObjectsOfType<InteractableLootbox>();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[LootboxesEndpoint] 无法获取战利品箱列表（可能正在加载场景）: {ex.Message}");
+                var safeResult = new
+                {
+                    count = 0,
+                    lootboxes = new List<object>(),
+                    timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    message = "场景正在加载中"
+                };
+                HttpHelper.SendJson(context.Response, safeResult);
+                return;
+            }
 
             foreach (var lootbox in interactableLootboxes)
             {

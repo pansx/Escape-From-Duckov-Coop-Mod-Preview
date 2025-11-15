@@ -41,3 +41,5 @@ git diff --no-pager            # ❌ --no-pager位置错误
 - `git blame`
 - `git branch -a`
 - `git tag -l`
+
+推送时默认推送到pansx的fork

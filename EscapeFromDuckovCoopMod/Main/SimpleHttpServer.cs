@@ -81,15 +81,15 @@ public class SimpleHttpServer : MonoBehaviour
         try
         {
             _listener = new HttpListener();
-            _listener.Prefixes.Add($"http://localhost:{port}/");
-            _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
+            // 监听所有网络接口，允许局域网访问
+            _listener.Prefixes.Add($"http://*:{port}/");
             _listener.Start();
             _isRunning = true;
 
             _listenerThread = new Thread(ListenForRequests) { IsBackground = true };
             _listenerThread.Start();
 
-            Debug.Log($"[SimpleHttpServer] ✓ HTTP 服务器已启动，监听端口: {port}");
+            Debug.Log($"[SimpleHttpServer] ✓ HTTP 服务器已启动，监听所有网络接口，端口: {port}");
         }
         catch (Exception ex)
         {

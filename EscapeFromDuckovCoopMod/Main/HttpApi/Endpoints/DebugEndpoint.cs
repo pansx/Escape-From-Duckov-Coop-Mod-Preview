@@ -53,9 +53,11 @@ public class DebugEndpoint : IHttpEndpoint
         sb.Append(".error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; border: 1px solid #f5c6cb; }");
         sb.Append(".expand-icon { display: inline-block; transition: transform 0.3s; margin-right: 8px; }");
         sb.Append(".expand-icon.expanded { transform: rotate(90deg); }");
-        sb.Append(".log-download-section { text-align: center; margin-bottom: 30px; }");
-        sb.Append(".download-btn { display: inline-block; background: white; color: #667eea; padding: 15px 30px; border-radius: 10px; text-decoration: none; font-size: 1.1em; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s; }");
+        sb.Append(".log-download-section { text-align: center; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }");
+        sb.Append(".download-btn { display: inline-block; background: white; color: #667eea; padding: 15px 30px; border-radius: 10px; text-decoration: none; font-size: 1.1em; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s; border: none; cursor: pointer; }");
         sb.Append(".download-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); background: #f8f9fa; }");
+        sb.Append(".export-btn { background: #28a745; color: white; }");
+        sb.Append(".export-btn:hover { background: #218838; }");
         sb.Append("@media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr; } .header h1 { font-size: 1.8em; } }");
         sb.Append("</style>");
         sb.Append("</head>");
@@ -69,6 +71,9 @@ public class DebugEndpoint : IHttpEndpoint
         sb.Append("<a href='/api/log' download='latest.log' class='download-btn'>");
         sb.Append("&#128190; 下载游戏日志 (latest.log)");
         sb.Append("</a>");
+        sb.Append("<button onclick='exportAllJson()' class='download-btn export-btn'>");
+        sb.Append("&#128190; 导出所有端点数据 (JSON)");
+        sb.Append("</button>");
         sb.Append("</div>");
         sb.Append("<div class='cards-grid' id='cardsGrid'>");
         sb.Append("<div class='loading'>正在加载数据...</div>");
@@ -202,6 +207,27 @@ public class DebugEndpoint : IHttpEndpoint
         sb.Append("async function refreshData() {");
         sb.Append("await Promise.all(endpoints.map(ep => fetchEndpoint(ep)));");
         sb.Append("renderCards();");
+        sb.Append("}");
+        
+        sb.Append("function exportAllJson() {");
+        sb.Append("const exportData = { exportTime: new Date().toISOString(), endpoints: {} };");
+        sb.Append("endpoints.forEach(endpoint => {");
+        sb.Append("const epData = endpointData[endpoint.path];");
+        sb.Append("if (epData && epData.success) {");
+        sb.Append("exportData.endpoints[endpoint.path] = { name: endpoint.name, timestamp: epData.timestamp, count: epData.count, data: epData.data };");
+        sb.Append("}");
+        sb.Append("});");
+        sb.Append("const jsonStr = JSON.stringify(exportData, null, 2);");
+        sb.Append("const blob = new Blob([jsonStr], { type: 'application/json' });");
+        sb.Append("const url = URL.createObjectURL(blob);");
+        sb.Append("const a = document.createElement('a');");
+        sb.Append("a.href = url;");
+        sb.Append("const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);");
+        sb.Append("a.download = 'api-export-' + timestamp + '.json';");
+        sb.Append("document.body.appendChild(a);");
+        sb.Append("a.click();");
+        sb.Append("document.body.removeChild(a);");
+        sb.Append("URL.revokeObjectURL(url);");
         sb.Append("}");
         
         sb.Append("refreshData();");
